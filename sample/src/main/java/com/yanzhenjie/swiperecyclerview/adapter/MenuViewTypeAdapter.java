@@ -1,0 +1,36 @@
+/*
+ * Copyright 2016 Yan Zhenjie
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.yanzhenjie.swiperecyclerview.adapter;
+
+import java.util.List;
+
+/**
+ * Created by YOLANDA on 2016/7/22.
+ */
+public class MenuViewTypeAdapter extends MenuAdapter {
+
+    public static final int VIEW_TYPE_MENU = 1;
+    public static final int VIEW_TYPE_NONE = 2;
+
+    public MenuViewTypeAdapter(List<String> titles) {
+        super(titles);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position % 2 == 0 ? VIEW_TYPE_MENU : VIEW_TYPE_NONE;
+    }
+}

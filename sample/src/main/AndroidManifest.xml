@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yanzhenjie.swiperecyclerview">
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.AllMenuActivity"
+            android:label="两侧菜单" />
+        <activity
+            android:name=".activity.ViewTypeMenuActivity"
+            android:label="ViewType菜单" />
+
+        <activity
+            android:name=".activity.ListDragMenuActivity"
+            android:label="拖拽Item条目(List)" />
+        <activity
+            android:name=".activity.GridDragMenuActivity"
+            android:label="拖拽Item条目(Grid)" />
+        <activity
+            android:name=".activity.ListSwipeDeleteActivity"
+            android:label="滑动直接Item条目" />
+        <activity
+            android:name=".activity.DragSwipeFlagsActivity"
+            android:label="指定Item不能拖拽或滑动删除" />
+    </application>
+
+</manifest>

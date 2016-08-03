@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="main_item">
+        <item>左右两侧都有</item>
+        <item>根据ViewType显示菜单</item>
+        <item>长按拖拽Item(List)，与Menu结合</item>
+        <item>长按拖拽Item(Grid)</item>
+        <item>滑动直接删除Item</item>
+        <item>指定某个Item不能拖拽或者不能滑动删除</item>
+    </string-array>
+
+    <string-array name="main_item_des">
+        <item>可以左右滑动，两遍边都可以滑出来菜单。</item>
+        <item>根据ViewType决定菜单在哪一行出现，可以左侧，可以右侧。</item>
+        <item>长按后可以拖拽Item，进行上下左右的移动。和侧滑的Menu菜单结合。</item>
+        <item>长按后可以拖拽Item，进行上下左右的移动。</item>
+        <item>滑动后直接删除Item，不是侧滑菜单那样的删除。</item>
+        <item>有的可能想让第一个不能拖拽或者滑动删除，看这个例子。</item>
+    </string-array>
+</resources>
