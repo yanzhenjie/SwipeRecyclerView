@@ -38,6 +38,9 @@
         <activity
             android:name=".activity.DragSwipeFlagsActivity"
             android:label="指定Item不能拖拽或滑动删除" />
+        <activity
+            android:name=".activity.DefineActivity"
+            android:label="用SwipeMenuLayout实现你自己的侧滑" />
     </application>
 
 </manifest>

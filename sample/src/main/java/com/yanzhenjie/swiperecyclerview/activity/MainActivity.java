@@ -23,6 +23,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import com.yanzhenjie.recyclerview.swipe.touch.DefaultItemTouchHelper;
 import com.yanzhenjie.swiperecyclerview.R;
 import com.yanzhenjie.swiperecyclerview.adapter.MainItemAdapter;
 import com.yanzhenjie.swiperecyclerview.listener.OnItemClickListener;
@@ -81,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 break;
             case 5:
                 startActivity(new Intent(this, DragSwipeFlagsActivity.class));
+                break;
+            case 6:
+                startActivity(new Intent(this, DefineActivity.class));
                 break;
         }
     }

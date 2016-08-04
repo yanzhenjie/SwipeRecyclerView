@@ -8,7 +8,7 @@
 [演示Demo apk下载][3]  
 
 # 引用方法  
-* Eclipse 清自行下载源码。  
+* Eclipse 请自行[下载源码][4]。  
 * AndroidStudio使用Gradle构建添加依赖（推荐）  
 ```groovy
 compile 'com.yanzhenjie:recyclerview-swipe:1.0.0'
@@ -145,3 +145,4 @@ limitations under the License.
 [1]: http://blog.csdn.net/yanzhenjie1003
 [2]: https://github.com/yanzhenjie/SkillGroupRule
 [3]: https://github.com/yanzhenjie/SwipeRecyclerView/blob/master/sample-release.apk?raw=true
+[4]: https://codeload.github.com/yanzhenjie/SwipeRecyclerView/zip/master
