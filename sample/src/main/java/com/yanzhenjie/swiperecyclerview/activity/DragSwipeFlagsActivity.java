@@ -143,6 +143,9 @@ public class DragSwipeFlagsActivity extends AppCompatActivity {
     private OnItemMoveListener onItemMoveListener = new OnItemMoveListener() {
         @Override
         public boolean onItemMove(int fromPosition, int toPosition) {
+            if (toPosition == 0) {// 保证第一个不被挤走。
+                return false;
+            }
             Collections.swap(mStrings, fromPosition, toPosition);
             mMenuAdapter.notifyItemMoved(fromPosition, toPosition);
             return true;

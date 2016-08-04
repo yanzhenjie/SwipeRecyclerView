@@ -33,7 +33,7 @@ import android.widget.TextView;
  */
 public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
 
-    public static final int DEFAULT_SCROLLER_DURATION = 300;
+    public static final int DEFAULT_SCROLLER_DURATION = 200;
 
     private int mLeftViewId = 0;
     private int mContentViewId = 0;
