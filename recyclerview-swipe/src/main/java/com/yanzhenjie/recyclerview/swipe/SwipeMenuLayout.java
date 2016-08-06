@@ -17,7 +17,6 @@ package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -237,7 +236,7 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                                 smoothCloseMenu(duration);
                             }
                         }
-                        ViewCompat.postInvalidateOnAnimation(this);
+                        postInvalidateOnAnimation();
                     }
                 } else {
                     judgeOpenClose(dx, dy);
@@ -437,11 +436,11 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int parentViewWidth = ViewCompat.getMeasuredWidthAndState(this);
+        int parentViewWidth = getMeasuredWidthAndState();
 
         if (mContentView != null) {
-            int contentViewWidth = ViewCompat.getMeasuredWidthAndState(mContentView);
-            int contentViewHeight = ViewCompat.getMeasuredHeightAndState(mContentView);
+            int contentViewWidth = mContentView.getMeasuredWidthAndState();
+            int contentViewHeight = mContentView.getMeasuredHeightAndState();
             LayoutParams lp = (LayoutParams) mContentView.getLayoutParams();
             int start = getPaddingLeft();
             int top = getPaddingTop() + lp.topMargin;
@@ -450,8 +449,8 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
 
         if (mSwipeLeftHorizontal != null) {
             View leftMenu = mSwipeLeftHorizontal.getMenuView();
-            int menuViewWidth = ViewCompat.getMeasuredWidthAndState(leftMenu);
-            int menuViewHeight = ViewCompat.getMeasuredHeightAndState(leftMenu);
+            int menuViewWidth = leftMenu.getMeasuredWidthAndState();
+            int menuViewHeight = leftMenu.getMeasuredHeightAndState();
             LayoutParams lp = (LayoutParams) leftMenu.getLayoutParams();
             int top = getPaddingTop() + lp.topMargin;
             mSwipeLeftHorizontal.getMenuView().layout(-menuViewWidth, top, 0, top + menuViewHeight);
@@ -459,8 +458,8 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
 
         if (mSwipeRightHorizontal != null) {
             View rightMenu = mSwipeRightHorizontal.getMenuView();
-            int menuViewWidth = ViewCompat.getMeasuredWidthAndState(rightMenu);
-            int menuViewHeight = ViewCompat.getMeasuredHeightAndState(rightMenu);
+            int menuViewWidth = rightMenu.getMeasuredWidthAndState();
+            int menuViewHeight = rightMenu.getMeasuredHeightAndState();
             LayoutParams lp = (LayoutParams) rightMenu.getLayoutParams();
             int top = getPaddingTop() + lp.topMargin;
             mSwipeRightHorizontal.getMenuView().layout(parentViewWidth, top, parentViewWidth + menuViewWidth, top + menuViewHeight);

@@ -16,7 +16,6 @@
 package com.yanzhenjie.recyclerview.swipe.touch;
 
 import android.graphics.Canvas;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -111,7 +110,7 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             //1.ItemView--ViewHolder; 2.侧滑条目的透明度程度关联谁？dX(delta增量，范围：当前条目-width~width)。
             float alpha = 1 - Math.abs(dX) / viewHolder.itemView.getWidth();
-            ViewCompat.setAlpha(viewHolder.itemView, alpha);//1~0
+            viewHolder.itemView.setAlpha(alpha);//1~0
         }
         // super里面自动实现了viewHolder.itemView.setTranslationX(dX);
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);

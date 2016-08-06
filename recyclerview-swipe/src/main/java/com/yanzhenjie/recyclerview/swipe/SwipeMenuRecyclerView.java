@@ -56,6 +56,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private int mDownX;
     private int mDownY;
 
+    private boolean mSwipeEnable = true;
+
     private SwipeMenuCreator mSwipeMenuCreator;
     private OnSwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private DefaultItemTouchHelper mDefaultItemTouchHelper;
@@ -129,6 +131,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void setItemViewSwipeEnabled(boolean canSwipe) {
         initializeItemTouchHelper();
+        mSwipeEnable = !canSwipe;
         mDefaultItemTouchHelper.setItemViewSwipeEnabled(canSwipe);
     }
 
@@ -300,43 +303,47 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
-        if (e.getPointerCount() > 1) return true;
         boolean isIntercepted = super.onInterceptTouchEvent(e);
-        int action = e.getAction();
-        int x = (int) e.getX();
-        int y = (int) e.getY();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                mDownX = x;
-                mDownY = y;
-                isIntercepted = false;
+        if (!mSwipeEnable) {
+            return isIntercepted;
+        } else {
+            if (e.getPointerCount() > 1) return true;
+            int action = e.getAction();
+            int x = (int) e.getX();
+            int y = (int) e.getY();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    mDownX = x;
+                    mDownY = y;
+                    isIntercepted = false;
 
-                int touchingPosition = getChildAdapterPosition(findChildViewUnder(x, y));
-                if (touchingPosition != mOldTouchedPosition && mOldSwipedLayout != null && mOldSwipedLayout.isMenuOpen()) {
-                    mOldSwipedLayout.smoothCloseMenu();
-                    isIntercepted = true;
-                }
+                    int touchingPosition = getChildAdapterPosition(findChildViewUnder(x, y));
+                    if (touchingPosition != mOldTouchedPosition && mOldSwipedLayout != null && mOldSwipedLayout.isMenuOpen()) {
+                        mOldSwipedLayout.smoothCloseMenu();
+                        isIntercepted = true;
+                    }
 
-                if (isIntercepted) {
-                    mOldSwipedLayout = null;
-                    mOldTouchedPosition = INVALID_POSITION;
-                } else {
-                    ViewHolder vh = findViewHolderForAdapterPosition(touchingPosition);
-                    if (vh != null) {
-                        View itemView = getSwipeMenuView(vh.itemView);
-                        if (itemView != null && itemView instanceof SwipeMenuLayout) {
-                            mOldSwipedLayout = (SwipeMenuLayout) itemView;
-                            mOldTouchedPosition = touchingPosition;
+                    if (isIntercepted) {
+                        mOldSwipedLayout = null;
+                        mOldTouchedPosition = INVALID_POSITION;
+                    } else {
+                        ViewHolder vh = findViewHolderForAdapterPosition(touchingPosition);
+                        if (vh != null) {
+                            View itemView = getSwipeMenuView(vh.itemView);
+                            if (itemView != null && itemView instanceof SwipeMenuLayout) {
+                                mOldSwipedLayout = (SwipeMenuLayout) itemView;
+                                mOldTouchedPosition = touchingPosition;
+                            }
                         }
                     }
-                }
-                break;
-            // They are sensitive to retain sliding and inertia.
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                isIntercepted = handleUnDown(x, y, isIntercepted);
-                break;
+                    break;
+                // They are sensitive to retain sliding and inertia.
+                case MotionEvent.ACTION_MOVE:
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    isIntercepted = handleUnDown(x, y, isIntercepted);
+                    break;
+            }
         }
         return isIntercepted;
     }

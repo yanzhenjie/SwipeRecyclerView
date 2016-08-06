@@ -3,19 +3,19 @@
     <string-array name="main_item">
         <item>左右两侧都有</item>
         <item>根据ViewType显示菜单</item>
-        <item>长按拖拽Item(List)，与Menu结合</item>
-        <item>长按拖拽Item(Grid)</item>
-        <item>滑动直接删除Item</item>
-        <item>指定某个Item不能拖拽或者不能滑动删除</item>
+        <item>长按拖拽Item+菜单(List形式)</item>
+        <item>长按拖拽Item+菜单(Grid形式)</item>
+        <item>滑动直接删除+拖拽Item</item>
+        <item>指定某个Item不能拖拽/滑动删除</item>
         <item>用SwipeMenuLayout实现你自己的侧滑</item>
     </string-array>
 
     <string-array name="main_item_des">
         <item>可以左右滑动，两遍边都可以滑出来菜单。</item>
-        <item>根据ViewType决定菜单在哪一行出现，可以左侧，可以右侧。</item>
-        <item>长按后可以拖拽Item，进行上下左右的移动。和侧滑的Menu菜单结合。</item>
-        <item>长按后可以拖拽Item，进行上下左右的移动。</item>
-        <item>滑动后直接删除Item，不是侧滑菜单那样的删除。</item>
+        <item>根据ViewType决定菜单在哪一行出现，或者某一行出现不同的菜单，可以左侧，可以右侧。</item>
+        <item>ListView形式，长按后可以拖拽Item，进行上下移动。和侧滑的Menu菜单结合。</item>
+        <item>GridView形式，长按后可以拖拽Item，进行上下左右的移动。和侧滑的Menu菜单结合。</item>
+        <item>滑动后直接删除/拖拽Item，不是侧滑菜单那样的删除。</item>
         <item>有的可能想让第一个不能拖拽或者滑动删除，看这个例子。</item>
         <item>用SwipeMenuLayout实现你自己的侧滑，不仅仅用在RecyclerView的Item中，可以用在ListView中，或者其它Layout中。</item>
     </string-array>
