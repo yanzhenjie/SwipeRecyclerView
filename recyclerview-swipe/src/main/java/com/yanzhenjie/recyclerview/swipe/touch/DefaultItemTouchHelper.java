@@ -112,4 +112,22 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
         return this.mDefaultItemTouchHelperCallback.isItemViewSwipeEnabled();
     }
 
+    /**
+     * Set OnItemStateChangedListener.
+     *
+     * @param onItemStateChangedListener {@link OnItemStateChangedListener}.
+     */
+    public void setOnItemStateChangedListener(OnItemStateChangedListener onItemStateChangedListener) {
+        this.mDefaultItemTouchHelperCallback.setOnItemStateChangedListener(onItemStateChangedListener);
+    }
+
+    /**
+     * Get OnItemStateChangedListener.
+     *
+     * @return {@link OnItemStateChangedListener}.
+     */
+    public OnItemStateChangedListener getOnItemStateChangedListener() {
+        return this.mDefaultItemTouchHelperCallback.getOnItemStateChangedListener();
+    }
+
 }

@@ -23,7 +23,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import com.yanzhenjie.recyclerview.swipe.touch.DefaultItemTouchHelper;
 import com.yanzhenjie.swiperecyclerview.R;
 import com.yanzhenjie.swiperecyclerview.adapter.MainItemAdapter;
 import com.yanzhenjie.swiperecyclerview.listener.OnItemClickListener;
@@ -72,18 +71,24 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 startActivity(new Intent(this, ViewTypeMenuActivity.class));
                 break;
             case 2:
-                startActivity(new Intent(this, ListDragMenuActivity.class));
+                startActivity(new Intent(this, ViewPagerMenuActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(this, GridDragMenuActivity.class));
+                startActivity(new Intent(this, RefreshLoadMoreActivity.class));
                 break;
             case 4:
-                startActivity(new Intent(this, ListSwipeDeleteActivity.class));
+                startActivity(new Intent(this, ListDragMenuActivity.class));
                 break;
             case 5:
-                startActivity(new Intent(this, DragSwipeFlagsActivity.class));
+                startActivity(new Intent(this, GridDragMenuActivity.class));
                 break;
             case 6:
+                startActivity(new Intent(this, ListDragSwipeActivity.class));
+                break;
+            case 7:
+                startActivity(new Intent(this, DragSwipeFlagsActivity.class));
+                break;
+            case 8:
                 startActivity(new Intent(this, DefineActivity.class));
                 break;
         }

@@ -17,6 +17,7 @@ package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -236,7 +237,7 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                                 smoothCloseMenu(duration);
                             }
                         }
-                        postInvalidateOnAnimation();
+                        ViewCompat.postInvalidateOnAnimation(this);
                     }
                 } else {
                     judgeOpenClose(dx, dy);

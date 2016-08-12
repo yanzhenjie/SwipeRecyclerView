@@ -18,9 +18,12 @@ package com.yanzhenjie.swiperecyclerview.activity;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,13 +44,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created on 2016/7/27.
- *
- * @author Yan Zhenjie.
+ * Created by Yan Zhenjie on 2016/8/12.
  */
-public class AllMenuActivity extends AppCompatActivity {
+public class RefreshLoadMoreActivity extends AppCompatActivity {
 
     private Activity mContext;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private MenuAdapter mMenuAdapter;
 
@@ -58,12 +61,15 @@ public class AllMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity);
+        setContentView(R.layout.activity_refresh_load_more);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
         mStrings = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
@@ -74,6 +80,8 @@ public class AllMenuActivity extends AppCompatActivity {
         mSwipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
         mSwipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
         mSwipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
+        // 添加滚动监听。
+        mSwipeMenuRecyclerView.addOnScrollListener(mOnScrollListener);
 
         // 为SwipeRecyclerView的Item创建菜单就两句话，不错就是这么简单：
         // 设置菜单创建器。
@@ -88,6 +96,33 @@ public class AllMenuActivity extends AppCompatActivity {
         mMenuAdapter.setOnItemClickListener(onItemClickListener);
         mSwipeMenuRecyclerView.setAdapter(mMenuAdapter);
     }
+
+    /**
+     * 刷新监听。
+     */
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            mSwipeMenuRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 2000);
+        }
+    };
+
+    /**
+     * 加载更多
+     */
+    private RecyclerView.OnScrollListener mOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (!recyclerView.canScrollVertically(1)) {// 手指不能向上滑动了
+                Snackbar.make(mSwipeMenuRecyclerView, "加载更多", Snackbar.LENGTH_LONG).show();
+            }
+        }
+    };
 
     /**
      * 菜单创建器。在Item要创建菜单的时候调用。

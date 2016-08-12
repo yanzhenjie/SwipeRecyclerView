@@ -25,7 +25,12 @@
         <activity
             android:name=".activity.ViewTypeMenuActivity"
             android:label="ViewType菜单" />
-
+        <activity
+            android:name=".activity.ViewPagerMenuActivity"
+            android:label="和ViewPager嵌套" />
+        <activity
+            android:name=".activity.RefreshLoadMoreActivity"
+            android:label="ViewType菜单" />
         <activity
             android:name=".activity.ListDragMenuActivity"
             android:label="拖拽Item条目+菜单(List)" />
@@ -33,7 +38,7 @@
             android:name=".activity.GridDragMenuActivity"
             android:label="拖拽Item条目+菜单(Grid)" />
         <activity
-            android:name=".activity.ListSwipeDeleteActivity"
+            android:name=".activity.ListDragSwipeActivity"
             android:label="滑动直接删除+拖拽Item条目" />
         <activity
             android:name=".activity.DragSwipeFlagsActivity"

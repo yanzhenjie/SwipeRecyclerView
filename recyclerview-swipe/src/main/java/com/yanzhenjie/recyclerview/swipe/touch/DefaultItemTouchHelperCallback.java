@@ -30,6 +30,8 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private OnItemMoveListener onItemMoveListener;
 
+    private OnItemStateChangedListener onItemStateChangedListener;
+
     private boolean isItemViewSwipeEnabled;
 
     private boolean isLongPressDragEnabled;
@@ -69,6 +71,14 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     public OnItemMovementListener getOnItemMovementListener() {
         return onItemMovementListener;
+    }
+
+    public void setOnItemStateChangedListener(OnItemStateChangedListener onItemStateChangedListener) {
+        this.onItemStateChangedListener = onItemStateChangedListener;
+    }
+
+    public OnItemStateChangedListener getOnItemStateChangedListener() {
+        return onItemStateChangedListener;
     }
 
     @Override
@@ -133,5 +143,13 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
         //回调适配器里面的方法，让其刷新数据及界面。
         if (onItemMoveListener != null)
             onItemMoveListener.onItemDismiss(viewHolder.getAdapterPosition());
+    }
+
+    @Override
+    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+        super.onSelectedChanged(viewHolder, actionState);
+        if (onItemStateChangedListener != null) {
+            onItemStateChangedListener.onSelectedChanged(viewHolder, actionState);
+        }
     }
 }

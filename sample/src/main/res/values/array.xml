@@ -3,6 +3,8 @@
     <string-array name="main_item">
         <item>左右两侧都有</item>
         <item>根据ViewType显示菜单</item>
+        <item>侧滑菜单和ViewPager嵌套</item>
+        <item>侧滑菜单和 Refresh LoadMore 嵌套</item>
         <item>长按拖拽Item+菜单(List形式)</item>
         <item>长按拖拽Item+菜单(Grid形式)</item>
         <item>滑动直接删除+拖拽Item</item>
@@ -13,6 +15,8 @@
     <string-array name="main_item_des">
         <item>可以左右滑动，两遍边都可以滑出来菜单。</item>
         <item>根据ViewType决定菜单在哪一行出现，或者某一行出现不同的菜单，可以左侧，可以右侧。</item>
+        <item>RecyclerView嵌套在ViewPager中，解决左右滑动时的冲突。</item>
+        <item>侧滑菜单和下拉刷新，上拉加载嵌套</item>
         <item>ListView形式，长按后可以拖拽Item，进行上下移动。和侧滑的Menu菜单结合。</item>
         <item>GridView形式，长按后可以拖拽Item，进行上下左右的移动。和侧滑的Menu菜单结合。</item>
         <item>滑动后直接删除/拖拽Item，不是侧滑菜单那样的删除。</item>

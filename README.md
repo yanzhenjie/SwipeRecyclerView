@@ -7,11 +7,26 @@
 ----
 [演示Demo apk下载][3]  
 
+# 特性和功能
+>1. RecyclerView侧滑菜单（左右两侧都可以添加）（List、Grid两种形式）。 
+2. RecyclerView长按拖拽Item（List、Grid两种形式）。 
+3. RecyclerView侧滑删除item（List、Grid两种形式）。 
+4. 指定RecyclerView的某一个Item不能滑动删除或长按拖拽（List、Grid两种形式）。 
+5. 根据Item的ViewType来决定显示的菜单。 
+6. 用SwipeMenuLayout在任何地方都可以实现你自己的侧滑菜单。 
+7. 使用SwipeRefreshLayout下拉刷新。（更新） 
+8. 支持和ViewPager嵌套使用。（更新）
+
+**2016.08.12发布1.0.1，更新日志：**
+> 1. 增加SwipeRefreshLayout下拉刷新和上拉加载演示。
+2. 解决和ViewPager嵌套使用的冲突。
+3. 增加可以监听长按和滑动的手势监听。
+
 # 引用方法  
 * Eclipse 请自行[下载源码][4]。  
 * AndroidStudio使用Gradle构建添加依赖（推荐）  
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.0.0'
+compile 'com.yanzhenjie:recyclerview-swipe:1.0.1'
 ```
 
 本库引用的RecyclerView版本如下：
@@ -29,7 +44,10 @@ gif有一些失真，且网页加载速度慢，可以[下载demo的apk][3]看�
 <image src="./image/3.gif" width="300px"/> <image src="./image/4.gif" width="300px"/>  
 
 ## 拖拽、侧滑删除  
-<image src="./image/5.gif" width="300px"/> <image src="./image/6.gif" width="300px"/>  
+<image src="./image/5.gif" width="300px"/> <image src="./image/6.gif" width="300px"/> 
+
+## 用户自定义菜单 下拉刷新、上拉加载更多
+<image src="./image/7.gif" width="300px"/> <image src="./image/8.gif" width="300px"/> 
 
 # 使用介绍
 这里列出关键实现，具体请参考demo，或者加最上面的交流群一起讨论。

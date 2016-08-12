@@ -45,6 +45,8 @@ public class DragSwipeFlagsActivity extends AppCompatActivity {
 
     private Activity mContext;
 
+    private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
+
     private List<String> mStrings;
 
     private MenuAdapter mMenuAdapter;
@@ -68,22 +70,22 @@ public class DragSwipeFlagsActivity extends AppCompatActivity {
                 mStrings.add("我是第" + i + "个。");
             }
         }
-        SwipeMenuRecyclerView swipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        swipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
-        swipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
-        swipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
-        swipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
+        mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
+        mSwipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
+        mSwipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
+        mSwipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
 
         // 这个就不用添加菜单啦，因为滑动删除和菜单是冲突的。
 
         mMenuAdapter = new MenuAdapter(mStrings);
         mMenuAdapter.setOnItemClickListener(onItemClickListener);
-        swipeMenuRecyclerView.setAdapter(mMenuAdapter);
+        mSwipeMenuRecyclerView.setAdapter(mMenuAdapter);
 
-        swipeMenuRecyclerView.setLongPressDragEnabled(true);// 开启长安拖拽。
-        swipeMenuRecyclerView.setItemViewSwipeEnabled(true);// 开启滑动删除。
-        swipeMenuRecyclerView.setOnItemMoveListener(onItemMoveListener);// 监听拖拽，更新UI。
-        swipeMenuRecyclerView.setOnItemMovementListener(onItemMovementListener);
+        mSwipeMenuRecyclerView.setLongPressDragEnabled(true);// 开启长安拖拽。
+        mSwipeMenuRecyclerView.setItemViewSwipeEnabled(true);// 开启滑动删除。
+        mSwipeMenuRecyclerView.setOnItemMoveListener(onItemMoveListener);// 监听拖拽，更新UI。
+        mSwipeMenuRecyclerView.setOnItemMovementListener(onItemMovementListener);
     }
 
     /**
@@ -158,7 +160,6 @@ public class DragSwipeFlagsActivity extends AppCompatActivity {
             Toast.makeText(mContext, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
         }
     };
-
 
     private OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override

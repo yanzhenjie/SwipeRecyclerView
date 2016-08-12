@@ -22,10 +22,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.yanzhenjie.recyclerview.swipe.touch.DefaultItemTouchHelper;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMovementListener;
+import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +102,24 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     public void setOnItemMovementListener(OnItemMovementListener onItemMovementListener) {
         initializeItemTouchHelper();
         mDefaultItemTouchHelper.setOnItemMovementListener(onItemMovementListener);
+    }
+
+    /**
+     * Set OnItemStateChangedListener.
+     *
+     * @param onItemStateChangedListener {@link OnItemStateChangedListener}.
+     */
+    public void setOnItemStateChangedListener(OnItemStateChangedListener onItemStateChangedListener) {
+        this.mDefaultItemTouchHelper.setOnItemStateChangedListener(onItemStateChangedListener);
+    }
+
+    /**
+     * Get OnItemStateChangedListener.
+     *
+     * @return {@link OnItemStateChangedListener}.
+     */
+    public OnItemStateChangedListener getOnItemStateChangedListener() {
+        return this.mDefaultItemTouchHelper.getOnItemStateChangedListener();
     }
 
 
@@ -339,7 +359,15 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                     break;
                 // They are sensitive to retain sliding and inertia.
                 case MotionEvent.ACTION_MOVE:
+                    isIntercepted = handleUnDown(x, y, isIntercepted);
+                    ViewParent viewParent = getParent();
+                    if (viewParent != null) {
+                        viewParent.requestDisallowInterceptTouchEvent(!isIntercepted);
+                    }
+                    break;
                 case MotionEvent.ACTION_UP:
+                    isIntercepted = handleUnDown(x, y, isIntercepted);
+                    break;
                 case MotionEvent.ACTION_CANCEL:
                     isIntercepted = handleUnDown(x, y, isIntercepted);
                     break;
