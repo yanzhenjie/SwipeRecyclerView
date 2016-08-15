@@ -90,6 +90,25 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
         return onCompatCreateViewHolder(contentView, viewType);
     }
 
+    /**
+     * Create view for item.
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new view.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
+    public abstract View onCreateContentView(ViewGroup parent, int viewType);
+
+    /**
+     * Instead {@link #onCreateViewHolder(ViewGroup, int)}.
+     *
+     * @param realContentView Is this Item real view, {@link SwipeMenuLayout} or {@link #onCreateContentView(ViewGroup, int)}.
+     * @param viewType        The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     * @see #onCompatBindViewHolder(RecyclerView.ViewHolder, int, List)
+     */
+    public abstract VH onCompatCreateViewHolder(View realContentView, int viewType);
+
     @Override
     public final void onBindViewHolder(VH holder, int position, List<Object> payloads) {
         View itemView = holder.itemView;
@@ -99,21 +118,12 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
             for (int i = 0; i < childCount; i++) {
                 View childView = swipeMenuLayout.getChildAt(i);
                 if (childView instanceof SwipeMenuView) {
-                    ((SwipeMenuView) childView).bindAdapterPosition(position);
+                    ((SwipeMenuView) childView).bindAdapterViewHolder(holder);
                 }
             }
         }
         onCompatBindViewHolder(holder, position, payloads);
     }
-
-    /**
-     * Create view for item.
-     *
-     * @param parent   The ViewGroup into which the new View will be added after it is bound to an adapter position.
-     * @param viewType The view type of the new view.
-     * @return A new ViewHolder that holds a View of the given view type.
-     */
-    public abstract View onCreateContentView(ViewGroup parent, int viewType);
 
     /**
      * Instead {@link #onBindViewHolder(RecyclerView.ViewHolder, int, List)}.
@@ -126,14 +136,4 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
     public void onCompatBindViewHolder(VH holder, int position, List<Object> payloads) {
         onBindViewHolder(holder, position);
     }
-
-    /**
-     * Instead {@link #onCreateViewHolder(ViewGroup, int)}.
-     *
-     * @param realContentView Is this Item real view, {@link SwipeMenuLayout} or {@link #onCreateContentView(ViewGroup, int)}.
-     * @param viewType        The view type of the new View.
-     * @return A new ViewHolder that holds a View of the given view type.
-     * @see #onCompatBindViewHolder(RecyclerView.ViewHolder, int, List)
-     */
-    public abstract VH onCompatCreateViewHolder(View realContentView, int viewType);
 }

@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -33,7 +34,7 @@ public class SwipeMenuView extends LinearLayout {
 
     private SwipeSwitch mSwipeSwitch;
 
-    private int mAdapterPosition;
+    private RecyclerView.ViewHolder mAdapterVIewHolder;
 
     private int mDirection;
 
@@ -66,8 +67,8 @@ public class SwipeMenuView extends LinearLayout {
         this.mSwipeSwitch = swipeSwitch;
     }
 
-    public void bindAdapterPosition(int position) {
-        this.mAdapterPosition = position;
+    public void bindAdapterViewHolder(RecyclerView.ViewHolder adapterVIewHolder) {
+        this.mAdapterVIewHolder = adapterVIewHolder;
     }
 
     private void addItem(SwipeMenuItem item, int index) {
@@ -110,7 +111,7 @@ public class SwipeMenuView extends LinearLayout {
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null && mSwipeSwitch != null && mSwipeSwitch.isMenuOpen()) {
-                mItemClickListener.onItemClick(mSwipeSwitch, mAdapterPosition, v.getId(), mDirection);
+                mItemClickListener.onItemClick(mSwipeSwitch, mAdapterVIewHolder.getAdapterPosition(), v.getId(), mDirection);
             }
         }
     };

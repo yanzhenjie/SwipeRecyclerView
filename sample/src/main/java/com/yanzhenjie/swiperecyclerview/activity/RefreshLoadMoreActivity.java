@@ -207,11 +207,10 @@ public class RefreshLoadMoreActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
             }
 
-            // TODO 这里特别注意，如果这里删除了Item，不要调用Adapter.notifyItemRemoved(position)，因为RecyclerView有个bug，调用这个方法后，后面的position会错误！
-            // TODO 删除Item后调用Adapter.notifyDataSetChanged()，下面是事例代码：
+            // TODO 推荐调用Adapter.notifyItemRemoved(position)，也可以Adapter.notifyDataSetChanged();
             if (menuPosition == 0) {// 删除按钮被点击。
                 mStrings.remove(adapterPosition);
-                mMenuAdapter.notifyDataSetChanged();
+                mMenuAdapter.notifyItemRemoved(adapterPosition);
             }
         }
     };

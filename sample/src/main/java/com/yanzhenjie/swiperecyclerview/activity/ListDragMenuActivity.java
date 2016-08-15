@@ -49,6 +49,8 @@ public class ListDragMenuActivity extends AppCompatActivity {
 
     private List<String> mStrings;
 
+    private LinearLayoutManager mLinearLayoutManager;
+
     private MenuAdapter mMenuAdapter;
 
     @Override
@@ -66,7 +68,8 @@ public class ListDragMenuActivity extends AppCompatActivity {
             mStrings.add("我是第" + i + "个。");
         }
         SwipeMenuRecyclerView swipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        swipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        swipeMenuRecyclerView.setLayoutManager(mLinearLayoutManager);// 布局管理器。
         swipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
         swipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
         swipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
