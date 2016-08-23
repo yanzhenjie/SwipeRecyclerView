@@ -32,6 +32,7 @@ public class SwipeMenuItem {
     private int titleSize = -1;
     private int width = -2;
     private int height = -2;
+    private Typeface typeface;
 
     public SwipeMenuItem(Context context) {
         mContext = context;
@@ -53,6 +54,14 @@ public class SwipeMenuItem {
 
     public int getTitleColor() {
         return titleColor;
+    }
+    
+    public int getTypeface() {
+        return typeface;
+    }
+
+    public int setTypeface() {
+        return typeface;
     }
 
     public SwipeMenuItem setText(String title) {
