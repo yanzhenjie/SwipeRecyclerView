@@ -18,6 +18,7 @@ package com.yanzhenjie.recyclerview.swipe;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 
 /**
  * Created by Yan Zhenjie on 2016/7/26.
@@ -32,7 +33,11 @@ public class SwipeMenuItem {
     private int titleSize = -1;
     private int width = -2;
     private int height = -2;
-    private Typeface typeface;
+    public static final int BOLD = 1;
+    public static final int BOLD_ITALIC = 3;
+    public static final int ITALIC = 2;
+    public static final int NORMAL = 0;
+    private int typeface=NORMAL;
 
     public SwipeMenuItem(Context context) {
         mContext = context;
