@@ -86,7 +86,8 @@ public class SwipeMenuView extends LinearLayout {
             parent.addView(createIcon(item));
 
         if (!TextUtils.isEmpty(item.getText()))
-            parent.addView(createTitle(item));
+             parent.addView(createTitle(item));
+           
     }
 
     private ImageView createIcon(SwipeMenuItem item) {
@@ -99,6 +100,7 @@ public class SwipeMenuView extends LinearLayout {
         TextView textView = new TextView(getContext());
         textView.setText(item.getText());
         textView.setGravity(Gravity.CENTER);
+        textView.setTypeface(Typeface.defaultFromStyle(item.getTypeface()))
         int textSize = item.getTextSize();
         if (textSize > 0)
             textView.setTextSize(textSize);
