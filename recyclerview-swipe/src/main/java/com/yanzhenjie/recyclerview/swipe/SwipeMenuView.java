@@ -16,6 +16,8 @@
 package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -73,6 +75,7 @@ public class SwipeMenuView extends LinearLayout {
 
     private void addItem(SwipeMenuItem item, int index) {
         LayoutParams params = new LayoutParams(item.getWidth(), item.getHeight());
+        params.weight = item.getWeight();
         LinearLayout parent = new LinearLayout(getContext());
         parent.setId(index);
         parent.setGravity(Gravity.CENTER);
@@ -102,8 +105,15 @@ public class SwipeMenuView extends LinearLayout {
         int textSize = item.getTextSize();
         if (textSize > 0)
             textView.setTextSize(textSize);
-        int textColor = item.getTitleColor();
-        textView.setTextColor(textColor);
+        ColorStateList textColor = item.getTitleColor();
+        if (textColor != null)
+            textView.setTextColor(textColor);
+        int textAppearance = item.getTextAppearance();
+        if (textAppearance != 0)
+            ResCompat.setTextAppearance(textView, textAppearance);
+        Typeface typeface = item.getTextTypeface();
+        if (typeface != null)
+            textView.setTypeface(typeface);
         return textView;
     }
 

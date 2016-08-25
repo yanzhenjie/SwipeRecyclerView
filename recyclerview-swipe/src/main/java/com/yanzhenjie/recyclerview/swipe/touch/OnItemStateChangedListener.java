@@ -15,8 +15,12 @@
  */
 package com.yanzhenjie.recyclerview.swipe.touch;
 
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by Yan Zhenjie on 2016/8/12.
@@ -47,6 +51,10 @@ public interface OnItemStateChangedListener {
      *                    {@link OnItemStateChangedListener#ACTION_STATE_SWIPE} or
      *                    {@link OnItemStateChangedListener#ACTION_STATE_DRAG}.
      */
-    void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState);
+    void onSelectedChanged(RecyclerView.ViewHolder viewHolder, @ActionStateMode int actionState);
 
+    @IntDef({ACTION_STATE_IDLE, ACTION_STATE_SWIPE, ACTION_STATE_DRAG})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ActionStateMode {
+    }
 }

@@ -113,11 +113,11 @@ public class ListDragSwipeActivity extends AppCompatActivity {
         @Override
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
             if (actionState == ACTION_STATE_DRAG) {
-                Snackbar.make(mSwipeMenuRecyclerView, "拖拽", Snackbar.LENGTH_LONG).show();
+                getSupportActionBar().setSubtitle("状态：拖拽");
             } else if (actionState == ACTION_STATE_SWIPE) {
-                Snackbar.make(mSwipeMenuRecyclerView, "滑动删除", Snackbar.LENGTH_LONG).show();
+                getSupportActionBar().setSubtitle("状态：滑动删除");
             } else if (actionState == ACTION_STATE_IDLE) {
-                Snackbar.make(mSwipeMenuRecyclerView, "手指松开", Snackbar.LENGTH_LONG).show();
+                getSupportActionBar().setSubtitle("状态：手指松开");
             }
         }
     };

@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
+import android.widget.TextView;
 
 import java.lang.reflect.Method;
 
@@ -96,5 +97,23 @@ public class ResCompat {
             viewMethod.invoke(view, background);
         } catch (Throwable e) {
         }
+    }
+
+    public static void setTextAppearance(TextView view, int textAppearance) {
+        Class<?> resourcesClass = view.getClass();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            try {
+                Method getColorMethod = resourcesClass.getMethod("setTextAppearance", Context.class, int.class);
+                getColorMethod.setAccessible(true);
+                getColorMethod.invoke(view, view.getContext(), textAppearance);
+            } catch (Throwable e) {
+            }
+        else
+            try {
+                Method getColorMethod = resourcesClass.getMethod("setTextAppearance", int.class);
+                getColorMethod.setAccessible(true);
+                getColorMethod.invoke(view, textAppearance);
+            } catch (Throwable e) {
+            }
     }
 }

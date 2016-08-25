@@ -46,6 +46,11 @@ import java.util.List;
  */
 public class MenuFragment extends Fragment {
 
+    public static Fragment newInstance() {
+        MenuFragment menuFragment = new MenuFragment();
+        return menuFragment;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -90,9 +95,6 @@ public class MenuFragment extends Fragment {
         // 设置菜单Item点击监听。
         mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
 
-        mSwipeMenuRecyclerView.openLeftMenu(0);
-        mSwipeMenuRecyclerView.openRightMenu(0);
-
         mMenuAdapter = new MenuAdapter(mStrings);
         mMenuAdapter.setOnItemClickListener(onItemClickListener);
         mSwipeMenuRecyclerView.setAdapter(mMenuAdapter);
@@ -104,22 +106,25 @@ public class MenuFragment extends Fragment {
     private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
         @Override
         public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
-            int size = getResources().getDimensionPixelSize(R.dimen.item_height);
+            int width = getResources().getDimensionPixelSize(R.dimen.item_height);
+
+            // MATCH_PARENT 自适应高度，保持和内容一样高；也可以指定菜单具体高度，也可以用WRAP_CONTENT。
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
             // 添加左侧的，如果不添加，则左侧不会出现菜单。
             {
                 SwipeMenuItem addItem = new SwipeMenuItem(mContext)
                         .setBackgroundDrawable(R.drawable.selector_green)// 点击的背景。
                         .setImage(R.mipmap.ic_action_add) // 图标。
-                        .setWidth(size) // 宽度。
-                        .setHeight(size); // 高度。
+                        .setWidth(width) // 宽度。
+                        .setHeight(height); // 高度。
                 swipeLeftMenu.addMenuItem(addItem); // 添加一个按钮到左侧菜单。
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(mContext)
                         .setBackgroundDrawable(R.drawable.selector_red)
                         .setImage(R.mipmap.ic_action_close)
-                        .setWidth(size)
-                        .setHeight(size);
+                        .setWidth(width)
+                        .setHeight(height);
 
                 swipeLeftMenu.addMenuItem(closeItem); // 添加一个按钮到左侧菜单。
             }
@@ -131,23 +136,23 @@ public class MenuFragment extends Fragment {
                         .setImage(R.mipmap.ic_action_delete)
                         .setText("删除") // 文字，还可以设置文字颜色，大小等。。
                         .setTextColor(Color.WHITE)
-                        .setWidth(size)
-                        .setHeight(size);
+                        .setWidth(width)
+                        .setHeight(height);
                 swipeRightMenu.addMenuItem(deleteItem);// 添加一个按钮到右侧侧菜单。
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(mContext)
                         .setBackgroundDrawable(R.drawable.selector_purple)
                         .setImage(R.mipmap.ic_action_close)
-                        .setWidth(size)
-                        .setHeight(size);
+                        .setWidth(width)
+                        .setHeight(height);
                 swipeRightMenu.addMenuItem(closeItem); // 添加一个按钮到右侧菜单。
 
                 SwipeMenuItem addItem = new SwipeMenuItem(mContext)
                         .setBackgroundDrawable(R.drawable.selector_green)
                         .setText("添加")
                         .setTextColor(Color.WHITE)
-                        .setWidth(size)
-                        .setHeight(size);
+                        .setWidth(width)
+                        .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加一个按钮到右侧菜单。
             }
         }

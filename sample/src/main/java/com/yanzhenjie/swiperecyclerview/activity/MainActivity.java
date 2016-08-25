@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
                 startActivity(new Intent(this, DragSwipeFlagsActivity.class));
                 break;
             case 8:
+                startActivity(new Intent(this, VerticalMenuActivity.class));
+                break;
+            case 9:
                 startActivity(new Intent(this, DefineActivity.class));
                 break;
         }

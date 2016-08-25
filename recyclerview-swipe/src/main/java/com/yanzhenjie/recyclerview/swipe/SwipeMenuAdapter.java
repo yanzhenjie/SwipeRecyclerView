@@ -69,6 +69,7 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
             int leftMenuCount = swipeLeftMenu.getMenuItems().size();
             if (leftMenuCount > 0) {
                 SwipeMenuView swipeLeftMenuView = (SwipeMenuView) swipeMenuLayout.findViewById(R.id.swipe_left);
+                swipeLeftMenuView.setOrientation(swipeLeftMenu.getOrientation());
                 swipeLeftMenuView.bindMenu(swipeLeftMenu, SwipeMenuRecyclerView.LEFT_DIRECTION);
                 swipeLeftMenuView.bindMenuItemClickListener(mSwipeMenuItemClickListener, swipeMenuLayout);
             }
@@ -76,6 +77,7 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
             int rightMenuCount = swipeRightMenu.getMenuItems().size();
             if (rightMenuCount > 0) {
                 SwipeMenuView swipeRightMenuView = (SwipeMenuView) swipeMenuLayout.findViewById(R.id.swipe_right);
+                swipeRightMenuView.setOrientation(swipeRightMenu.getOrientation());
                 swipeRightMenuView.bindMenu(swipeRightMenu, SwipeMenuRecyclerView.RIGHT_DIRECTION);
                 swipeRightMenuView.bindMenuItemClickListener(mSwipeMenuItemClickListener, swipeMenuLayout);
             }

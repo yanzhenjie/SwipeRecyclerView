@@ -109,7 +109,7 @@ public class DragSwipeFlagsActivity extends AppCompatActivity {
             if (layoutManager instanceof LinearLayoutManager) {// 如果是LinearLayoutManager。
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
                 if (linearLayoutManager.getOrientation() == LinearLayoutManager.HORIZONTAL) {// 横向的List。
-                    return OnItemMovementListener.LEFT | OnItemMovementListener.RIGHT; // 只能左右拖拽。
+                    return (OnItemMovementListener.LEFT | OnItemMovementListener.RIGHT); // 只能左右拖拽。
                 } else {// 竖向的List。
                     return OnItemMovementListener.UP | OnItemMovementListener.DOWN; // 只能上下拖拽。
                 }

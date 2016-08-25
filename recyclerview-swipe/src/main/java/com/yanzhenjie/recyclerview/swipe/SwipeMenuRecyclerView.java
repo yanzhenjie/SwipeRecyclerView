@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
+import android.support.annotation.IntDef;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -29,6 +30,8 @@ import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMovementListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,11 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public static final int RIGHT_DIRECTION = -1;
 
+    @IntDef({LEFT_DIRECTION, RIGHT_DIRECTION})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface DirectionMode {
+    }
+
     /**
      * Invalid position.
      */
@@ -58,7 +66,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private int mDownX;
     private int mDownY;
 
-    private boolean mSwipeEnable = true;
+    private boolean isInterceptTouchEvent = true;
 
     private SwipeMenuCreator mSwipeMenuCreator;
     private OnSwipeMenuItemClickListener mSwipeMenuItemClickListener;
@@ -151,7 +159,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void setItemViewSwipeEnabled(boolean canSwipe) {
         initializeItemTouchHelper();
-        mSwipeEnable = !canSwipe;
+        isInterceptTouchEvent = !canSwipe;
         mDefaultItemTouchHelper.setItemViewSwipeEnabled(canSwipe);
     }
 
@@ -242,8 +250,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      *
      * @param position position.
      */
-    public void openLeftMenu(int position) {
-        openMenu(position, LEFT_DIRECTION, SwipeMenuLayout.DEFAULT_SCROLLER_DURATION);
+    public void smoothOpenLeftMenu(int position) {
+        smoothOpenMenu(position, LEFT_DIRECTION, SwipeMenuLayout.DEFAULT_SCROLLER_DURATION);
     }
 
     /**
@@ -252,8 +260,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * @param position position.
      * @param duration time millis.
      */
-    public void openLeftMenu(int position, int duration) {
-        openMenu(position, LEFT_DIRECTION, duration);
+    public void smoothOpenLeftMenu(int position, int duration) {
+        smoothOpenMenu(position, LEFT_DIRECTION, duration);
     }
 
     /**
@@ -261,8 +269,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      *
      * @param position position.
      */
-    public void openRightMenu(int position) {
-        openMenu(position, RIGHT_DIRECTION, SwipeMenuLayout.DEFAULT_SCROLLER_DURATION);
+    public void smoothOpenRightMenu(int position) {
+        smoothOpenMenu(position, RIGHT_DIRECTION, SwipeMenuLayout.DEFAULT_SCROLLER_DURATION);
     }
 
     /**
@@ -271,8 +279,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * @param position position.
      * @param duration time millis.
      */
-    public void openRightMenu(int position, int duration) {
-        openMenu(position, RIGHT_DIRECTION, duration);
+    public void smoothOpenRightMenu(int position, int duration) {
+        smoothOpenMenu(position, RIGHT_DIRECTION, duration);
     }
 
     /**
@@ -282,7 +290,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * @param direction use {@link #LEFT_DIRECTION}, {@link #RIGHT_DIRECTION}.
      * @param duration  time millis.
      */
-    public void openMenu(int position, int direction, int duration) {
+    public void smoothOpenMenu(int position, @DirectionMode int direction, int duration) {
         if (mOldSwipedLayout != null) {
             if (mOldSwipedLayout.isMenuOpen()) {
                 mOldSwipedLayout.smoothCloseMenu();
@@ -301,6 +309,15 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                     mOldSwipedLayout.smoothOpenLeftMenu(duration);
                 }
             }
+        }
+    }
+
+    /**
+     * Close menu.
+     */
+    public void smoothCloseMenu() {
+        if (mOldSwipedLayout != null && mOldSwipedLayout.isMenuOpen()) {
+            mOldSwipedLayout.smoothCloseMenu();
         }
     }
 
@@ -324,7 +341,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
         boolean isIntercepted = super.onInterceptTouchEvent(e);
-        if (!mSwipeEnable) {
+        if (!isInterceptTouchEvent) {
             return isIntercepted;
         } else {
             if (e.getPointerCount() > 1) return true;

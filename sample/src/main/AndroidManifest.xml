@@ -30,7 +30,7 @@
             android:label="和ViewPager嵌套" />
         <activity
             android:name=".activity.RefreshLoadMoreActivity"
-            android:label="ViewType菜单" />
+            android:label="下拉刷新，加载更多" />
         <activity
             android:name=".activity.ListDragMenuActivity"
             android:label="拖拽Item条目+菜单(List)" />
@@ -43,6 +43,9 @@
         <activity
             android:name=".activity.DragSwipeFlagsActivity"
             android:label="指定Item不能拖拽/滑动删除" />
+        <activity
+            android:name=".activity.VerticalMenuActivity"
+            android:label="竖型菜单" />
         <activity
             android:name=".activity.DefineActivity"
             android:label="用SwipeMenuLayout实现你自己的侧滑" />

@@ -28,6 +28,6 @@ public interface OnSwipeMenuItemClickListener {
      * @param menuPosition    menuPosition.
      * @param direction       can be {@link SwipeMenuRecyclerView#LEFT_DIRECTION}, {@link SwipeMenuRecyclerView#RIGHT_DIRECTION}.
      */
-    void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction);
+    void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, @SwipeMenuRecyclerView.DirectionMode int direction);
 
 }
