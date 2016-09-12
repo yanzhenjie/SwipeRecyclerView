@@ -50,27 +50,27 @@ gif有一些失真，且网页加载速度慢，可以[下载demo的apk][3]看�
 ## 侧滑菜单
 1. 左右两侧都有菜单，主动调出第几个菜单或者手指滑动出现。  
 2. 根据ViewType某一个Item显示的不同的菜单（类似QQ）   
-<image src="image/1.gif" width="280px"/> <image src="image/2.gif" width="280px"/>  
+<image src="./image/1.gif" width="280px"/> <image src="./image/2.gif" width="280px"/>  
 
 ## 和ViewPager嵌套 下拉刷新、自动加载更多
 1. 和ViewPager嵌套使用，兼容了滑动冲突。  
 2. 可以和任何下拉刷新的框架结合，滑动到底部自动加载更多。  
-<image src="image/3.gif" width="280px"/> <image src="image/4.gif" width="280px"/>  
+<image src="./image/3.gif" width="280px"/> <image src="./image/4.gif" width="280px"/>  
 
 ## 长按拖拽 侧滑菜单结合使用
 1. 一直按住Item进行拖拽排序，支持List、Grid形式。  
 2. 长按拖拽并且和侧滑菜单结合使用。  
-<image src="image/5.gif" width="280px"/> <image src="image/6.gif" width="280px"/> 
+<image src="./image/5.gif" width="280px"/> <image src="./image/6.gif" width="280px"/> 
 
 ## 直接滑动删除 长按拖拽Item排序
 1. 侧滑直接删除，也可以长按拖拽排序。  
 2. 可以指定某个Item不能被侧滑删除、不能被长按拖拽。  
-<image src="image/7.gif" width="280px"/> <image src="image/8.gif" width="280px"/> 
+<image src="./image/7.gif" width="280px"/> <image src="./image/8.gif" width="280px"/> 
 
 ## 直接滑动删除 长按拖拽Item排序
 1. 给菜单设置排列方向，支持横向、竖向。  
 2. 开发者用库中的`SwipeMenuLayout`开发自己的侧滑菜单。  
-<image src="image/9.gif" width="280px"/> <image src="image/10.gif" width="280px"/> 
+<image src="./image/9.gif" width="280px"/> <image src="./image/10.gif" width="280px"/> 
 
 # 使用介绍
 这里列出关键实现，具体请参考demo，或者加最上面的交流群一起讨论。 更多教程请进入[我的博客][1]查看。
