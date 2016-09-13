@@ -168,7 +168,11 @@ public class MenuAdapter extends SwipeMenuAdapter<MenuAdapter.DefaultViewHolder>
 }
 ```
 # Thanks
-[SwipeMenu](https://github.com/TUBB/SwipeMenu/)
+SwiepRecyclerView的侧滑功能绝大部分代码参考了SwipeMenu，并改了部分代码，修复了几个bug：  
+[SwipeMenu](https://github.com/TUBB/SwipeMenu/)  
+
+SwiepRecyclerView的菜单创建监器参考了SwipeMenuListView，如果是想ListView使用侧滑菜单功能，请使用SwipeMenuListView：  
+[SwipeMenuListView](https://github.com/baoyongzhang/SwipeMenuListView)
 
 #License
 ```text
