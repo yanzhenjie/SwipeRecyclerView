@@ -167,6 +167,8 @@ public class MenuAdapter extends SwipeMenuAdapter<MenuAdapter.DefaultViewHolder>
     }
 }
 ```
+# Thanks
+[SwipeMenu](https://github.com/TUBB/SwipeMenu/)
 
 #License
 ```text
