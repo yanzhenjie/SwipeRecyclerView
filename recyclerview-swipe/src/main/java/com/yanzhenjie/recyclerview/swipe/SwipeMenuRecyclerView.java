@@ -397,7 +397,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         int disX = mDownX - x;
         int disY = mDownY - y;
         // swipe
-        if (Math.abs(disX) > mViewConfig.getScaledTouchSlop())
+        if (Math.abs(disX) > mViewConfig.getScaledTouchSlop() && Math.abs(disX) > Math.abs(disY))
             defaultValue = false;
         // click
         if (Math.abs(disY) < mViewConfig.getScaledTouchSlop() && Math.abs(disX) < mViewConfig.getScaledTouchSlop())
