@@ -16,17 +16,31 @@
 package com.yanzhenjie.swiperecyclerview.activity;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.yanzhenjie.swiperecyclerview.R;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuCardActivity;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuDefineActivity;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuDrawerActivity;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuHorizontalActivity;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuVerticalActivity;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuViewPagerActivity;
+import com.yanzhenjie.swiperecyclerview.activity.menu.MenuViewTypeActivity;
+import com.yanzhenjie.swiperecyclerview.activity.move.DragGridMenuActivity;
+import com.yanzhenjie.swiperecyclerview.activity.move.DragListMenuActivity;
+import com.yanzhenjie.swiperecyclerview.activity.move.DragSwipeFlagsActivity;
+import com.yanzhenjie.swiperecyclerview.activity.move.DragSwipeListActivity;
+import com.yanzhenjie.swiperecyclerview.activity.move.DragTouchListActivity;
 import com.yanzhenjie.swiperecyclerview.adapter.MainItemAdapter;
 import com.yanzhenjie.swiperecyclerview.listener.OnItemClickListener;
-import com.yanzhenjie.swiperecyclerview.view.ListViewDecoration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,11 +51,6 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements OnItemClickListener {
 
-    private RecyclerView recyclerView;
-    private List<String> titles;
-    private List<String> descriptions;
-    private MainItemAdapter mMainItemAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,51 +58,78 @@ public class MainActivity extends AppCompatActivity implements OnItemClickListen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new ListViewDecoration());
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.set(10, 10, 10, 15);
+            }
+        });
 
-        titles = Arrays.asList(getResources().getStringArray(R.array.main_item));
-        descriptions = Arrays.asList(getResources().getStringArray(R.array.main_item_des));
-        mMainItemAdapter = new MainItemAdapter(titles, descriptions);
-        mMainItemAdapter.setOnItemClickListener(this);
-        recyclerView.setAdapter(mMainItemAdapter);
+        List<String> titles = Arrays.asList(getResources().getStringArray(R.array.main_item));
+        List<String> descriptions = Arrays.asList(getResources().getStringArray(R.array.main_item_des));
+        MainItemAdapter mainItemAdapter = new MainItemAdapter(titles, descriptions);
+        mainItemAdapter.setOnItemClickListener(this);
+        recyclerView.setAdapter(mainItemAdapter);
     }
 
     @Override
     public void onItemClick(int position) {
         switch (position) {
-            case 0:
-                startActivity(new Intent(this, AllMenuActivity.class));
+            case 0: {
+                startActivity(new Intent(this, MenuHorizontalActivity.class));
                 break;
-            case 1:
-                startActivity(new Intent(this, ViewTypeMenuActivity.class));
+            }
+            case 1: {
+                startActivity(new Intent(this, MenuVerticalActivity.class));
                 break;
-            case 2:
-                startActivity(new Intent(this, ViewPagerMenuActivity.class));
+            }
+            case 2: {
+                startActivity(new Intent(this, MenuViewTypeActivity.class));
                 break;
-            case 3:
+            }
+            case 3: {
+                startActivity(new Intent(this, MenuViewPagerActivity.class));
+                break;
+            }
+            case 4: {
+                startActivity(new Intent(this, MenuDrawerActivity.class));
+                break;
+            }
+            case 5: {
+                startActivity(new Intent(this, MenuCardActivity.class));
+                break;
+            }
+            case 6: {
+                startActivity(new Intent(this, MenuDefineActivity.class));
+                break;
+            }
+            case 7: {
                 startActivity(new Intent(this, RefreshLoadMoreActivity.class));
                 break;
-            case 4:
-                startActivity(new Intent(this, ListDragMenuActivity.class));
+            }
+            case 8: {
+                startActivity(new Intent(this, DragListMenuActivity.class));
                 break;
-            case 5:
-                startActivity(new Intent(this, GridDragMenuActivity.class));
+            }
+            case 9: {
+                startActivity(new Intent(this, DragGridMenuActivity.class));
                 break;
-            case 6:
-                startActivity(new Intent(this, ListDragSwipeActivity.class));
+            }
+            case 10: {
+                startActivity(new Intent(this, DragTouchListActivity.class));
                 break;
-            case 7:
+            }
+            case 11: {
+                startActivity(new Intent(this, DragSwipeListActivity.class));
+                break;
+            }
+            case 12: {
                 startActivity(new Intent(this, DragSwipeFlagsActivity.class));
                 break;
-            case 8:
-                startActivity(new Intent(this, VerticalMenuActivity.class));
-                break;
-            case 9:
-                startActivity(new Intent(this, DefineActivity.class));
-                break;
+            }
         }
     }
 

@@ -1,14 +1,18 @@
-apply plugin: 'com.android.library'
+apply plugin: rootProject.ext.plugin.library
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
 }
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile rootProject.ext.dependencies.recyclerView
 }
+
+apply from: "maven.gradle"

@@ -28,8 +28,6 @@ import android.widget.FrameLayout;
 import android.widget.OverScroller;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 /**
  * Created by Yan Zhenjie on 2016/7/27.
  */
@@ -79,11 +77,12 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         mRightViewId = typedArray.getResourceId(R.styleable.SwipeMenuLayout_rightViewId, mRightViewId);
         typedArray.recycle();
 
-        ViewConfiguration mViewConfig = ViewConfiguration.get(getContext());
-        mScaledTouchSlop = mViewConfig.getScaledTouchSlop();
+        ViewConfiguration configuration = ViewConfiguration.get(getContext());
+        mScaledTouchSlop = configuration.getScaledTouchSlop();
+        mScaledMinimumFlingVelocity = configuration.getScaledMinimumFlingVelocity();
+        mScaledMaximumFlingVelocity = configuration.getScaledMaximumFlingVelocity();
+
         mScroller = new OverScroller(getContext());
-        mScaledMinimumFlingVelocity = mViewConfig.getScaledMinimumFlingVelocity();
-        mScaledMaximumFlingVelocity = mViewConfig.getScaledMaximumFlingVelocity();
     }
 
     @Override
@@ -160,28 +159,29 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         boolean isIntercepted = super.onInterceptTouchEvent(ev);
         int action = ev.getAction();
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN: {
                 mDownX = mLastX = (int) ev.getX();
                 mDownY = (int) ev.getY();
-                isIntercepted = false;
-                break;
-            case MotionEvent.ACTION_MOVE:
+                return false;
+            }
+            case MotionEvent.ACTION_MOVE: {
                 int disX = (int) (ev.getX() - mDownX);
                 int disY = (int) (ev.getY() - mDownY);
-                isIntercepted = Math.abs(disX) > mScaledTouchSlop && Math.abs(disX) > Math.abs(disY);
-                break;
-            case MotionEvent.ACTION_UP:
-                isIntercepted = false;
-                if (isMenuOpen() && mSwipeCurrentHorizontal.isClickOnContentView(getWidth(), ev.getX())) {
+                return Math.abs(disX) > mScaledTouchSlop && Math.abs(disX) > Math.abs(disY);
+            }
+            case MotionEvent.ACTION_UP: {
+                boolean isClick = mSwipeCurrentHorizontal.isClickOnContentView(getWidth(), ev.getX());
+                if (isMenuOpen() && isClick) {
                     smoothCloseMenu();
-                    isIntercepted = true;
+                    return true;
                 }
-                break;
-            case MotionEvent.ACTION_CANCEL:
-                isIntercepted = false;
+                return false;
+            }
+            case MotionEvent.ACTION_CANCEL: {
                 if (!mScroller.isFinished())
                     mScroller.abortAnimation();
-                break;
+                return false;
+            }
         }
         return isIntercepted;
     }
@@ -194,11 +194,12 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         int dy;
         int action = ev.getAction();
         switch (action) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN: {
                 mLastX = (int) ev.getX();
                 mLastY = (int) ev.getY();
                 break;
-            case MotionEvent.ACTION_MOVE:
+            }
+            case MotionEvent.ACTION_MOVE: {
                 if (!isSwipeEnable()) break;
                 int disX = (int) (mLastX - ev.getX());
                 int disY = (int) (mLastY - ev.getY());
@@ -225,7 +226,8 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                     shouldResetSwipe = false;
                 }
                 break;
-            case MotionEvent.ACTION_UP:
+            }
+            case MotionEvent.ACTION_UP: {
                 dx = (int) (mDownX - ev.getX());
                 dy = (int) (mDownY - ev.getY());
                 mDragging = false;
@@ -256,13 +258,17 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                 mVelocityTracker.clear();
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
-                if (Math.abs(mDownX - ev.getX()) > mScaledTouchSlop || Math.abs(mDownY - ev.getY()) > mScaledTouchSlop || isMenuOpen()) {
+                if (Math.abs(mDownX - ev.getX()) > mScaledTouchSlop
+                        || Math.abs(mDownY - ev.getY()) > mScaledTouchSlop
+                        || isLeftMenuOpen()
+                        || isRightMenuOpen()) {
                     ev.setAction(MotionEvent.ACTION_CANCEL);
                     super.onTouchEvent(ev);
                     return true;
                 }
                 break;
-            case MotionEvent.ACTION_CANCEL:
+            }
+            case MotionEvent.ACTION_CANCEL: {
                 mDragging = false;
                 if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
@@ -272,6 +278,7 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                     judgeOpenClose(dx, dy);
                 }
                 break;
+            }
         }
         return super.onTouchEvent(ev);
     }
@@ -349,6 +356,14 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         }
     }
 
+    public boolean hasLeftMenu() {
+        return mSwipeLeftHorizontal != null && mSwipeLeftHorizontal.canSwipe();
+    }
+
+    public boolean hasRightMenu() {
+        return mSwipeRightHorizontal != null && mSwipeRightHorizontal.canSwipe();
+    }
+
     @Override
     public boolean isMenuOpen() {
         return isLeftMenuOpen() || isRightMenuOpen();
@@ -362,6 +377,21 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
     @Override
     public boolean isRightMenuOpen() {
         return mSwipeRightHorizontal != null && mSwipeRightHorizontal.isMenuOpen(getScrollX());
+    }
+
+    @Override
+    public boolean isCompleteOpen() {
+        return isLeftCompleteOpen() || isRightMenuOpen();
+    }
+
+    @Override
+    public boolean isLeftCompleteOpen() {
+        return mSwipeLeftHorizontal != null && !mSwipeLeftHorizontal.isCompleteClose(getScrollX());
+    }
+
+    @Override
+    public boolean isRightCompleteOpen() {
+        return mSwipeRightHorizontal != null && !mSwipeRightHorizontal.isCompleteClose(getScrollX());
     }
 
     @Override
@@ -380,8 +410,18 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
     }
 
     @Override
+    public void smoothOpenMenu() {
+        smoothOpenMenu(mScrollerDuration);
+    }
+
+    @Override
     public void smoothOpenLeftMenu() {
         smoothOpenLeftMenu(mScrollerDuration);
+    }
+
+    @Override
+    public void smoothOpenRightMenu() {
+        smoothOpenRightMenu(mScrollerDuration);
     }
 
     @Override
@@ -393,11 +433,6 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
     }
 
     @Override
-    public void smoothOpenRightMenu() {
-        smoothOpenRightMenu(mScrollerDuration);
-    }
-
-    @Override
     public void smoothOpenRightMenu(int duration) {
         if (mSwipeRightHorizontal != null) {
             mSwipeCurrentHorizontal = mSwipeRightHorizontal;
@@ -405,16 +440,16 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         }
     }
 
-    @Override
-    public void smoothOpenMenu() {
-        smoothOpenMenu(mScrollerDuration);
-    }
-
     private void smoothOpenMenu(int duration) {
         if (mSwipeCurrentHorizontal != null) {
             mSwipeCurrentHorizontal.autoOpenMenu(mScroller, getScrollX(), duration);
             invalidate();
         }
+    }
+
+    @Override
+    public void smoothCloseMenu() {
+        smoothCloseMenu(mScrollerDuration);
     }
 
     @Override
@@ -442,104 +477,8 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
     }
 
     @Override
-    public void smoothCloseMenu() {
-        smoothCloseMenu(mScrollerDuration);
-    }
-
-    private final ArrayList<View> mMatchParentChildren = new ArrayList<>(1);
-
-    boolean mMeasureAllChildren = false;
-
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int count = getChildCount();
-//
-//        final boolean measureMatchParentChildren = MeasureSpec.getMode(widthMeasureSpec) != MeasureSpec.EXACTLY || MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY;
-//        mMatchParentChildren.clear();
-//
-//        int maxHeight = 0;
-//        int maxWidth = 0;
-//        int childState = 0;
-//
-//        for (int i = 0; i < count; i++) {
-//            final View child = getChildAt(i);
-//            if (mMeasureAllChildren || child.getVisibility() != GONE) {
-//                measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0);
-//                final LayoutParams lp = (LayoutParams) child.getLayoutParams();
-//                maxWidth = Math.max(maxWidth, child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin);
-//                maxHeight = Math.max(maxHeight, child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
-//                childState = combineMeasuredStates(childState, child.getMeasuredState());
-//                if (measureMatchParentChildren) {
-//                    if (lp.width == LayoutParams.MATCH_PARENT || lp.height == LayoutParams.MATCH_PARENT) {
-//                        mMatchParentChildren.add(child);
-//                    }
-//                }
-//            }
-//        }
-//
-//        // Check against our minimum height and width
-//        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
-//        maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
-//
-//        // Check against our foreground's minimum height and width
-//        final Drawable drawable = getForeground();
-//        if (drawable != null) {
-//            maxHeight = Math.max(maxHeight, drawable.getMinimumHeight());
-//            maxWidth = Math.max(maxWidth, drawable.getMinimumWidth());
-//        }
-//
-//        setMeasuredDimension(resolveSizeAndState(maxWidth, widthMeasureSpec, childState), resolveSizeAndState(maxHeight, heightMeasureSpec, childState << MEASURED_HEIGHT_STATE_SHIFT));
-//
-//        count = mMatchParentChildren.size();
-//        if (count > 1) {
-//            for (int i = 0; i < count; i++) {
-//                final View child = mMatchParentChildren.get(i);
-//                final MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
-//
-//                final int childWidthMeasureSpec;
-//                if (lp.width == LayoutParams.MATCH_PARENT) {
-//                    final int width = Math.max(0, getMeasuredWidth() - lp.leftMargin - lp.rightMargin);
-//                    childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
-//                } else {
-//                    childWidthMeasureSpec = getChildMeasureSpec(widthMeasureSpec, lp.leftMargin + lp.rightMargin, lp.width);
-//                }
-//
-//                final int childHeightMeasureSpec;
-//                if (lp.height == LayoutParams.MATCH_PARENT) {
-//                    final int height = Math.max(0, getMeasuredHeight() - lp.topMargin - lp.bottomMargin);
-//                    childHeightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-//                } else {
-//                    childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec, lp.topMargin + lp.bottomMargin, lp.height);
-//                }
-//                child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-//            }
-//        }
-//    }
-
-
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int contentViewHeight = 0;
-//        if (mContentView != null) {
-//            contentViewHeight = mContentView.getMeasuredHeightAndState();
-//        }
-//
-//        if (mSwipeLeftHorizontal != null) {
-//            View leftMenu = mSwipeLeftHorizontal.getMenuView();
-//            int menuViewHeight = contentViewHeight == 0 ? leftMenu.getMeasuredHeightAndState() : contentViewHeight;
-//        }
-//
-//        if (mSwipeRightHorizontal != null) {
-//            View rightMenu = mSwipeRightHorizontal.getMenuView();
-//            int menuViewHeight = contentViewHeight == 0 ? rightMenu.getMeasuredHeightAndState() : contentViewHeight;
-//        }
-//    }
-
-    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int contentViewHeight = 0;
+        int contentViewHeight;
         if (mContentView != null) {
             int contentViewWidth = mContentView.getMeasuredWidthAndState();
             contentViewHeight = mContentView.getMeasuredHeightAndState();
@@ -552,7 +491,6 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         if (mSwipeLeftHorizontal != null) {
             View leftMenu = mSwipeLeftHorizontal.getMenuView();
             int menuViewWidth = leftMenu.getMeasuredWidthAndState();
-//            int menuViewHeight = contentViewHeight == 0 ? leftMenu.getMeasuredHeightAndState() : contentViewHeight;
             int menuViewHeight = leftMenu.getMeasuredHeightAndState();
             LayoutParams lp = (LayoutParams) leftMenu.getLayoutParams();
             int top = getPaddingTop() + lp.topMargin;
@@ -562,7 +500,6 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         if (mSwipeRightHorizontal != null) {
             View rightMenu = mSwipeRightHorizontal.getMenuView();
             int menuViewWidth = rightMenu.getMeasuredWidthAndState();
-//            int menuViewHeight = contentViewHeight == 0 ? rightMenu.getMeasuredHeightAndState() : contentViewHeight;
             int menuViewHeight = rightMenu.getMeasuredHeightAndState();
             LayoutParams lp = (LayoutParams) rightMenu.getLayoutParams();
             int top = getPaddingTop() + lp.topMargin;

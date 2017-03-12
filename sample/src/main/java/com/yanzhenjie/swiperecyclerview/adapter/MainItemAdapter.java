@@ -53,13 +53,15 @@ public class MainItemAdapter extends RecyclerView.Adapter<MainItemAdapter.Defaul
 
     @Override
     public MainItemAdapter.DefaultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new DefaultViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main, parent, false));
+        DefaultViewHolder viewHolder = new DefaultViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout
+                .item_main, parent, false));
+        viewHolder.mOnItemClickListener = mOnItemClickListener;
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(MainItemAdapter.DefaultViewHolder holder, int position) {
         holder.setData(titles.get(position), descriptions.get(position));
-        holder.setOnItemClickListener(mOnItemClickListener);
     }
 
     static class DefaultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -72,10 +74,6 @@ public class MainItemAdapter extends RecyclerView.Adapter<MainItemAdapter.Defaul
             itemView.setOnClickListener(this);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
             tvDescription = (TextView) itemView.findViewById(R.id.tv_des);
-        }
-
-        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-            this.mOnItemClickListener = onItemClickListener;
         }
 
         public void setData(String title, String des) {

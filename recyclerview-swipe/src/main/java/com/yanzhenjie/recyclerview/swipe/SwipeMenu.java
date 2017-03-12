@@ -17,6 +17,7 @@ package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.widget.LinearLayout;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -33,18 +34,18 @@ public class SwipeMenu {
     public @interface OrientationMode {
     }
 
-    public static final int HORIZONTAL = 0;
-    public static final int VERTICAL = 1;
+    public static final int HORIZONTAL = LinearLayout.HORIZONTAL;
+    public static final int VERTICAL = LinearLayout.VERTICAL;
 
     private SwipeMenuLayout mSwipeMenuLayout;
 
     private int mViewType;
 
-    private int orientation;
+    private int orientation = HORIZONTAL;
 
     private List<SwipeMenuItem> mSwipeMenuItems;
 
-    SwipeMenu(SwipeMenuLayout swipeMenuLayout, int viewType) {
+    public SwipeMenu(SwipeMenuLayout swipeMenuLayout, int viewType) {
         this.mSwipeMenuLayout = swipeMenuLayout;
         this.mViewType = viewType;
         this.mSwipeMenuItems = new ArrayList<>(2);

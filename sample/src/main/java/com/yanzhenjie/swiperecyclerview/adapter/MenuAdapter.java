@@ -51,18 +51,19 @@ public class MenuAdapter extends SwipeMenuAdapter<MenuAdapter.DefaultViewHolder>
 
     @Override
     public View onCreateContentView(ViewGroup parent, int viewType) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu, parent, false);
     }
 
     @Override
     public MenuAdapter.DefaultViewHolder onCompatCreateViewHolder(View realContentView, int viewType) {
-        return new DefaultViewHolder(realContentView);
+        DefaultViewHolder viewHolder = new DefaultViewHolder(realContentView);
+        viewHolder.mOnItemClickListener = mOnItemClickListener;
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(MenuAdapter.DefaultViewHolder holder, int position) {
         holder.setData(titles.get(position));
-        holder.setOnItemClickListener(mOnItemClickListener);
     }
 
     static class DefaultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -73,10 +74,6 @@ public class MenuAdapter extends SwipeMenuAdapter<MenuAdapter.DefaultViewHolder>
             super(itemView);
             itemView.setOnClickListener(this);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
-        }
-
-        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-            this.mOnItemClickListener = onItemClickListener;
         }
 
         public void setData(String title) {

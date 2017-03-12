@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.swiperecyclerview.activity;
+package com.yanzhenjie.swiperecyclerview.activity.menu;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -33,7 +33,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.swiperecyclerview.R;
-import com.yanzhenjie.swiperecyclerview.adapter.MenuAdapter;
+import com.yanzhenjie.swiperecyclerview.adapter.MenuVerticalAdapter;
 import com.yanzhenjie.swiperecyclerview.listener.OnItemClickListener;
 import com.yanzhenjie.swiperecyclerview.view.ListViewDecoration;
 
@@ -41,17 +41,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>左右两侧Item菜单：竖向排布。</p>
  * Created by Yan Zhenjie on 2016/8/25.
  */
-public class VerticalMenuActivity extends AppCompatActivity {
+public class MenuVerticalActivity extends AppCompatActivity {
 
     private Activity mContext;
 
-    private MenuAdapter mMenuAdapter;
+    private MenuVerticalAdapter mMenuAdapter;
 
-    private List<String> mStrings;
+    private List<String> mDataList;
 
-    private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
+    private SwipeMenuRecyclerView mMenuRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,29 +60,29 @@ public class VerticalMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
 
-        mStrings = new ArrayList<>();
+        mDataList = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            mStrings.add("我 我 我 我\n是 是 是 是\n第 第 第 第\n" + i + " " + i + " " + i + " " + i + "\n个 个 个 个\n，\n我 我 我 我\n是 是 是 是\n竖 竖 竖 竖\n型 型 型 型\n菜 菜 菜 菜 \n单 单 单 单");
+            mDataList.add("我是第" + i + "个菜单");
         }
-        mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
-        mSwipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
-        mSwipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
-        mSwipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
+        mMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        mMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
+        mMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
 
         // 为SwipeRecyclerView的Item创建菜单就两句话，不错就是这么简单：
         // 设置菜单创建器。
-        mSwipeMenuRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
+        mMenuRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
         // 设置菜单Item点击监听。
-        mSwipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
+        mMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
 
-        mMenuAdapter = new MenuAdapter(mStrings);
+        mMenuAdapter = new MenuVerticalAdapter(mDataList);
         mMenuAdapter.setOnItemClickListener(onItemClickListener);
-        mSwipeMenuRecyclerView.setAdapter(mMenuAdapter);
+        mMenuRecyclerView.setAdapter(mMenuAdapter);
     }
 
     /**
@@ -116,6 +117,9 @@ public class VerticalMenuActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * Item点击监听。
+     */
     private OnItemClickListener onItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(int position) {
@@ -132,7 +136,8 @@ public class VerticalMenuActivity extends AppCompatActivity {
          * @param closeable       closeable. 用来关闭菜单。
          * @param adapterPosition adapterPosition. 这个菜单所在的item在Adapter中position。
          * @param menuPosition    menuPosition. 这个菜单的position。比如你为某个Item创建了2个MenuItem，那么这个position可能是是 0、1，
-         * @param direction       如果是左侧菜单，值是：SwipeMenuRecyclerView#LEFT_DIRECTION，如果是右侧菜单，值是：SwipeMenuRecyclerView#RIGHT_DIRECTION.
+         * @param direction       如果是左侧菜单，值是：SwipeMenuRecyclerView#LEFT_DIRECTION，如果是右侧菜单，值是：SwipeMenuRecyclerView
+         *                        #RIGHT_DIRECTION.
          */
         @Override
         public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
@@ -146,7 +151,7 @@ public class VerticalMenuActivity extends AppCompatActivity {
 
             // TODO 如果是删除：推荐调用Adapter.notifyItemRemoved(position)，不推荐Adapter.notifyDataSetChanged();
             if (menuPosition == 0) {// 删除按钮被点击。
-                mStrings.remove(adapterPosition);
+                mDataList.remove(adapterPosition);
                 mMenuAdapter.notifyItemRemoved(adapterPosition);
             }
         }
@@ -163,7 +168,7 @@ public class VerticalMenuActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.menu_open_rv_menu) {
-            mSwipeMenuRecyclerView.smoothOpenRightMenu(0);
+            mMenuRecyclerView.smoothOpenRightMenu(0);
         }
         return true;
     }

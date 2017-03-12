@@ -59,7 +59,8 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
     public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View contentView = onCreateContentView(parent, viewType);
         if (mSwipeMenuCreator != null) {
-            SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.yanzhenjie_item_default, parent, false);
+            SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout
+                    .yanzhenjie_item_default, parent, false);
 
             SwipeMenu swipeLeftMenu = new SwipeMenu(swipeMenuLayout, viewType);
             SwipeMenu swipeRightMenu = new SwipeMenu(swipeMenuLayout, viewType);
@@ -69,6 +70,7 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
             int leftMenuCount = swipeLeftMenu.getMenuItems().size();
             if (leftMenuCount > 0) {
                 SwipeMenuView swipeLeftMenuView = (SwipeMenuView) swipeMenuLayout.findViewById(R.id.swipe_left);
+                // noinspection WrongConstant
                 swipeLeftMenuView.setOrientation(swipeLeftMenu.getOrientation());
                 swipeLeftMenuView.bindMenu(swipeLeftMenu, SwipeMenuRecyclerView.LEFT_DIRECTION);
                 swipeLeftMenuView.bindMenuItemClickListener(mSwipeMenuItemClickListener, swipeMenuLayout);
@@ -77,6 +79,7 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
             int rightMenuCount = swipeRightMenu.getMenuItems().size();
             if (rightMenuCount > 0) {
                 SwipeMenuView swipeRightMenuView = (SwipeMenuView) swipeMenuLayout.findViewById(R.id.swipe_right);
+                // noinspection WrongConstant
                 swipeRightMenuView.setOrientation(swipeRightMenu.getOrientation());
                 swipeRightMenuView.bindMenu(swipeRightMenu, SwipeMenuRecyclerView.RIGHT_DIRECTION);
                 swipeRightMenuView.bindMenuItemClickListener(mSwipeMenuItemClickListener, swipeMenuLayout);
@@ -86,7 +89,6 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
                 ViewGroup viewGroup = (ViewGroup) swipeMenuLayout.findViewById(R.id.swipe_content);
                 viewGroup.addView(contentView);
                 contentView = swipeMenuLayout;
-
             }
         }
         return onCompatCreateViewHolder(contentView, viewType);
@@ -130,7 +132,8 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
     /**
      * Instead {@link #onBindViewHolder(RecyclerView.ViewHolder, int, List)}.
      *
-     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position in the data set.
+     * @param holder   The ViewHolder which should be updated to represent the contents of the item at the given position in
+     *                 the data set.
      * @param position The position of the item within the adapter's data set.
      * @param payloads A non-null list of merged payloads. Can be empty list if requires full update.
      * @see #onCompatBindViewHolder(RecyclerView.ViewHolder, int, List)

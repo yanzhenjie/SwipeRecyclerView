@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.swiperecyclerview.activity;
+package com.yanzhenjie.swiperecyclerview.activity.move;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -40,17 +39,18 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * <p>拖拽Item + 侧滑删除，默认侧滑删除只支持List形式。</p>
  * Created by Yan Zhenjie on 2016/8/3.
  */
-public class ListDragSwipeActivity extends AppCompatActivity {
+public class DragSwipeListActivity extends AppCompatActivity {
 
     private Activity mContext;
 
-    private SwipeMenuRecyclerView mSwipeMenuRecyclerView;
-
-    private List<String> mStrings;
+    private List<String> mDataList;
 
     private MenuAdapter mMenuAdapter;
+
+    private ActionBar mActionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,29 +61,27 @@ public class ListDragSwipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        assert mActionBar != null;
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mStrings = new ArrayList<>();
+        mDataList = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            mStrings.add("我是第" + i + "个。");
+            mDataList.add("我是第" + i + "个。");
         }
 
-        mSwipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        mSwipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
-        mSwipeMenuRecyclerView.setHasFixedSize(true);// 如果Item够简单，高度是确定的，打开FixSize将提高性能。
-        mSwipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());// 设置Item默认动画，加也行，不加也行。
-        mSwipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
+        SwipeMenuRecyclerView menuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));// 布局管理器。
+        menuRecyclerView.addItemDecoration(new ListViewDecoration());// 添加分割线。
 
-        // 这个就不用添加菜单啦，因为滑动删除和菜单是冲突的。
-
-        mMenuAdapter = new MenuAdapter(mStrings);
+        mMenuAdapter = new MenuAdapter(mDataList);
         mMenuAdapter.setOnItemClickListener(onItemClickListener);
-        mSwipeMenuRecyclerView.setAdapter(mMenuAdapter);
+        menuRecyclerView.setAdapter(mMenuAdapter);
 
-        mSwipeMenuRecyclerView.setLongPressDragEnabled(true);
-        mSwipeMenuRecyclerView.setItemViewSwipeEnabled(true);// 开启滑动删除。
-        mSwipeMenuRecyclerView.setOnItemMoveListener(onItemMoveListener);// 监听拖拽，更新UI。
-        mSwipeMenuRecyclerView.setOnItemStateChangedListener(mOnItemStateChangedListener);
+        menuRecyclerView.setLongPressDragEnabled(true); // 开启长按拖拽。
+        menuRecyclerView.setItemViewSwipeEnabled(true); // 开启滑动删除。
+        menuRecyclerView.setOnItemMoveListener(onItemMoveListener);// 监听拖拽，更新UI。
+        menuRecyclerView.setOnItemStateChangedListener(mOnItemStateChangedListener);
     }
 
     /**
@@ -92,14 +90,14 @@ public class ListDragSwipeActivity extends AppCompatActivity {
     private OnItemMoveListener onItemMoveListener = new OnItemMoveListener() {
         @Override
         public boolean onItemMove(int fromPosition, int toPosition) {
-            Collections.swap(mStrings, fromPosition, toPosition);
+            Collections.swap(mDataList, fromPosition, toPosition);
             mMenuAdapter.notifyItemMoved(fromPosition, toPosition);
             return true;
         }
 
         @Override
         public void onItemDismiss(int position) {
-            mStrings.remove(position);
+            mDataList.remove(position);
             mMenuAdapter.notifyItemRemoved(position);
             Toast.makeText(mContext, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
         }
@@ -107,18 +105,21 @@ public class ListDragSwipeActivity extends AppCompatActivity {
     };
 
     /**
-     * Item的滑动状态发生变化监听。
+     * Item的拖拽/侧滑删除时，手指状态发生变化监听。
      */
-    private OnItemStateChangedListener mOnItemStateChangedListener = new OnItemStateChangedListener() {
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            if (actionState == ACTION_STATE_DRAG) {
-                getSupportActionBar().setSubtitle("状态：拖拽");
-            } else if (actionState == ACTION_STATE_SWIPE) {
-                getSupportActionBar().setSubtitle("状态：滑动删除");
-            } else if (actionState == ACTION_STATE_IDLE) {
-                getSupportActionBar().setSubtitle("状态：手指松开");
-            }
+    private OnItemStateChangedListener mOnItemStateChangedListener = (viewHolder, actionState) -> {
+        if (actionState == OnItemStateChangedListener.ACTION_STATE_DRAG) {
+            mActionBar.setSubtitle("状态：拖拽");
+
+            // 拖拽的时候背景就透明了，这里我们可以添加一个特殊背景。
+            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(this, R.color.white_pressed));
+        } else if (actionState == OnItemStateChangedListener.ACTION_STATE_SWIPE) {
+            mActionBar.setSubtitle("状态：滑动删除");
+        } else if (actionState == OnItemStateChangedListener.ACTION_STATE_IDLE) {
+            mActionBar.setSubtitle("状态：手指松开");
+
+            // 在手松开的时候还原背景。
+            ViewCompat.setBackground(viewHolder.itemView, ContextCompat.getDrawable(this, R.drawable.select_white));
         }
     };
 

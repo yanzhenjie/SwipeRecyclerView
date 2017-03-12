@@ -116,7 +116,8 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int
+            actionState, boolean isCurrentlyActive) {
         //判断当前是否是swipe方式：侧滑。
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             //1.ItemView--ViewHolder; 2.侧滑条目的透明度程度关联谁？dX(delta增量，范围：当前条目-width~width)。
@@ -157,8 +158,16 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
-        if (onItemStateChangedListener != null) {
+        if (onItemStateChangedListener != null && actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
             onItemStateChangedListener.onSelectedChanged(viewHolder, actionState);
+        }
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        if (onItemStateChangedListener != null) {
+            onItemStateChangedListener.onSelectedChanged(viewHolder, OnItemStateChangedListener.ACTION_STATE_IDLE);
         }
     }
 }

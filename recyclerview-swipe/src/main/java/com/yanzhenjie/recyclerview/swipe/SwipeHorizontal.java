@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe;
 
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.OverScroller;
 
 /**
@@ -33,9 +34,21 @@ abstract class SwipeHorizontal {
         mChecker = new Checker();
     }
 
-    public abstract boolean isMenuOpen(final int scrollX);
+    public boolean canSwipe() {
+        if (menuView instanceof ViewGroup) {
+            return ((ViewGroup) menuView).getChildCount() > 0;
+        }
+        return false;
+    }
 
-    public abstract boolean isMenuOpenNotEqual(final int scrollX);
+    public boolean isCompleteClose(int scrollX) {
+        int i = -getMenuView().getWidth() * getDirection();
+        return scrollX == 0 && i != 0;
+    }
+
+    public abstract boolean isMenuOpen(int scrollX);
+
+    public abstract boolean isMenuOpenNotEqual(int scrollX);
 
     public abstract void autoOpenMenu(OverScroller scroller, int scrollX, int duration);
 

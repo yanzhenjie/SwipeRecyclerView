@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.swiperecyclerview.activity;
+package com.yanzhenjie.swiperecyclerview.activity.menu;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -41,11 +41,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created on 2016/7/27.
- *
- * @author Yan Zhenjie.
+ * <p>根据ViewType自定义菜单。</p>
+ * Created by Yan Zhenjie on 2016/7/27.
  */
-public class ViewTypeMenuActivity extends AppCompatActivity {
+public class MenuViewTypeActivity extends AppCompatActivity {
 
     private Activity mContext;
 
@@ -57,7 +56,9 @@ public class ViewTypeMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mContext = this;
 
@@ -82,19 +83,17 @@ public class ViewTypeMenuActivity extends AppCompatActivity {
             mViewTypeBeanList.add(viewTypeBean);
         }
 
-        SwipeMenuRecyclerView swipeMenuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        swipeMenuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        swipeMenuRecyclerView.setHasFixedSize(true);
-        swipeMenuRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        swipeMenuRecyclerView.addItemDecoration(new ListViewDecoration());
+        SwipeMenuRecyclerView menuRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        menuRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        menuRecyclerView.addItemDecoration(new ListViewDecoration());
 
-        swipeMenuRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        swipeMenuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
+        menuRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
+        menuRecyclerView.setSwipeMenuItemClickListener(menuItemClickListener);
 
         MenuViewTypeAdapter menuAdapter = new MenuViewTypeAdapter(mViewTypeBeanList);
         menuAdapter.setOnItemClickListener(onItemClickListener);
 
-        swipeMenuRecyclerView.setAdapter(menuAdapter);
+        menuRecyclerView.setAdapter(menuAdapter);
     }
 
     /**

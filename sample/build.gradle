@@ -1,20 +1,25 @@
-apply plugin: 'com.android.application'
+apply plugin: rootProject.ext.plugin.application
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.yanzhenjie.swiperecyclerview"
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+
+        jackOptions {
+            enabled rootProject.ext.android.jackOptions
+        }
     }
 }
 
 dependencies {
-    compile 'com.yanzhenjie:recyclerview-swipe:1.0.2'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile rootProject.ext.dependencies.swipeRecyclerView
+    compile rootProject.ext.dependencies.design
+    compile rootProject.ext.dependencies.appCompat
+    compile rootProject.ext.dependencies.cardView
 }

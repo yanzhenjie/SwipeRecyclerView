@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.swiperecyclerview.activity;
+package com.yanzhenjie.swiperecyclerview.activity.menu;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -28,13 +29,12 @@ import com.yanzhenjie.recyclerview.swipe.SwipeSwitch;
 import com.yanzhenjie.swiperecyclerview.R;
 
 /**
+ * <p>利用SwipeMenuLayout自定义菜单。</p>
  * Created by Yan Zhenjie on 2016/8/4.
  */
-public class DefineActivity extends AppCompatActivity {
+public class MenuDefineActivity extends AppCompatActivity {
 
     private Activity mContext;
-
-    private TextView mTvContent, mBtnLeft, mBtnRight;
 
     private SwipeSwitch mSwipeSwitch;
 
@@ -47,15 +47,16 @@ public class DefineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_define);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mSwipeSwitch = (SwipeSwitch) findViewById(R.id.swipe_layout);
-        mTvContent = (TextView) findViewById(R.id.content_view);
-        mBtnLeft = (TextView) findViewById(R.id.left_view);
-        mBtnRight = (TextView) findViewById(R.id.right_view);
+        TextView btnLeft = (TextView) findViewById(R.id.left_view);
+        TextView btnRight = (TextView) findViewById(R.id.right_view);
 
-        mBtnLeft.setOnClickListener(xOnClickListener);
-        mBtnRight.setOnClickListener(xOnClickListener);
+        btnLeft.setOnClickListener(xOnClickListener);
+        btnRight.setOnClickListener(xOnClickListener);
     }
 
     private View.OnClickListener xOnClickListener = new View.OnClickListener() {

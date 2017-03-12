@@ -24,11 +24,11 @@ import java.util.List;
 /**
  * Created by Yan Zhenjie on 2016/8/12.
  */
-public class MenuPagerAdapter extends FragmentPagerAdapter {
+public class MenuViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragments;
 
-    public MenuPagerAdapter(FragmentManager fragmentManager, List<Fragment> fragments) {
+    public MenuViewPagerAdapter(FragmentManager fragmentManager, List<Fragment> fragments) {
         super(fragmentManager);
         this.fragments = fragments;
     }

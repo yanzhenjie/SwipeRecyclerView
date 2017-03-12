@@ -17,13 +17,14 @@ package com.yanzhenjie.swiperecyclerview.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.swiperecyclerview.R;
-import com.yanzhenjie.swiperecyclerview.entity.ViewTypeBean;
 import com.yanzhenjie.swiperecyclerview.listener.OnItemClickListener;
 
 import java.util.List;
@@ -31,19 +32,17 @@ import java.util.List;
 /**
  * Created by YOLANDA on 2016/7/22.
  */
-public class MenuViewTypeAdapter extends SwipeMenuAdapter<MenuViewTypeAdapter.DefaultViewHolder> {
+public class DragTouchAdapter extends SwipeMenuAdapter<DragTouchAdapter.DefaultViewHolder> {
 
-    public static final int VIEW_TYPE_MENU_NONE = 1;
-    public static final int VIEW_TYPE_MENU_SINGLE = 2;
-    public static final int VIEW_TYPE_MENU_MULTI = 3;
-    public static final int VIEW_TYPE_MENU_LEFT = 4;
+    private SwipeMenuRecyclerView mMenuRecyclerView;
 
-    private List<ViewTypeBean> mViewTypeBeanList;
+    private List<String> titles;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public MenuViewTypeAdapter(List<ViewTypeBean> viewTypeBeanList) {
-        this.mViewTypeBeanList = viewTypeBeanList;
+    public DragTouchAdapter(SwipeMenuRecyclerView menuRecyclerView, List<String> titles) {
+        this.mMenuRecyclerView = menuRecyclerView;
+        this.titles = titles;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -51,44 +50,43 @@ public class MenuViewTypeAdapter extends SwipeMenuAdapter<MenuViewTypeAdapter.De
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return mViewTypeBeanList.get(position).getViewType();
-    }
-
-    @Override
     public int getItemCount() {
-        return mViewTypeBeanList == null ? 0 : mViewTypeBeanList.size();
+        return titles == null ? 0 : titles.size();
     }
 
     @Override
     public View onCreateContentView(ViewGroup parent, int viewType) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_drag_touch, parent, false);
     }
 
     @Override
-    public MenuViewTypeAdapter.DefaultViewHolder onCompatCreateViewHolder(View realContentView, int viewType) {
+    public DragTouchAdapter.DefaultViewHolder onCompatCreateViewHolder(View realContentView, int viewType) {
         DefaultViewHolder viewHolder = new DefaultViewHolder(realContentView);
         viewHolder.mOnItemClickListener = mOnItemClickListener;
+        viewHolder.mMenuRecyclerView = mMenuRecyclerView;
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MenuViewTypeAdapter.DefaultViewHolder holder, int position) {
-        holder.setData(mViewTypeBeanList.get(position));
+    public void onBindViewHolder(DragTouchAdapter.DefaultViewHolder holder, int position) {
+        holder.setData(titles.get(position));
     }
 
-    static class DefaultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    static class DefaultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnTouchListener {
+
         TextView tvTitle;
         OnItemClickListener mOnItemClickListener;
+        SwipeMenuRecyclerView mMenuRecyclerView;
 
         public DefaultViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            itemView.findViewById(R.id.iv_touch).setOnTouchListener(this);
         }
 
-        public void setData(ViewTypeBean viewTypeBean) {
-            this.tvTitle.setText(viewTypeBean.getContent());
+        public void setData(String title) {
+            this.tvTitle.setText(title);
         }
 
         @Override
@@ -96,6 +94,18 @@ public class MenuViewTypeAdapter extends SwipeMenuAdapter<MenuViewTypeAdapter.De
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(getAdapterPosition());
             }
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = event.getAction();
+            switch (action) {
+                case MotionEvent.ACTION_DOWN: {
+                    mMenuRecyclerView.startDrag(this);
+                    break;
+                }
+            }
+            return false;
         }
     }
 

@@ -23,27 +23,22 @@ import android.widget.TextView;
 
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuAdapter;
 import com.yanzhenjie.swiperecyclerview.R;
-import com.yanzhenjie.swiperecyclerview.entity.ViewTypeBean;
 import com.yanzhenjie.swiperecyclerview.listener.OnItemClickListener;
 
 import java.util.List;
 
 /**
+ * <p>竖向排布菜单的适配器。</p>
  * Created by YOLANDA on 2016/7/22.
  */
-public class MenuViewTypeAdapter extends SwipeMenuAdapter<MenuViewTypeAdapter.DefaultViewHolder> {
+public class MenuVerticalAdapter extends SwipeMenuAdapter<MenuVerticalAdapter.DefaultViewHolder> {
 
-    public static final int VIEW_TYPE_MENU_NONE = 1;
-    public static final int VIEW_TYPE_MENU_SINGLE = 2;
-    public static final int VIEW_TYPE_MENU_MULTI = 3;
-    public static final int VIEW_TYPE_MENU_LEFT = 4;
-
-    private List<ViewTypeBean> mViewTypeBeanList;
+    private List<String> titles;
 
     private OnItemClickListener mOnItemClickListener;
 
-    public MenuViewTypeAdapter(List<ViewTypeBean> viewTypeBeanList) {
-        this.mViewTypeBeanList = viewTypeBeanList;
+    public MenuVerticalAdapter(List<String> titles) {
+        this.titles = titles;
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
@@ -51,30 +46,25 @@ public class MenuViewTypeAdapter extends SwipeMenuAdapter<MenuViewTypeAdapter.De
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return mViewTypeBeanList.get(position).getViewType();
-    }
-
-    @Override
     public int getItemCount() {
-        return mViewTypeBeanList == null ? 0 : mViewTypeBeanList.size();
+        return titles == null ? 0 : titles.size();
     }
 
     @Override
     public View onCreateContentView(ViewGroup parent, int viewType) {
-        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu, parent, false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_vertical, parent, false);
     }
 
     @Override
-    public MenuViewTypeAdapter.DefaultViewHolder onCompatCreateViewHolder(View realContentView, int viewType) {
+    public MenuVerticalAdapter.DefaultViewHolder onCompatCreateViewHolder(View realContentView, int viewType) {
         DefaultViewHolder viewHolder = new DefaultViewHolder(realContentView);
         viewHolder.mOnItemClickListener = mOnItemClickListener;
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MenuViewTypeAdapter.DefaultViewHolder holder, int position) {
-        holder.setData(mViewTypeBeanList.get(position));
+    public void onBindViewHolder(MenuVerticalAdapter.DefaultViewHolder holder, int position) {
+        holder.setData(titles.get(position));
     }
 
     static class DefaultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -87,8 +77,8 @@ public class MenuViewTypeAdapter extends SwipeMenuAdapter<MenuViewTypeAdapter.De
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
         }
 
-        public void setData(ViewTypeBean viewTypeBean) {
-            this.tvTitle.setText(viewTypeBean.getContent());
+        public void setData(String title) {
+            this.tvTitle.setText(title);
         }
 
         @Override

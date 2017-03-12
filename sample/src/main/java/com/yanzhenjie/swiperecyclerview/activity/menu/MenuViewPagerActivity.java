@@ -13,32 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.swiperecyclerview.activity;
+package com.yanzhenjie.swiperecyclerview.activity.menu;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.yanzhenjie.swiperecyclerview.R;
-import com.yanzhenjie.swiperecyclerview.adapter.MenuPagerAdapter;
+import com.yanzhenjie.swiperecyclerview.adapter.MenuViewPagerAdapter;
 import com.yanzhenjie.swiperecyclerview.fragment.MenuFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>侧滑菜单和ViewPager嵌套。</p>
  * Created by Yan Zhenjie on 2016/8/12.
  */
-public class ViewPagerMenuActivity extends AppCompatActivity {
+public class MenuViewPagerActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
-
-    private MenuPagerAdapter mMenuPagerAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +47,9 @@ public class ViewPagerMenuActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.btn_one).setOnClickListener(onClickListener);
         findViewById(R.id.btn_two).setOnClickListener(onClickListener);
@@ -58,12 +60,12 @@ public class ViewPagerMenuActivity extends AppCompatActivity {
         mViewPager.setOffscreenPageLimit(2);
 
         List<Fragment> fragments = new ArrayList<>(3);
-        fragments.add(MenuFragment.newInstance());
-        fragments.add(MenuFragment.newInstance());
-        fragments.add(MenuFragment.newInstance());
+        fragments.add(Fragment.instantiate(this, MenuFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, MenuFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, MenuFragment.class.getName()));
 
-        mMenuPagerAdapter = new MenuPagerAdapter(getSupportFragmentManager(), fragments);
-        mViewPager.setAdapter(mMenuPagerAdapter);
+        MenuViewPagerAdapter pagerAdapter = new MenuViewPagerAdapter(getSupportFragmentManager(), fragments);
+        mViewPager.setAdapter(pagerAdapter);
 
         simpleOnPageChangeListener.onPageSelected(0);
     }

@@ -21,6 +21,11 @@ package com.yanzhenjie.recyclerview.swipe;
 public interface Closeable {
 
     /**
+     * Smooth closed the menu.
+     */
+    void smoothCloseMenu();
+
+    /**
      * Smooth closed the menu on the left.
      */
     void smoothCloseLeftMenu();
@@ -29,11 +34,6 @@ public interface Closeable {
      * Smooth closed the menu on the right.
      */
     void smoothCloseRightMenu();
-
-    /**
-     * Smooth closed the menu.
-     */
-    void smoothCloseMenu();
 
     /**
      * Smooth closed the menu for the duration.

@@ -35,11 +35,32 @@ public interface Openable {
     boolean isLeftMenuOpen();
 
     /**
-     * The menu is open on the left?
+     * The menu is open on the right?
      *
      * @return true, otherwise false.
      */
-    boolean isLeftMenuOpenNotEqual();
+    boolean isRightMenuOpen();
+
+    /**
+     * The menu is completely open?
+     *
+     * @return true, otherwise false.
+     */
+    boolean isCompleteOpen();
+
+    /**
+     * The menu is completely open on the left?
+     *
+     * @return true, otherwise false.
+     */
+    boolean isLeftCompleteOpen();
+
+    /**
+     * The menu is completely open on the right?
+     *
+     * @return true, otherwise false.
+     */
+    boolean isRightCompleteOpen();
 
     /**
      * The menu is open?
@@ -49,11 +70,11 @@ public interface Openable {
     boolean isMenuOpenNotEqual();
 
     /**
-     * The menu is open on the right?
+     * The menu is open on the left?
      *
      * @return true, otherwise false.
      */
-    boolean isRightMenuOpen();
+    boolean isLeftMenuOpenNotEqual();
 
     /**
      * The menu is open on the right?
@@ -73,16 +94,16 @@ public interface Openable {
     void smoothOpenLeftMenu();
 
     /**
+     * Open the menu on right.
+     */
+    void smoothOpenRightMenu();
+
+    /**
      * Open the menu on left for the duration.
      *
      * @param duration duration time.
      */
     void smoothOpenLeftMenu(int duration);
-
-    /**
-     * Open the menu on right.
-     */
-    void smoothOpenRightMenu();
 
     /**
      * Open the menu on right for the duration.

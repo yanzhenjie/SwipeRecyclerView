@@ -1,28 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <resources>
     <string-array name="main_item">
-        <item>左右两侧都有</item>
-        <item>根据ViewType显示菜单</item>
-        <item>侧滑菜单和ViewPager嵌套</item>
-        <item>侧滑菜单和 Refresh LoadMore 嵌套</item>
-        <item>长按拖拽Item+菜单(List形式)</item>
-        <item>长按拖拽Item+菜单(Grid形式)</item>
-        <item>滑动直接删除+拖拽Item</item>
-        <item>指定某个Item不能拖拽/滑动删除</item>
-        <item>竖型菜单（完美）</item>
-        <item>用SwipeMenuLayout实现你自己的侧滑</item>
+        <item>Item横向菜单</item>
+        <item>Item竖向菜单</item>
+        <item>ViewType定制菜单</item>
+        <item>ViewPager嵌套</item>
+        <item>DrawerLayout嵌套</item>
+        <item>CardView嵌套菜单</item>
+        <item>自定义侧滑</item>
+        <item>刷新、加载更多</item>
+        <item>List拖拽+菜单</item>
+        <item>Grid拖拽+菜单</item>
+        <item>触摸拖拽</item>
+        <item>拖拽+侧滑删除</item>
+        <item>自定义拖拽/侧滑参数</item>
     </string-array>
 
     <string-array name="main_item_des">
-        <item>可以左右滑动，两遍边都可以滑出来菜单。</item>
-        <item>根据ViewType决定菜单在哪一行出现，或者某一行出现不同的菜单，可以左侧，可以右侧。</item>
-        <item>RecyclerView嵌套在ViewPager中，解决左右滑动时的冲突。</item>
-        <item>侧滑菜单和下拉刷新，上拉加载嵌套</item>
+        <item>左右侧滑Item菜单，菜单的顺序是左右排布。</item>
+        <item>左右侧滑Item菜单，菜单的顺序是上下排布。</item>
+        <item>根据ViewType决定某一行菜单具体是什么样的，例如：第一行不要菜单，第二行只添加1个Menu，第三行2个Menu。</item>
+        <item>Item侧滑菜单嵌套在ViewPager中，解决左右滑动时的冲突。</item>
+        <item>Item侧滑菜单嵌套在DrawerLayout中，解决左右滑动时的冲突。</item>
+        <item>第一：自定义侧滑菜单的View；第二：Item的RootLayout为CardView，菜单显示在CardView中。</item>
+        <item>用SwipeMenuLayout实现你自己的侧滑，可以用在任意地方。</item>
+        <item>下拉刷新，加载更多的实现。</item>
         <item>ListView形式，长按后可以拖拽Item，进行上下移动。和侧滑的Menu菜单结合。</item>
         <item>GridView形式，长按后可以拖拽Item，进行上下左右的移动。和侧滑的Menu菜单结合。</item>
-        <item>滑动后直接删除/拖拽Item，不是侧滑菜单那样的删除。</item>
-        <item>有的可能想让第一个不能拖拽或者滑动删除，看这个例子。</item>
-        <item>打开左右两侧的菜单，成竖向排布。</item>
-        <item>用SwipeMenuLayout实现你自己的侧滑，不仅仅用在RecyclerView的Item中，可以用在ListView中，或者其它Layout中。</item>
+        <item>触摸拖拽，非长按Item拖拽，手指碰到Item的某个View就开始拖拽。</item>
+        <item>拖拽Item + 侧滑删除Item，非滑动出现删除Menu，Grid形式比较特殊，不支持侧滑删除。</item>
+        <item>指定某个Item不能被侧滑删除或者拖拽，或者扩展Grid形式可以被滑动删除Item。</item>
     </string-array>
 </resources>

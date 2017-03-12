@@ -37,16 +37,57 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_layout"
+    <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/ic_launcher"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:layout_marginTop="20dp"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/app_name"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/app_name"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="?selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/app_name"/>
+
+        </android.support.v7.widget.LinearLayoutCompat>
+    </android.support.v4.widget.DrawerLayout>
 
 </android.support.design.widget.CoordinatorLayout>
