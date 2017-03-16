@@ -170,7 +170,8 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                 return Math.abs(disX) > mScaledTouchSlop && Math.abs(disX) > Math.abs(disY);
             }
             case MotionEvent.ACTION_UP: {
-                boolean isClick = mSwipeCurrentHorizontal.isClickOnContentView(getWidth(), ev.getX());
+                boolean isClick = mSwipeCurrentHorizontal != null
+                        && mSwipeCurrentHorizontal.isClickOnContentView(getWidth(), ev.getX());
                 if (isMenuOpen() && isClick) {
                     smoothCloseMenu();
                     return true;

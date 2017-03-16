@@ -2,7 +2,7 @@
 
 严振杰的主页：[http://www.yanzhenjie.com](http://www.yanzhenjie.com)  
 严振杰的博客：[http://blog.yanzhenjie.com](http://blog.yanzhenjie.com)  
-技术交流群：46523908，加群前请务必阅读[群行为规范](https://github.com/yanzhenjie/SkillGroupRule)    
+技术交流群：46523908，加群前请务必阅读[群行为规范](https://github.com/yanzhenjie/SkillGroupRule)。
 
 ----
 # Features
@@ -18,10 +18,10 @@
 10. 使用SwipeRecyclerView下拉刷新、自动加载更多。
 11. 可以和ViewPager、DrawerLayout、CardView嵌套使用。
 
-# 引用方法  
+# Dependencies
 * Gradle
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.0.3'
+compile 'com.yanzhenjie:recyclerview-swipe:1.0.4'
 ```
 
 * Maven
@@ -29,7 +29,7 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.0.3'
 <dependency>
   <groupId>com.yanzhenjie</groupId>
   <artifactId>recyclerview-swipe</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <type>pom</type>
 </dependency>
 ```
@@ -55,7 +55,7 @@ gif有一些失真，且网页加载速度慢，建议下载demo运行后查看�
 1. 利用`SwipeMenuLayout`自定义侧滑`menu`。  
 2. 结合`SwipeRefreshLayout`下拉刷新、利用`RecyclerView`自身特性加载更多。
 
-<image src="./image/7.gif" width="250px"/> <image src="./image/8.gif" width="250px"/>
+<image src="./image/7.gif" width="180px"/> <image src="./image/8.gif" width="180px"/>
 
 ## Item拖拽、侧滑菜单、触摸拖拽、侧滑删除
 1. 长按拖拽Item、触摸拖拽Item和侧滑菜单结合。
@@ -66,7 +66,7 @@ gif有一些失真，且网页加载速度慢，建议下载demo运行后查看�
 # Usage
 首先添加再依赖后Sync。
 
-## xml
+## xml中引用
 在xml中引用SwipeRecyclerView：
 ```xml
 <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
@@ -75,7 +75,7 @@ gif有一些失真，且网页加载速度慢，建议下载demo运行后查看�
     android:layout_height="wrap_content"/>
 ```
 
-## 只要用到菜单功能就要继承`SwipeMenuAdapter`
+## 菜单功能需要继承`SwipeMenuAdapter`
 `Adapter`要继承`SwipeMenuAdapter`：
 ```java
 public class DragTouchAdapter extends SwipeMenuAdapter<ViewHolder> {

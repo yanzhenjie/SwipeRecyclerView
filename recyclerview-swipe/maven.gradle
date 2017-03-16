@@ -1,7 +1,7 @@
 apply plugin: rootProject.ext.plugin.maven
 apply plugin: rootProject.ext.plugin.bintray
 
-version = "1.0.3"
+version = "1.0.4"
 
 def siteUrl = 'https://github.com/yanzhenjie/SwipeRecyclerView'
 def gitUrl = 'git@github.com:yanzhenjie/SwipeRecyclerView.git'
