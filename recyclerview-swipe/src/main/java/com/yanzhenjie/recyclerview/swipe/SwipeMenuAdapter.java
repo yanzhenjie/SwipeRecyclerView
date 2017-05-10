@@ -58,6 +58,8 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
     @Override
     public final VH onCreateViewHolder(ViewGroup parent, int viewType) {
         View contentView = onCreateContentView(parent, viewType);
+        View originView = contentView;
+        
         if (mSwipeMenuCreator != null) {
             SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout
                     .yanzhenjie_item_default, parent, false);
@@ -91,7 +93,7 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
                 contentView = swipeMenuLayout;
             }
         }
-        return onCompatCreateViewHolder(contentView, viewType);
+        return onCompatCreateViewHolder(contentView, viewType, originView);
     }
 
     /**
@@ -107,11 +109,12 @@ public abstract class SwipeMenuAdapter<VH extends RecyclerView.ViewHolder> exten
      * Instead {@link #onCreateViewHolder(ViewGroup, int)}.
      *
      * @param realContentView Is this Item real view, {@link SwipeMenuLayout} or {@link #onCreateContentView(ViewGroup, int)}.
+     * @param originView the origin view.
      * @param viewType        The view type of the new View.
      * @return A new ViewHolder that holds a View of the given view type.
      * @see #onCompatBindViewHolder(RecyclerView.ViewHolder, int, List)
      */
-    public abstract VH onCompatCreateViewHolder(View realContentView, int viewType);
+    public abstract VH onCompatCreateViewHolder(View realContentView, View originView, int viewType);
 
     @Override
     public final void onBindViewHolder(VH holder, int position, List<Object> payloads) {
