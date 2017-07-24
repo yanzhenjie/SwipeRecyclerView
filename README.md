@@ -19,7 +19,7 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 7. 和`ViewPager`、`DrawerLayout`等滑动布局嵌套使用。
 8. `Sticky`普通布局黏贴和`ReyclerView`分组黏贴。
 
-# 截图演示
+# 截图
 对上面提到的效果都例举演示，但不是全部，更多效果可以下载Demo查看。
 
 ## Item侧滑菜单
@@ -63,7 +63,7 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.0'
 在xml中引用SwipeRecyclerView：
 ```xml
 <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
-    ..."/>
+    .../>
 ```
 
 **注意**：新版从1.1.0开始不再需要继承`SwipeMenuAdapter`了，只需要使用`SwipeMenuRecyclerView`即可。
@@ -298,7 +298,7 @@ public class DefineLoadMoreView extends LinearLayout
 * [SwipeMenu](https://github.com/TUBB/SwipeMenu/)
 * [HeaderAndFooterWrapper](https://github.com/hongyangAndroid/baseAdapter/blob/master/baseadapter-recyclerview/src/main/java/com/zhy/adapter/recyclerview/wrapper/HeaderAndFooterWrapper.java)
 
-本库的加载更多的API参考了cube-sdk，侧滑菜单参考了SwipeMenu，加载更多参考了HeaderAndFooterWrapper类，特别感谢上述开源库及作者。
+本库的加载更多的API参考了cube-sdk，侧滑菜单参考了SwipeMenu，添加HeaderView参考了HeaderAndFooterWrapper类，特别感谢上述开源库及作者。
 
 # License
 ```text
