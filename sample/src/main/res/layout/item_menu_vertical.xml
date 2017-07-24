@@ -16,25 +16,18 @@
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/select_white"
+    android:layout_height="@dimen/dp_200"
+    android:background="?selectableItemBackground"
     android:gravity="center_vertical"
-    android:minHeight="150dp"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <ImageView
-        android:layout_width="@dimen/item_height"
-        android:layout_height="@dimen/item_height"
-        android:contentDescription="@string/app_name"
-        android:src="@mipmap/ic_launcher"/>
+    android:orientation="vertical"
+    android:padding="@dimen/dp_10">
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/item_margin"
-        android:layout_marginStart="@dimen/item_margin"/>
+        tools:text="Testing"/>
 
 </LinearLayout>

@@ -15,10 +15,11 @@
     limitations under the License.
 -->
 <resources>
-    <declare-styleable name="SwipeMenuLayout">
-        <attr name="leftViewId" format="reference" />
-        <attr name="rightViewId" format="reference" />
-        <attr name="contentViewId" format="reference" />
+
+    <declare-styleable name="recycler_swipe_SwipeMenuLayout">
+        <attr name="leftViewId" format="reference"/>
+        <attr name="rightViewId" format="reference"/>
+        <attr name="contentViewId" format="reference"/>
     </declare-styleable>
 
 </resources>

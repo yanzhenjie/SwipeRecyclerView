@@ -71,10 +71,10 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
     public SwipeMenuLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayout);
-        mLeftViewId = typedArray.getResourceId(R.styleable.SwipeMenuLayout_leftViewId, mLeftViewId);
-        mContentViewId = typedArray.getResourceId(R.styleable.SwipeMenuLayout_contentViewId, mContentViewId);
-        mRightViewId = typedArray.getResourceId(R.styleable.SwipeMenuLayout_rightViewId, mRightViewId);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.recycler_swipe_SwipeMenuLayout);
+        mLeftViewId = typedArray.getResourceId(R.styleable.recycler_swipe_SwipeMenuLayout_leftViewId, mLeftViewId);
+        mContentViewId = typedArray.getResourceId(R.styleable.recycler_swipe_SwipeMenuLayout_contentViewId, mContentViewId);
+        mRightViewId = typedArray.getResourceId(R.styleable.recycler_swipe_SwipeMenuLayout_rightViewId, mRightViewId);
         typedArray.recycle();
 
         ViewConfiguration configuration = ViewConfiguration.get(getContext());
@@ -167,7 +167,8 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
             case MotionEvent.ACTION_MOVE: {
                 int disX = (int) (ev.getX() - mDownX);
                 int disY = (int) (ev.getY() - mDownY);
-                return Math.abs(disX) > mScaledTouchSlop && Math.abs(disX) > Math.abs(disY);
+                boolean i = Math.abs(disX) > mScaledTouchSlop && Math.abs(disX) > Math.abs(disY);
+                return i;
             }
             case MotionEvent.ACTION_UP: {
                 boolean isClick = mSwipeCurrentHorizontal != null
@@ -325,7 +326,7 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
                     if (isMenuOpen()) smoothCloseMenu();
                     else smoothOpenMenu();
                 }
-            } else { // auto close
+            } else { // auto closeMenu
                 smoothCloseMenu();
             }
         }
@@ -474,6 +475,39 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
         if (mSwipeCurrentHorizontal != null) {
             mSwipeCurrentHorizontal.autoCloseMenu(mScroller, getScrollX(), duration);
             invalidate();
+        }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int contentViewHeight = 0;
+
+        if (mContentView != null) {
+            measureChildWithMargins(mContentView, widthMeasureSpec, 0, heightMeasureSpec, 0);
+            contentViewHeight = mContentView.getMeasuredHeight();
+        }
+
+        if (mSwipeLeftHorizontal != null) {
+            View leftMenu = mSwipeLeftHorizontal.getMenuView();
+            int menuViewHeight = contentViewHeight == 0 ? leftMenu.getMeasuredHeightAndState() : contentViewHeight;
+
+            int menuWidthSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
+            int menuHeightSpec = MeasureSpec.makeMeasureSpec(menuViewHeight, MeasureSpec.EXACTLY);
+            leftMenu.measure(menuWidthSpec, menuHeightSpec);
+        }
+
+        if (mSwipeRightHorizontal != null) {
+            View rightMenu = mSwipeRightHorizontal.getMenuView();
+            int menuViewHeight = contentViewHeight == 0 ? rightMenu.getMeasuredHeightAndState() : contentViewHeight;
+
+            int menuWidthSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
+            int menuHeightSpec = MeasureSpec.makeMeasureSpec(menuViewHeight, MeasureSpec.EXACTLY);
+            rightMenu.measure(menuWidthSpec, menuHeightSpec);
+        }
+
+        if (contentViewHeight > 0) {
+            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), contentViewHeight);
         }
     }
 

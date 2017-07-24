@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yanzhenjie.swiperecyclerview">
+    package="com.yanzhenjie.recyclerview.swipe.sample">
 
     <application
         android:name=".App"
@@ -10,6 +25,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
@@ -21,44 +37,81 @@
         </activity>
 
         <activity
-            android:name=".activity.menu.MenuHorizontalActivity"
-            android:label="横向菜单"/>
+            android:name=".activity.menu.MenuActivity"
+            android:label="Item中的菜单"/>
         <activity
-            android:name=".activity.menu.MenuVerticalActivity"
-            android:label="竖向菜单"/>
+            android:name=".activity.menu.ListActivity"
+            android:label="List形式菜单"/>
         <activity
-            android:name=".activity.menu.MenuViewTypeActivity"
+            android:name=".activity.menu.GridActivity"
+            android:label="Grid形式菜单"/>
+        <activity
+            android:name=".activity.menu.ViewTypeActivity"
             android:label="ViewType菜单"/>
         <activity
-            android:name=".activity.menu.MenuViewPagerActivity"
-            android:label="和ViewPager嵌套"/>
+            android:name=".activity.menu.VerticalActivity"
+            android:label="竖向排布的菜单"/>
         <activity
-            android:name=".activity.menu.MenuDrawerActivity"
-            android:label="和DrawerLayout嵌套"/>
+            android:name=".activity.menu.DefineActivity"
+            android:label="自定义菜单"/>
+
+        <!-- -->
         <activity
-            android:name=".activity.menu.MenuCardActivity"
-            android:label="CardView嵌套菜单"/>
-        <activity
-            android:name=".activity.menu.MenuDefineActivity"
-            android:label="实现你自己的侧滑"/>
-        <activity
-            android:name=".activity.RefreshLoadMoreActivity"
-            android:label="下拉刷新，加载更多"/>
-        <activity
-            android:name=".activity.move.DragListMenuActivity"
-            android:label="拖拽Item条目+菜单(List)"/>
-        <activity
-            android:name=".activity.move.DragGridMenuActivity"
-            android:label="拖拽Item条目+菜单(Grid)"/>
-        <activity
-            android:name=".activity.move.DragTouchListActivity"
-            android:label="触摸拖拽"/>
+            android:name=".activity.move.MoveActivity"
+            android:label="Item拖拽和侧滑删除"/>
         <activity
             android:name=".activity.move.DragSwipeListActivity"
-            android:label="滑动直接删除+拖拽Item条目"/>
+            android:label="ListItem拖拽/侧滑"/>
         <activity
-            android:name=".activity.move.DragSwipeFlagsActivity"
-            android:label="自定义拖拽参数"/>
+            android:name=".activity.move.DragGridActivity"
+            android:label="GridItem拖拽"/>
+        <activity
+            android:name=".activity.move.DragTouchListActivity"
+            android:label="触摸即拖拽"/>
+        <activity
+            android:name=".activity.move.DefineActivity"
+            android:label="自定义拖拽/侧滑"/>
+
+        <!-- -->
+        <activity
+            android:name=".activity.header.HeaderViewActivity"
+            android:label="Header和Footer"/>
+
+        <!-- -->
+        <activity
+            android:name=".activity.load.RefreshLoadActivity"
+            android:label="刷新和加载更多"/>
+        <activity
+            android:name=".activity.load.DefaultActivity"
+            android:label="默认LoadMore"/>
+        <activity
+            android:name=".activity.load.DefineActivity"
+            android:label="自定义LoadMore"/>
+
+        <!-- -->
+        <activity
+            android:name=".activity.nested.NestedActivity"
+            android:label="滑动布局嵌套使用"/>
+        <activity
+            android:name=".activity.nested.CardViewActivity"
+            android:label="CardView"/>
+        <activity
+            android:name=".activity.nested.DrawerActivity"
+            android:label="DrawerLayout"/>
+        <activity
+            android:name=".activity.nested.ViewPagerActivity"
+            android:label="ViewPager"/>
+
+        <!-- -->
+        <activity
+            android:name=".activity.group.GroupActivity"
+            android:label="Sticky分组效果"/>
+        <activity
+            android:name=".activity.group.LayoutActivity"
+            android:label="普通布局中Sticky"/>
+        <activity
+            android:name=".activity.group.MenuActivity"
+            android:label="Item菜单Sticky分组"/>
     </application>
 
 </manifest>

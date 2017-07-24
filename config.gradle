@@ -1,5 +1,5 @@
 ext {
-    plugin = [
+    plugins = [
             library    : 'com.android.library',
             application: 'com.android.application',
             maven      : 'com.github.dcendents.android-maven',
@@ -7,24 +7,52 @@ ext {
     ]
 
     android = [
-            applicationId    : "com.yanzhenjie.swiperecyclerview",
+            applicationId    : "com.yanzhenjie.recyclerview.swipe.sample",
             compileSdkVersion: 25,
-            buildToolsVersion: "25.0.2",
+            buildToolsVersion: "25.0.3",
 
             minSdkVersion    : 14,
             targetSdkVersion : 25,
 
-            versionCode      : 1,
-            versionName      : "1.0",
+            versionCode      : 5,
+            versionName      : "1.0.4",
+    ]
 
-            jackOptions      : true
+    maven = [
+            version       : "1.1.0",
+
+            siteUrl       : 'https://github.com/yanzhenjie/SwipeRecyclerView',
+            gitUrl        : 'git@github.com:yanzhenjie/SwipeRecyclerView.git',
+
+            group         : "com.yanzhenjie",
+
+            // project
+            packaging     : 'aar',
+            name          : 'SwipeRecyclerView',
+            description   : 'SwipeRecyclerView For Android',
+
+            // project.license
+            licenseName   : 'The Apache Software License, Version 2.0',
+            licenseUrl    : 'http://www.apache.org/licenses/LICENSE-2.0.txt',
+
+            // project.developers
+            developerId   : 'yanzhenjie',
+            developerName : 'yanzhenjie',
+            developerEmail: 'smallajax@foxmail.com',
+
+            // bintray
+            binrayLibrary : "recyclerview-swipe",
+            bintrayRepo   : "maven",
+            bintrayUser   : 'yolanda',
+            bintrayLicense: "Apache-2.0"
     ]
 
     dependencies = [
-            appCompat        : 'com.android.support:appcompat-v7:25.2.0',
-            design           : 'com.android.support:design:25.2.0',
-            cardView         : 'com.android.support:cardview-v7:25.2.0',
-            recyclerView     : 'com.android.support:recyclerview-v7:25.2.0',
-            swipeRecyclerView: 'com.yanzhenjie:recyclerview-swipe:1.0.4'
+            appCompat        : 'com.android.support:appcompat-v7:25.3.1',
+            design           : 'com.android.support:design:25.3.1',
+            cardView         : 'com.android.support:cardview-v7:25.3.1',
+            recyclerView     : 'com.android.support:recyclerview-v7:25.3.1',
+            loading          : 'com.yanzhenjie:loading:1.0.2',
+            swipeRecyclerView: 'com.yanzhenjie:recyclerview-swipe:1.1.0'
     ]
 }

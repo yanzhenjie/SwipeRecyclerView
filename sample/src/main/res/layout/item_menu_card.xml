@@ -19,16 +19,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="2dp">
+    android:background="?selectableItemBackground"
+    app:cardElevation="2dp"
+    app:contentPadding="@dimen/dp_10">
 
     <com.yanzhenjie.recyclerview.swipe.SwipeMenuLayout
         xmlns:swipe="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?selectableItemBackground"
         android:clickable="true"
-        android:padding="10dp"
         swipe:contentViewId="@+id/content_view"
         swipe:leftViewId="@+id/left_view"
         swipe:rightViewId="@+id/right_view">
@@ -42,8 +41,8 @@
             android:padding="10dp">
 
             <ImageView
-                android:layout_width="@dimen/item_height"
-                android:layout_height="@dimen/item_height"
+                android:layout_width="@dimen/dp_70"
+                android:layout_height="@dimen/dp_70"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/ic_launcher"/>
 
@@ -51,8 +50,8 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/item_margin"
-                android:layout_marginStart="@dimen/item_margin"/>
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginStart="@dimen/dp_10"/>
 
         </LinearLayout>
 

@@ -17,6 +17,7 @@ package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -29,6 +30,7 @@ import com.yanzhenjie.recyclerview.swipe.touch.DefaultItemTouchHelper;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMovementListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultLoadMoreView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -68,9 +70,11 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
     private boolean allowSwipeDelete = false;
 
-    private SwipeMenuCreator mSwipeMenuCreator;
-    private OnSwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private DefaultItemTouchHelper mDefaultItemTouchHelper;
+
+    private SwipeMenuCreator mSwipeMenuCreator;
+    private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
+    private SwipeItemClickListener mSwipeItemClickListener;
 
     public SwipeMenuRecyclerView(Context context) {
         this(context, null);
@@ -118,18 +122,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * @param onItemStateChangedListener {@link OnItemStateChangedListener}.
      */
     public void setOnItemStateChangedListener(OnItemStateChangedListener onItemStateChangedListener) {
+        initializeItemTouchHelper();
         this.mDefaultItemTouchHelper.setOnItemStateChangedListener(onItemStateChangedListener);
     }
-
-    /**
-     * Get OnItemStateChangedListener.
-     *
-     * @return {@link OnItemStateChangedListener}.
-     */
-    public OnItemStateChangedListener getOnItemStateChangedListener() {
-        return this.mDefaultItemTouchHelper.getOnItemStateChangedListener();
-    }
-
 
     /**
      * Set can long press drag.
@@ -195,8 +190,6 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
     /**
      * Set to create menu listener.
-     *
-     * @param swipeMenuCreator listener.
      */
     public void setSwipeMenuCreator(SwipeMenuCreator swipeMenuCreator) {
         this.mSwipeMenuCreator = swipeMenuCreator;
@@ -204,11 +197,16 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
     /**
      * Set to click menu listener.
-     *
-     * @param swipeMenuItemClickListener listener.
      */
-    public void setSwipeMenuItemClickListener(OnSwipeMenuItemClickListener swipeMenuItemClickListener) {
+    public void setSwipeMenuItemClickListener(SwipeMenuItemClickListener swipeMenuItemClickListener) {
         this.mSwipeMenuItemClickListener = swipeMenuItemClickListener;
+    }
+
+    /**
+     * Set item click listener.
+     */
+    public void setSwipeItemClickListener(SwipeItemClickListener swipeItemClickListener) {
+        this.mSwipeItemClickListener = swipeItemClickListener;
     }
 
     /**
@@ -226,23 +224,98 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     /**
      * Default swipe menu item click listener.
      */
-    private OnSwipeMenuItemClickListener mDefaultMenuItemClickListener = new OnSwipeMenuItemClickListener() {
+    private SwipeMenuItemClickListener mDefaultMenuItemClickListener = new SwipeMenuItemClickListener() {
+
         @Override
-        public void onItemClick(Closeable closeable, int adapterPosition, int menuPosition, int direction) {
+        public void onItemClick(SwipeMenuBridge menuBridge) {
             if (mSwipeMenuItemClickListener != null) {
-                mSwipeMenuItemClickListener.onItemClick(closeable, adapterPosition, menuPosition, direction);
+                int position = menuBridge.getAdapterPosition();
+                position = position - getHeaderItemCount();
+                if (position >= 0)
+                    menuBridge.mAdapterPosition = position;
+                mSwipeMenuItemClickListener.onItemClick(menuBridge);
+            }
+        }
+    };
+
+    /**
+     * Default item click listener.
+     */
+    private SwipeItemClickListener mDefaultItemClickListener = new SwipeItemClickListener() {
+        @Override
+        public void onItemClick(View itemView, int position) {
+            if (mSwipeItemClickListener != null) {
+                position = position - getHeaderItemCount();
+                if (position >= 0)
+                    mSwipeItemClickListener.onItemClick(itemView, position);
             }
         }
     };
 
     @Override
     public void setAdapter(Adapter adapter) {
-        if (adapter instanceof SwipeMenuAdapter) {
-            SwipeMenuAdapter menuAdapter = (SwipeMenuAdapter) adapter;
-            menuAdapter.setSwipeMenuCreator(mDefaultMenuCreator);
-            menuAdapter.setSwipeMenuItemClickListener(mDefaultMenuItemClickListener);
-        }
-        super.setAdapter(adapter);
+        if (!(adapter instanceof SwipeAdapterWrapper)) {
+            SwipeAdapterWrapper adapterWrapper = new SwipeAdapterWrapper(adapter);
+            adapterWrapper.setSwipeMenuCreator(mDefaultMenuCreator);
+            adapterWrapper.setSwipeMenuItemClickListener(mDefaultMenuItemClickListener);
+            adapterWrapper.setSwipeItemClickListener(mDefaultItemClickListener);
+            super.setAdapter(adapterWrapper);
+        } else super.setAdapter(adapter);
+        if (mHeaderViewList.size() > 0)
+            for (View view : mHeaderViewList) {
+                ((SwipeAdapterWrapper) getAdapter()).addHeaderView(view);
+            }
+        if (mFooterViewList.size() > 0)
+            for (View view : mFooterViewList) {
+                ((SwipeAdapterWrapper) getAdapter()).addFooterView(view);
+            }
+    }
+
+    private List<View> mHeaderViewList = new ArrayList<>();
+    private List<View> mFooterViewList = new ArrayList<>();
+
+    /**
+     * Add view at the top.
+     */
+    public void addHeaderView(View view) {
+        if (getAdapter() != null)
+            throw new IllegalStateException(
+                    "Cannot add header view, setAdapter has already been called.");
+        mHeaderViewList.add(view);
+    }
+
+    /**
+     * Add view at the bottom.
+     */
+    public void addFooterView(View view) {
+        if (getAdapter() != null)
+            throw new IllegalStateException(
+                    "Cannot add footer view, setAdapter has already been called.");
+        mFooterViewList.add(view);
+    }
+
+    /**
+     * Get size of headers.
+     */
+    public int getHeaderItemCount() {
+        if (getAdapter() == null) return 0;
+        return ((SwipeAdapterWrapper) getAdapter()).getHeaderItemCount();
+    }
+
+    /**
+     * Get size of footer.
+     */
+    public int getFooterItemCount() {
+        if (getAdapter() == null) return 0;
+        return ((SwipeAdapterWrapper) getAdapter()).getFooterItemCount();
+    }
+
+    /**
+     * Get ViewType of item.
+     */
+    public int getItemViewType(int position) {
+        if (getAdapter() == null) return 0;
+        return getAdapter().getItemViewType(position);
     }
 
     /**
@@ -367,11 +440,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
                     int disX = mDownX - x;
                     // 向左滑，显示右侧菜单，或者关闭左侧菜单。
-                    boolean showRightCloseLeft = disX > 0 && (mOldSwipedLayout.hasRightMenu() || mOldSwipedLayout
-                            .isLeftCompleteOpen());
+                    boolean showRightCloseLeft = disX > 0 && (mOldSwipedLayout.hasRightMenu() || mOldSwipedLayout.isLeftCompleteOpen());
                     // 向右滑，显示左侧菜单，或者关闭右侧菜单。
-                    boolean showLeftCloseRight = disX < 0 && (mOldSwipedLayout.hasLeftMenu() || mOldSwipedLayout
-                            .isRightCompleteOpen());
+                    boolean showLeftCloseRight = disX < 0 && (mOldSwipedLayout.hasLeftMenu() || mOldSwipedLayout.isRightCompleteOpen());
                     viewParent.requestDisallowInterceptTouchEvent(showRightCloseLeft || showLeftCloseRight);
                 }
                 case MotionEvent.ACTION_UP:
@@ -434,4 +505,157 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         }
         return itemView;
     }
+
+    private int mScrollState = -1;
+
+    private boolean isLoadMore = false;
+    private boolean isAutoLoadMore = true;
+    private boolean isLoadError = false;
+
+    private boolean mDataEmpty = true;
+    private boolean mHasMore = false;
+
+    private LoadMoreView mLoadMoreView;
+    private LoadMoreListener mLoadMoreListener;
+
+    @Override
+    public void onScrollStateChanged(int state) {
+        this.mScrollState = state;
+    }
+
+    @Override
+    public void onScrolled(int dx, int dy) {
+        LayoutManager layoutManager = getLayoutManager();
+        if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+
+            int itemCount = layoutManager.getItemCount();
+            int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
+
+            if (itemCount > 0 && itemCount == lastVisiblePosition + 1 &&
+                    (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                dispatchLoadMore();
+            }
+        }
+    }
+
+    private void dispatchLoadMore() {
+        if (isLoadError) return;
+
+        if (!isAutoLoadMore) {
+            if (mLoadMoreView != null)
+                mLoadMoreView.onWaitToLoadMore(mLoadMoreListener);
+        } else {
+            if (isLoadMore || mDataEmpty || !mHasMore) return;
+
+            isLoadMore = true;
+
+            if (mLoadMoreView != null)
+                mLoadMoreView.onLoading();
+
+            if (mLoadMoreListener != null)
+                mLoadMoreListener.onLoadMore();
+        }
+    }
+
+    /**
+     * Use the default to load more View.
+     */
+    public void useDefaultLoadMore() {
+        DefaultLoadMoreView defaultLoadMoreView = new DefaultLoadMoreView(getContext());
+        addFooterView(defaultLoadMoreView);
+        setLoadMoreView(defaultLoadMoreView);
+    }
+
+    /**
+     * Load more view.
+     */
+    public void setLoadMoreView(LoadMoreView loadMoreView) {
+        mLoadMoreView = loadMoreView;
+    }
+
+    /**
+     * Load more listener.
+     */
+    public void setLoadMoreListener(LoadMoreListener loadMoreListener) {
+        mLoadMoreListener = loadMoreListener;
+    }
+
+    /**
+     * Automatically load more automatically.
+     * <p>
+     * Non-auto-loading mode, you can to click on the item to load.
+     * </p>
+     *
+     * @param autoLoadMore you can use false.
+     * @see LoadMoreView#onWaitToLoadMore(LoadMoreListener)
+     */
+    public void setAutoLoadMore(boolean autoLoadMore) {
+        isAutoLoadMore = autoLoadMore;
+    }
+
+    /**
+     * Load more done.
+     *
+     * @param dataEmpty data is empty ?
+     * @param hasMore   has more data ?
+     */
+    public final void loadMoreFinish(boolean dataEmpty, boolean hasMore) {
+        isLoadMore = false;
+        isLoadError = false;
+
+        mDataEmpty = dataEmpty;
+        mHasMore = hasMore;
+
+        if (mLoadMoreView != null) {
+            mLoadMoreView.onLoadFinish(dataEmpty, hasMore);
+        }
+    }
+
+    /**
+     * Called when data is loaded incorrectly.
+     *
+     * @param errorCode    Error code, will be passed to the LoadView, you can according to it to customize the prompt information.
+     * @param errorMessage Error message.
+     */
+    public void loadMoreError(int errorCode, String errorMessage) {
+        isLoadMore = false;
+        isLoadError = true;
+
+        if (mLoadMoreView != null) {
+            mLoadMoreView.onLoadError(errorCode, errorMessage);
+        }
+    }
+
+    public interface LoadMoreView {
+
+        /**
+         * Show progress.
+         */
+        void onLoading();
+
+        /**
+         * Load finish, handle result.
+         */
+        void onLoadFinish(boolean dataEmpty, boolean hasMore);
+
+        /**
+         * Non-auto-loading mode, you can to click on the item to load.
+         */
+        void onWaitToLoadMore(LoadMoreListener loadMoreListener);
+
+        /**
+         * Load error.
+         */
+        void onLoadError(int errorCode, String errorMessage);
+    }
+
+    public interface LoadMoreListener {
+
+        /**
+         * More data should be requested.
+         */
+        void onLoadMore();
+    }
+
 }

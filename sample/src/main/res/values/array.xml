@@ -16,34 +16,42 @@
 -->
 <resources>
     <string-array name="main_item">
-        <item>Item横向菜单</item>
-        <item>Item竖向菜单</item>
-        <item>ViewType定制菜单</item>
-        <item>ViewPager嵌套</item>
-        <item>DrawerLayout嵌套</item>
-        <item>CardView嵌套菜单</item>
-        <item>自定义侧滑</item>
-        <item>刷新、加载更多</item>
-        <item>List拖拽+菜单</item>
-        <item>Grid拖拽+菜单</item>
-        <item>触摸拖拽</item>
-        <item>拖拽+侧滑删除</item>
-        <item>自定义拖拽/侧滑参数</item>
+        <item>Item中的横竖菜单</item>
+        <item>Item的拖拽和侧滑删除</item>
+        <item>添加Header和Footer</item>
+        <item>下拉刷新和加载更多</item>
+        <item>和滑动布局嵌套使用</item>
+        <item>Sticky分组效果</item>
     </string-array>
 
-    <string-array name="main_item_des">
-        <item>左右侧滑Item菜单，菜单的顺序是左右排布。</item>
-        <item>左右侧滑Item菜单，菜单的顺序是上下排布。</item>
-        <item>根据ViewType决定某一行菜单具体是什么样的，例如：第一行不要菜单，第二行只添加1个Menu，第三行2个Menu。</item>
-        <item>Item侧滑菜单嵌套在ViewPager中，解决左右滑动时的冲突。</item>
-        <item>Item侧滑菜单嵌套在DrawerLayout中，解决左右滑动时的冲突。</item>
-        <item>第一：自定义侧滑菜单的View；第二：Item的RootLayout为CardView，菜单显示在CardView中。</item>
-        <item>用SwipeMenuLayout实现你自己的侧滑，可以用在任意地方。</item>
-        <item>下拉刷新，加载更多的实现。</item>
-        <item>ListView形式，长按后可以拖拽Item，进行上下移动。和侧滑的Menu菜单结合。</item>
-        <item>GridView形式，长按后可以拖拽Item，进行上下左右的移动。和侧滑的Menu菜单结合。</item>
-        <item>触摸拖拽，非长按Item拖拽，手指碰到Item的某个View就开始拖拽。</item>
-        <item>拖拽Item + 侧滑删除Item，非滑动出现删除Menu，Grid形式比较特殊，不支持侧滑删除。</item>
-        <item>指定某个Item不能被侧滑删除或者拖拽，或者扩展Grid形式可以被滑动删除Item。</item>
+    <string-array name="menu_item">
+        <item>List形式菜单</item>
+        <item>Grid形式菜单</item>
+        <item>根据ViewType定制菜单</item>
+        <item>竖向排布的菜单</item>
+        <item>自定义菜单</item>
+    </string-array>
+
+    <string-array name="refresh_item">
+        <item>默认LoadMoreView</item>
+        <item>自定义LoadMoreView</item>
+    </string-array>
+
+    <string-array name="nested_item">
+        <item>当Item是CardView时（特殊）</item>
+        <item>和DrawerLayout嵌套使用</item>
+        <item>和ViewPager嵌套使用</item>
+    </string-array>
+
+    <string-array name="sticky_item">
+        <item>普通布局中Sticky</item>
+        <item>Item菜单Sticky分组</item>
+    </string-array>
+
+    <string-array name="touch_item">
+        <item>ListItem拖拽和侧滑删除</item>
+        <item>GridItem拖拽</item>
+        <item>触摸即开始拖拽</item>
+        <item>自定义拖拽参数(不同ViewType)</item>
     </string-array>
 </resources>

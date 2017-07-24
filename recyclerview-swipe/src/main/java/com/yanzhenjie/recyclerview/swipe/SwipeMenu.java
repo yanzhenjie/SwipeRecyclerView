@@ -43,12 +43,11 @@ public class SwipeMenu {
 
     private int orientation = HORIZONTAL;
 
-    private List<SwipeMenuItem> mSwipeMenuItems;
+    private List<SwipeMenuItem> mSwipeMenuItems = new ArrayList<>(2);
 
     public SwipeMenu(SwipeMenuLayout swipeMenuLayout, int viewType) {
         this.mSwipeMenuLayout = swipeMenuLayout;
         this.mViewType = viewType;
-        this.mSwipeMenuItems = new ArrayList<>(2);
     }
 
     /**

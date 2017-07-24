@@ -1,4 +1,4 @@
-apply plugin: rootProject.ext.plugin.library
+apply plugin: rootProject.ext.plugins.library
 
 android {
 
@@ -9,10 +9,13 @@ android {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
     }
+
+    resourcePrefix 'recycler_swipe_'
 }
 
 dependencies {
     compile rootProject.ext.dependencies.recyclerView
+    compile rootProject.ext.dependencies.loading
 }
 
-apply from: "maven.gradle"
+apply from: "../maven.gradle"

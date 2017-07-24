@@ -88,25 +88,26 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
             int swipeFlags = onItemMovementListener.onSwipeFlags(recyclerView, targetViewHolder);
             return makeMovementFlags(dragFlags, swipeFlags);
         } else {
-            //适用GridLayoutManager类型和LinearLayoutManager类型。
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
             if (layoutManager instanceof GridLayoutManager) {
-                //拖拽的方向。
-                int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-                int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-                //侧滑的方向：left right。
-                return makeMovementFlags(dragFlags, swipeFlags);
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                if (linearLayoutManager.getOrientation() == LinearLayoutManager.HORIZONTAL) {
+                    int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    int swipeFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                    return makeMovementFlags(dragFlags, swipeFlags);
+                } else {
+                    int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                    return makeMovementFlags(dragFlags, swipeFlags);
+                }
             } else if (layoutManager instanceof LinearLayoutManager) {
-                //线性方向分为：水平和垂直方向。
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
                 if (linearLayoutManager.getOrientation() == LinearLayoutManager.HORIZONTAL) {
                     int dragFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                     int swipeFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
                     return makeMovementFlags(dragFlags, swipeFlags);
                 } else {
-                    //拖拽的方向。
                     int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-                    //侧滑的方向：left right。
                     int swipeFlags = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                     return makeMovementFlags(dragFlags, swipeFlags);
                 }
@@ -116,9 +117,9 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int
-            actionState, boolean isCurrentlyActive) {
-        //判断当前是否是swipe方式：侧滑。
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+                            float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        // 判断当前是否是swipe方式：侧滑。
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             //1.ItemView--ViewHolder; 2.侧滑条目的透明度程度关联谁？dX(delta增量，范围：当前条目-width~width)。
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -139,18 +140,15 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView arg0, RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
-        if (srcHolder.getItemViewType() == targetHolder.getItemViewType()) {// 相同类型的允许切换。
-            if (onItemMoveListener == null)
-                return false;
-            //回调刷新数据及界面。
-            return onItemMoveListener.onItemMove(srcHolder.getAdapterPosition(), targetHolder.getAdapterPosition());
-        }
+        if (onItemMoveListener != null)
+            // 回调刷新数据及界面。
+            return onItemMoveListener.onItemMove(srcHolder, targetHolder);
         return false;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        //回调刷新数据及界面。
+        // 回调刷新数据及界面。
         if (onItemMoveListener != null)
             onItemMoveListener.onItemDismiss(viewHolder.getAdapterPosition());
     }
@@ -158,7 +156,7 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
-        if (onItemStateChangedListener != null && actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+        if (onItemStateChangedListener != null && actionState != OnItemStateChangedListener.ACTION_STATE_IDLE) {
             onItemStateChangedListener.onSelectedChanged(viewHolder, actionState);
         }
     }

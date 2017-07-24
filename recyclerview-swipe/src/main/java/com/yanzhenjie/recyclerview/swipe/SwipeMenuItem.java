@@ -20,6 +20,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.Px;
+import android.support.annotation.StyleRes;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Created by Yan Zhenjie on 2016/7/26.
@@ -42,17 +48,20 @@ public class SwipeMenuItem {
         mContext = context;
     }
 
-    public SwipeMenuItem setBackgroundDrawable(Drawable background) {
+    public SwipeMenuItem setBackground(@DrawableRes int resId) {
+        return setBackground(ContextCompat.getDrawable(mContext, resId));
+    }
+
+    public SwipeMenuItem setBackground(Drawable background) {
         this.background = background;
         return this;
     }
 
-    public SwipeMenuItem setBackgroundDrawable(int resId) {
-        this.background = ResCompat.getDrawable(mContext, resId);
-        return this;
+    public SwipeMenuItem setBackgroundColorResource(@ColorRes int color) {
+        return setBackgroundColor(ContextCompat.getColor(mContext, color));
     }
 
-    public SwipeMenuItem setBackgroundColor(int color) {
+    public SwipeMenuItem setBackgroundColor(@ColorInt int color) {
         this.background = new ColorDrawable(color);
         return this;
     }
@@ -61,9 +70,8 @@ public class SwipeMenuItem {
         return background;
     }
 
-    public SwipeMenuItem setText(String title) {
-        this.title = title;
-        return this;
+    public SwipeMenuItem setImage(int resId) {
+        return setImage(ContextCompat.getDrawable(mContext, resId));
     }
 
     public SwipeMenuItem setImage(Drawable icon) {
@@ -71,20 +79,28 @@ public class SwipeMenuItem {
         return this;
     }
 
-    public SwipeMenuItem setImage(int resId) {
-        return setImage(ResCompat.getDrawable(mContext, resId));
-    }
-
     public Drawable getImage() {
         return icon;
     }
 
     public SwipeMenuItem setText(int resId) {
-        setText(mContext.getString(resId));
+        return setText(mContext.getString(resId));
+    }
+
+    public SwipeMenuItem setText(String title) {
+        this.title = title;
         return this;
     }
 
-    public SwipeMenuItem setTextColor(int titleColor) {
+    public String getText() {
+        return title;
+    }
+
+    public SwipeMenuItem setTextColorResource(@ColorRes int titleColor) {
+        return setTextColor(ContextCompat.getColor(mContext, titleColor));
+    }
+
+    public SwipeMenuItem setTextColor(@ColorInt int titleColor) {
         this.titleColor = ColorStateList.valueOf(titleColor);
         return this;
     }
@@ -93,7 +109,7 @@ public class SwipeMenuItem {
         return titleColor;
     }
 
-    public SwipeMenuItem setTextSize(int titleSize) {
+    public SwipeMenuItem setTextSize(@Px int titleSize) {
         this.titleSize = titleSize;
         return this;
     }
@@ -102,11 +118,7 @@ public class SwipeMenuItem {
         return titleSize;
     }
 
-    public String getText() {
-        return title;
-    }
-
-    public SwipeMenuItem setTextAppearance(int textAppearance) {
+    public SwipeMenuItem setTextAppearance(@StyleRes int textAppearance) {
         this.textAppearance = textAppearance;
         return this;
     }
@@ -124,22 +136,22 @@ public class SwipeMenuItem {
         return textTypeface;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
     public SwipeMenuItem setWidth(int width) {
         this.width = width;
         return this;
     }
 
-    public int getHeight() {
-        return height;
+    public int getWidth() {
+        return width;
     }
 
     public SwipeMenuItem setHeight(int height) {
         this.height = height;
         return this;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public SwipeMenuItem setWeight(int weight) {

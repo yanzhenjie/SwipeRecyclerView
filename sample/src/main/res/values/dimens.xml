@@ -15,6 +15,9 @@
     limitations under the License.
 -->
 <resources>
-    <dimen name="item_height">60dp</dimen>
-    <dimen name="item_margin">10dp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_100">100dp</dimen>
+    <dimen name="dp_70">70dp</dimen>
+    <dimen name="dp_10">10dp</dimen>
+    <dimen name="dp_2">2dp</dimen>
 </resources>

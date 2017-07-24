@@ -2,7 +2,7 @@
 .gradle
 /local.properties
 /.idea
+.DS_Store
 /build
-/recyclerview-swipe/build/
-sample/build/
-/captures/
+/captures
+.externalNativeBuild
