@@ -369,6 +369,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                 mOldSwipedLayout.smoothCloseMenu();
             }
         }
+        position += getHeaderItemCount();
         ViewHolder vh = findViewHolderForAdapterPosition(position);
         if (vh != null) {
             View itemView = getSwipeMenuView(vh.itemView);

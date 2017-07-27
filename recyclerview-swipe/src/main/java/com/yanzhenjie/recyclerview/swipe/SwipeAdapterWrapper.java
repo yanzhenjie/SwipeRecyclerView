@@ -204,7 +204,6 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         //noinspection unchecked
-        mAdapter.onViewAttachedToWindow(holder);
         int position = holder.getLayoutPosition();
 
         if (isHeaderView(position) || isFooterView(position)) {
@@ -213,6 +212,8 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
                 StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
                 p.setFullSpan(true);
             }
+        } else {
+            mAdapter.onViewAttachedToWindow(holder);
         }
     }
 

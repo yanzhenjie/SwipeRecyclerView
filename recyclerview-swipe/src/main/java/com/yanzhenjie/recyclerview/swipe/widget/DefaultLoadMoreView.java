@@ -49,6 +49,7 @@ public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecycl
         super(context, attrs);
         setLayoutParams(new ViewGroup.LayoutParams(-1, -2));
         setGravity(Gravity.CENTER);
+        setVisibility(GONE);
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 

@@ -166,6 +166,7 @@ public class DefineActivity extends AppCompatActivity {
             super(context);
             setLayoutParams(new ViewGroup.LayoutParams(-1, -2));
             setGravity(Gravity.CENTER);
+            setVisibility(GONE);
 
             inflate(getContext(), R.layout.layout_fotter_loadmore, this);
             mLoadingView = (LoadingView) findViewById(R.id.loading_view);
