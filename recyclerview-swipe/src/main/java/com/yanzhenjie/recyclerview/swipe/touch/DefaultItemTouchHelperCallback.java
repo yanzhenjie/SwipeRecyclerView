@@ -150,7 +150,7 @@ public class DefaultItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         // 回调刷新数据及界面。
         if (onItemMoveListener != null)
-            onItemMoveListener.onItemDismiss(viewHolder.getAdapterPosition());
+            onItemMoveListener.onItemDismiss(viewHolder);
     }
 
     @Override

@@ -34,8 +34,8 @@ public interface OnItemMoveListener {
     /**
      * When items should be removed when the callback.
      *
-     * @param position swipe position.
+     * @param srcHolder src.
      */
-    void onItemDismiss(int position);
+    void onItemDismiss(RecyclerView.ViewHolder srcHolder);
 
 }
