@@ -43,8 +43,12 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
 
-    public SwipeAdapterWrapper(RecyclerView.Adapter adapter) {
+    SwipeAdapterWrapper(RecyclerView.Adapter adapter) {
         mAdapter = adapter;
+    }
+
+    public RecyclerView.Adapter getOriginAdapter() {
+        return mAdapter;
     }
 
     /**
@@ -274,7 +278,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         int position = holder.getAdapterPosition();
 
         if (!isHeaderView(position) && !isFooterView(position))
-            mAdapter.onFailedToRecycleView(holder);
+            return mAdapter.onFailedToRecycleView(holder);
         return false;
     }
 
@@ -289,13 +293,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
-        mAdapter.registerAdapterDataObserver(observer);
     }
 
     @Override
     public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
         super.unregisterAdapterDataObserver(observer);
-        mAdapter.unregisterAdapterDataObserver(observer);
     }
 
     @Override

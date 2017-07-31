@@ -76,6 +76,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
 
+    private SwipeAdapterWrapper mAdapterWrapper;
+
     public SwipeMenuRecyclerView(Context context) {
         this(context, null);
     }
@@ -252,24 +254,88 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         }
     };
 
+    /**
+     * Get the original adapter.
+     */
+    public Adapter getOriginAdapter() {
+        if (mAdapterWrapper == null) return null;
+        return mAdapterWrapper.getOriginAdapter();
+    }
+
     @Override
     public void setAdapter(Adapter adapter) {
-        if (!(adapter instanceof SwipeAdapterWrapper)) {
-            SwipeAdapterWrapper adapterWrapper = new SwipeAdapterWrapper(adapter);
-            adapterWrapper.setSwipeMenuCreator(mDefaultMenuCreator);
-            adapterWrapper.setSwipeMenuItemClickListener(mDefaultMenuItemClickListener);
-            adapterWrapper.setSwipeItemClickListener(mDefaultItemClickListener);
-            super.setAdapter(adapterWrapper);
-        } else super.setAdapter(adapter);
+        if (mAdapterWrapper != null) {
+            if (mAdapterWrapper.getOriginAdapter() == adapter) {
+                adapter.notifyDataSetChanged();
+                return;
+            }
+
+            mAdapterWrapper.getOriginAdapter().unregisterAdapterDataObserver(mAdapterDataObserver);
+        }
+
+        adapter.registerAdapterDataObserver(mAdapterDataObserver);
+
+        mAdapterWrapper = new SwipeAdapterWrapper(adapter);
+        mAdapterWrapper.setSwipeMenuCreator(mDefaultMenuCreator);
+        mAdapterWrapper.setSwipeMenuItemClickListener(mDefaultMenuItemClickListener);
+        mAdapterWrapper.setSwipeItemClickListener(mDefaultItemClickListener);
+        super.setAdapter(mAdapterWrapper);
+
         if (mHeaderViewList.size() > 0)
             for (View view : mHeaderViewList) {
-                ((SwipeAdapterWrapper) getAdapter()).addHeaderView(view);
+                mAdapterWrapper.addHeaderView(view);
             }
         if (mFooterViewList.size() > 0)
             for (View view : mFooterViewList) {
-                ((SwipeAdapterWrapper) getAdapter()).addFooterView(view);
+                mAdapterWrapper.addFooterView(view);
             }
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.getOriginAdapter().unregisterAdapterDataObserver(mAdapterDataObserver);
+        }
+        super.onDetachedFromWindow();
+    }
+
+    private AdapterDataObserver mAdapterDataObserver = new AdapterDataObserver() {
+        @Override
+        public void onChanged() {
+            mAdapterWrapper.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemRangeChanged(int positionStart, int itemCount) {
+            positionStart += getHeaderItemCount();
+            mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
+            positionStart += getHeaderItemCount();
+            mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount, payload);
+        }
+
+        @Override
+        public void onItemRangeInserted(int positionStart, int itemCount) {
+            positionStart += getHeaderItemCount();
+            mAdapterWrapper.notifyItemRangeInserted(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeRemoved(int positionStart, int itemCount) {
+            positionStart += getHeaderItemCount();
+            mAdapterWrapper.notifyItemRangeRemoved(positionStart, itemCount);
+        }
+
+        @Override
+        public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
+            fromPosition += getHeaderItemCount();
+            toPosition += getHeaderItemCount();
+            mAdapterWrapper.notifyItemMoved(fromPosition, toPosition);
+        }
+    };
 
     private List<View> mHeaderViewList = new ArrayList<>();
     private List<View> mFooterViewList = new ArrayList<>();
@@ -278,9 +344,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Add view at the top.
      */
     public void addHeaderView(View view) {
-        if (getAdapter() != null)
-            throw new IllegalStateException(
-                    "Cannot add header view, setAdapter has already been called.");
+        if (mAdapterWrapper != null)
+            throw new IllegalStateException("Cannot add header view, setAdapter has already been called.");
         mHeaderViewList.add(view);
     }
 
@@ -288,9 +353,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Add view at the bottom.
      */
     public void addFooterView(View view) {
-        if (getAdapter() != null)
-            throw new IllegalStateException(
-                    "Cannot add footer view, setAdapter has already been called.");
+        if (mAdapterWrapper != null)
+            throw new IllegalStateException("Cannot add footer view, setAdapter has already been called.");
         mFooterViewList.add(view);
     }
 
@@ -298,24 +362,24 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Get size of headers.
      */
     public int getHeaderItemCount() {
-        if (getAdapter() == null) return 0;
-        return ((SwipeAdapterWrapper) getAdapter()).getHeaderItemCount();
+        if (mAdapterWrapper == null) return 0;
+        return mAdapterWrapper.getHeaderItemCount();
     }
 
     /**
      * Get size of footer.
      */
     public int getFooterItemCount() {
-        if (getAdapter() == null) return 0;
-        return ((SwipeAdapterWrapper) getAdapter()).getFooterItemCount();
+        if (mAdapterWrapper == null) return 0;
+        return mAdapterWrapper.getFooterItemCount();
     }
 
     /**
      * Get ViewType of item.
      */
     public int getItemViewType(int position) {
-        if (getAdapter() == null) return 0;
-        return getAdapter().getItemViewType(position);
+        if (mAdapterWrapper == null) return 0;
+        return mAdapterWrapper.getItemViewType(position);
     }
 
     /**
