@@ -23,6 +23,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,7 +111,7 @@ public class DefineActivity extends AppCompatActivity {
                 public void run() {
                     List<String> strings = getItemList(mMainAdapter.getItemCount());
                     mItemList.addAll(strings);
-                    mMainAdapter.notifyDataSetChanged();
+                    mMainAdapter.notifyItemRangeInserted(mItemList.size() - strings.size(), strings.size());
 
                     // 数据完更多数据，一定要掉用这个方法。
                     // 第一个参数：表示此次数据是否为空。
@@ -168,7 +169,12 @@ public class DefineActivity extends AppCompatActivity {
             setGravity(Gravity.CENTER);
             setVisibility(GONE);
 
-            inflate(getContext(), R.layout.layout_fotter_loadmore, this);
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+
+            int minHeight = (int) (displayMetrics.density * 60 + 0.5);
+            setMinimumHeight(minHeight);
+
+            inflate(context, R.layout.layout_fotter_loadmore, this);
             mLoadingView = (LoadingView) findViewById(R.id.loading_view);
             mTvMessage = (TextView) findViewById(R.id.tv_message);
 
@@ -217,6 +223,19 @@ public class DefineActivity extends AppCompatActivity {
         }
 
         /**
+         * 调用了setAutoLoadMore(false)后，在需要加载更多的时候，这个方法会被调用，并传入加载更多的listener。
+         */
+        @Override
+        public void onWaitToLoadMore(SwipeMenuRecyclerView.LoadMoreListener loadMoreListener) {
+            this.mLoadMoreListener = loadMoreListener;
+
+            setVisibility(VISIBLE);
+            mLoadingView.setVisibility(GONE);
+            mTvMessage.setVisibility(VISIBLE);
+            mTvMessage.setText("点我加载更多");
+        }
+
+        /**
          * 加载出错啦，下面的错误码和错误信息二选一。
          *
          * @param errorCode    错误码。
@@ -230,19 +249,6 @@ public class DefineActivity extends AppCompatActivity {
 
             // 这里要不直接设置错误信息，要不根据errorCode动态设置错误数据。
             mTvMessage.setText(errorMessage);
-        }
-
-        /**
-         * 调用了setAutoLoadMore(false)后，在需要加载更多的时候，这个方法会被调用，并传入加载更多的listener。
-         */
-        @Override
-        public void onWaitToLoadMore(SwipeMenuRecyclerView.LoadMoreListener loadMoreListener) {
-            this.mLoadMoreListener = loadMoreListener;
-
-            setVisibility(VISIBLE);
-            mLoadingView.setVisibility(GONE);
-            mTvMessage.setVisibility(VISIBLE);
-            mTvMessage.setText("点我加载更多");
         }
 
         /**

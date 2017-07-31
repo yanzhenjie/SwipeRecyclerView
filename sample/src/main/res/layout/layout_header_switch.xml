@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_10"
-        android:text="侧滑删除和侧滑菜单只能二选一，所以有侧滑删除就不能有侧滑菜单，关闭侧滑删除时可以滑出侧滑菜单。"/>
+        android:text="1. 侧滑删除和侧滑菜单只能二选一，所以有侧滑删除就不能有侧滑菜单，关闭侧滑删除时可以滑出侧滑菜单。\n2. 这里的HeadView可以删除，如果不想删除，请看自定义拖拽参数"/>
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/switch_compat"

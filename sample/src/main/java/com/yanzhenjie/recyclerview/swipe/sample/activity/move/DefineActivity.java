@@ -82,11 +82,14 @@ public class DefineActivity extends BaseDragActivity {
     /**
      * Item移动参数回调监听，这里自定义Item怎样移动。
      */
-    public static OnItemMovementListener mItemMovementListener = new OnItemMovementListener() {
+    private OnItemMovementListener mItemMovementListener = new OnItemMovementListener() {
         @Override
         public int onDragFlags(RecyclerView recyclerView, RecyclerView.ViewHolder targetViewHolder) {
+            // 添加了HeadView时，通过ViewHolder拿到的position都需要减掉HeadView的数量。
+            int position = targetViewHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
+
             // 假如让第一个不能拖拽。
-            if (targetViewHolder.getAdapterPosition() == 0) {
+            if (position == 0) {
                 return OnItemMovementListener.INVALID;// 返回无效的方向。
             }
 
@@ -114,10 +117,16 @@ public class DefineActivity extends BaseDragActivity {
 
         @Override
         public int onSwipeFlags(RecyclerView recyclerView, RecyclerView.ViewHolder targetViewHolder) {
+            // 添加了HeadView时，通过ViewHolder拿到的position都需要减掉HeadView的数量。
+            int position = targetViewHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
+
             // 假如让第一个不能滑动删除。
-            if (targetViewHolder.getAdapterPosition() == 0) {
+            if (position == 0) {
                 return OnItemMovementListener.INVALID;// 返回无效的方向。
             }
+
+            // 让HeadView不能滑动删除。
+            if(targetViewHolder.getItemViewType() != 0) return OnItemMovementListener.INVALID;
 
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
             if (layoutManager instanceof GridLayoutManager) {
@@ -152,10 +161,11 @@ public class DefineActivity extends BaseDragActivity {
         @Override
         public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
             // TODO 如何让不同的ViewType之间可以拖拽，就是去掉这个判断。
-            // if (srcHolder.getItemViewType() != targetHolder.getItemViewType()) return false;
+            if (srcHolder.getItemViewType() != targetHolder.getItemViewType()) return false;
 
-            int fromPosition = srcHolder.getAdapterPosition();
-            int toPosition = targetHolder.getAdapterPosition();
+            // 添加了HeadView时，通过ViewHolder拿到的position都需要减掉HeadView的数量。
+            int fromPosition = srcHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
+            int toPosition = targetHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
 
             if (toPosition == 0) {// 保证第一个不被挤走。
                 return false;
@@ -174,7 +184,9 @@ public class DefineActivity extends BaseDragActivity {
 
         @Override
         public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-            int position = srcHolder.getAdapterPosition();
+            int position = srcHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
+            if (position < 0) return; // 因为添加了HeadView，这里的HeadView是第0个，减掉个数后后肯定是负数，所以不许删除。
+
             mDataList.remove(position);
             mAdapter.notifyItemRemoved(position);
             Toast.makeText(DefineActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();

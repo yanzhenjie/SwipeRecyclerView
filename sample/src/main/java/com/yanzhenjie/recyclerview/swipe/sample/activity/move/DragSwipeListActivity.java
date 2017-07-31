@@ -78,8 +78,9 @@ public class DragSwipeListActivity extends BaseDragActivity {
             // 不同的ViewType不能拖拽换位置。
             if (srcHolder.getItemViewType() != targetHolder.getItemViewType()) return false;
 
-            int fromPosition = srcHolder.getAdapterPosition();
-            int toPosition = targetHolder.getAdapterPosition();
+            // 添加了HeadView时，通过ViewHolder拿到的position都需要减掉HeadView的数量。
+            int fromPosition = srcHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
+            int toPosition = targetHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
 
             Collections.swap(mDataList, fromPosition, toPosition);
             mAdapter.notifyItemMoved(fromPosition, toPosition);
@@ -88,7 +89,9 @@ public class DragSwipeListActivity extends BaseDragActivity {
 
         @Override
         public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-            int position = srcHolder.getAdapterPosition();
+            int position = srcHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
+            if (position < 0) return; // 因为添加了HeadView，这里的HeadView是第0个，减掉后肯定是负数，所以不许删除。
+
             mDataList.remove(position);
             mAdapter.notifyItemRemoved(position);
             Toast.makeText(DragSwipeListActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
