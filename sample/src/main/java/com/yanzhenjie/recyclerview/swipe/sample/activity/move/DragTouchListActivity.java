@@ -97,7 +97,8 @@ public class DragTouchListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onItemDismiss(int position) {
+        public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
+            int position = srcHolder.getAdapterPosition();
             mDataList.remove(position);
             mDragAdapter.notifyItemRemoved(position);
             Toast.makeText(DragTouchListActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();

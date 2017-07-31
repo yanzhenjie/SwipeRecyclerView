@@ -100,7 +100,8 @@ public class DragGridActivity extends BaseDragActivity {
         }
 
         @Override
-        public void onItemDismiss(int position) {
+        public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
+            int position = srcHolder.getAdapterPosition();
             mDataList.remove(position);
             mAdapter.notifyItemRemoved(position);
             Toast.makeText(DragGridActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
