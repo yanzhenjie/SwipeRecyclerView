@@ -19,6 +19,8 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 7. 和`ViewPager`、`DrawerLayout`等滑动布局嵌套使用。
 8. `Sticky`普通布局黏贴和`ReyclerView`分组黏贴。
 
+> **注意**：使用本库只需要使用`SwipeMenuRecyclerView`即可，可是使用任何第三方的Adapter，比如`BaseRecyclerViewAdapterHelper`。
+
 # 截图
 对上面提到的效果都例举演示，但不是全部，更多效果可以下载Demo查看。
 
@@ -46,7 +48,7 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 ## 引入
 * Gradle
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.1.0'
+compile 'com.yanzhenjie:recyclerview-swipe:1.1.1'
 ```
 
 * Maven
@@ -54,7 +56,7 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.0'
 <dependency>
   <groupId>com.yanzhenjie</groupId>
   <artifactId>recyclerview-swipe</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <type>pom</type>
 </dependency>
 ```
@@ -66,7 +68,19 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.0'
     .../>
 ```
 
-**注意**：新版从1.1.0开始不再需要继承`SwipeMenuAdapter`了，只需要使用`SwipeMenuRecyclerView`即可。
+**注意**：
+1. 新版从1.1.0开始不再需要继承`SwipeMenuAdapter`了，只需要使用`SwipeMenuRecyclerView`即可。
+2. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`item position`。
+
+### Item点击监听
+```
+recyclerView.setSwipeItemClickListener(new SwipeItemClickListener() {
+    @Override
+    public void onItemClick(View view, int position) {
+        // TODO，搞事情...
+    }
+});
+```
 
 ### 侧滑菜单
 ```java
@@ -110,7 +124,10 @@ recyclerView.setOnItemMoveListener(mItemMoveListener);// 监听拖拽，更新UI
 
 OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
     @Override
-    public boolean onItemMove(int fromPosition, int toPosition) {
+    public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+        int fromPosition = srcHolder.getAdapterPosition();
+        int toPosition = targetHolder.getAdapterPosition();
+        
         // Item被拖拽时，交换数据，并更新adapter。
         Collections.swap(mDataList, fromPosition, toPosition);
         adapter.notifyItemMoved(fromPosition, toPosition);
@@ -118,7 +135,8 @@ OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
     }
 
     @Override
-    public void onItemDismiss(int position) {
+    public void onItemDismiss(ViewHolder srcHolder) {
+        int position = srcHolder.getAdapterPosition();
         // Item被侧滑删除时，删除数据，并更新adapter。
         mDataList.remove(position);
         adapter.notifyItemRemoved(position);
@@ -129,7 +147,9 @@ OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
 **特别注意**：如果`LayoutManager`是`List`形式，那么Item拖拽时只能从1-2-3-4这样走，如果你的`LayoutManager`是`Grid`形式的，那么Item可以从1直接到3或者5或者6...，这样数据就会错乱，所以**当`LayoutManager`是Grid形式时**这里要特别注意转换数据位置的算法：
 ```java
 @Override
-public boolean onItemMove(int fromPosition, int toPosition) {
+public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+    int fromPosition = srcHolder.getAdapterPosition();
+    int toPosition = targetHolder.getAdapterPosition();
     if (fromPosition < toPosition)
         for (int i = fromPosition; i < toPosition; i++)
             Collections.swap(mDataList, i, i + 1);
@@ -185,6 +205,9 @@ recyclerView.addFooterView(footerView);
 // 最后设置适配器。
 recyclerView.setAdapter(new MainAdapter(getItemList()));
 ```
+
+**特别注意**：
+1. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`item position`。
 
 ### 加载更多
 本库默认提供了加载更多的动画和View，开发者也可以自定义。
@@ -298,7 +321,7 @@ public class DefineLoadMoreView extends LinearLayout
 * [SwipeMenu](https://github.com/TUBB/SwipeMenu/)
 * [HeaderAndFooterWrapper](https://github.com/hongyangAndroid/baseAdapter/blob/master/baseadapter-recyclerview/src/main/java/com/zhy/adapter/recyclerview/wrapper/HeaderAndFooterWrapper.java)
 
-本库的加载更多的API参考了cube-sdk，侧滑菜单参考了SwipeMenu，添加HeaderView参考了HeaderAndFooterWrapper类，特别感谢上述开源库及作者。
+加载更多的灵感来自`cube-sdk`，侧滑菜单参考了`SwipeMenu`，添加`HeaderView`参考了`HeaderAndFooterWrapper`类，特别感谢上述开源库及其作者。
 
 # License
 ```text
