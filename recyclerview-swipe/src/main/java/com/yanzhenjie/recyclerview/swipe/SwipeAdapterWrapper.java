@@ -137,12 +137,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
             viewGroup.addView(viewHolder.itemView);
 
             try {
-                Field itemView;
-                if (viewHolder.getClass().isMemberClass()) {
-                    itemView = viewHolder.getClass().getSuperclass().getDeclaredField("itemView");
-                } else {
-                    itemView = viewHolder.getClass().getDeclaredField("itemView");
-                }
+                Field itemView = getSupperClass(viewHolder.getClass()).getDeclaredField("itemView");
                 if (!itemView.isAccessible()) itemView.setAccessible(true);
                 itemView.set(viewHolder, swipeMenuLayout);
             } catch (Exception e) {
@@ -152,6 +147,13 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         return viewHolder;
     }
 
+    private Class<?> getSupperClass(Class<?> aClass) {
+        Class<?> supperClass = aClass.getSuperclass();
+        if (supperClass != null && !supperClass.equals(Object.class)) {
+            return getSupperClass(supperClass);
+        }
+        return aClass;
+    }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
