@@ -18,4 +18,4 @@ dependencies {
     compile rootProject.ext.dependencies.loading
 }
 
-apply from: "../maven.gradle"
+apply from: "https://github.com/yanzhenjie/bintray/blob/master/maven.gradle?raw=true"
