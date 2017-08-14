@@ -48,7 +48,7 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 ## 引入
 * Gradle
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.1.1'
+compile 'com.yanzhenjie:recyclerview-swipe:1.1.2'
 ```
 
 * Maven
@@ -56,7 +56,7 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.1'
 <dependency>
   <groupId>com.yanzhenjie</groupId>
   <artifactId>recyclerview-swipe</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
   <type>pom</type>
 </dependency>
 ```
@@ -71,6 +71,19 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.1'
 **注意**：
 1. 新版从1.1.0开始不再需要继承`SwipeMenuAdapter`了，只需要使用`SwipeMenuRecyclerView`即可。
 2. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`item position`。
+
+### ItemDecoration
+也就是分割线，支持Grid形式和Linear形式，可以选择某个ViewType不画分割线：
+```java
+// 默认构造，传入颜色即可。
+new DefaultDecoration(color);
+
+// 颜色，宽，高，最后一个参数是不画分割线的ViewType，可以传入多个。
+new DefaultDecoration(colir, width, height, excludeViewType);
+
+// 例如下面的123都是不画分割线的ViewType：
+new DefaultDecoration(colir, width, height, 1, 2, 3);
+```
 
 ### Item点击监听
 ```
