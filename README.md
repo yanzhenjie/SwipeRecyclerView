@@ -79,10 +79,10 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.2'
 new DefaultDecoration(color);
 
 // 颜色，宽，高，最后一个参数是不画分割线的ViewType，可以传入多个。
-new DefaultDecoration(colir, width, height, excludeViewType);
+new DefaultDecoration(color, width, height, excludeViewType);
 
 // 例如下面的123都是不画分割线的ViewType：
-new DefaultDecoration(colir, width, height, 1, 2, 3);
+new DefaultDecoration(color, width, height, 1, 2, 3);
 ```
 
 ### Item点击监听
