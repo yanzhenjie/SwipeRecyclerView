@@ -15,88 +15,24 @@
  */
 package com.yanzhenjie.recyclerview.swipe.widget;
 
-import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 /**
  * <p>
  * RecyclerView's Item Split Line.
  * </p>
  * Created by Yan Zhenjie on 2016/7/27.
+ *
+ * @deprecated use {@link DefaultItemDecoration} instead.
  */
-public class ListItemDecoration extends RecyclerView.ItemDecoration {
+@Deprecated
+public class ListItemDecoration extends DefaultItemDecoration {
 
-    private Drawable mDivider;
-    private int mDividerSize;
-    private int mExcludeViewType;
-
-    /**
-     * @param color line color.
-     */
     public ListItemDecoration(@ColorInt int color) {
-        this(color, 2, -1);
+        super(color);
     }
 
-    /**
-     * @param color           line color.
-     * @param dividerSize     line height.
-     * @param excludeViewType
-     */
-    public ListItemDecoration(@ColorInt int color, int dividerSize, int excludeViewType) {
-        mDivider = new ColorDrawable(color);
-        mDividerSize = dividerSize;
-        mExcludeViewType = excludeViewType;
-    }
-
-    @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        int orientation = ((LinearLayoutManager) parent.getLayoutManager()).getOrientation();
-        int position = parent.getChildLayoutPosition(view);
-
-        if (parent.getAdapter().getItemViewType(position) == mExcludeViewType) {
-            outRect.set(0, 0, 0, 0);
-            return;
-        }
-
-        int childCount = parent.getAdapter().getItemCount();
-        boolean lastRaw = position == childCount - 1;
-        switch (orientation) {
-            case LinearLayoutManager.HORIZONTAL: {
-                if (lastRaw) {
-                    outRect.set(0, 0, 0, 0);
-                } else {
-                    outRect.set(0, 0, mDividerSize, 0);
-                }
-                break;
-            }
-            case LinearLayoutManager.VERTICAL: {
-                if (lastRaw) {
-                    outRect.set(0, 0, 0, 0);
-                } else {
-                    outRect.set(0, 0, 0, mDividerSize);
-                }
-                break;
-            }
-        }
-    }
-
-    @Override
-    public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            final View child = parent.getChildAt(i);
-            final int left = child.getLeft();
-            final int top = child.getBottom();
-            final int right = child.getRight();
-            final int bottom = top + mDividerSize;
-            mDivider.setBounds(left, top, right, bottom);
-            mDivider.draw(c);
-        }
+    public ListItemDecoration(@ColorInt int color, int dividerWidth, int dividerHeight, int... excludeViewType) {
+        super(color, dividerWidth, dividerHeight, excludeViewType);
     }
 }
