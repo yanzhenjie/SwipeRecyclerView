@@ -37,7 +37,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
-import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class DefineActivity extends AppCompatActivity {
 
         mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new ListItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
+        mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
         mRecyclerView.setSwipeItemClickListener(mItemClickListener);
 
         // 自定义的核心就是DefineLoadMoreView类。

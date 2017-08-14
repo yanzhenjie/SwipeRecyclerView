@@ -21,7 +21,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -41,8 +40,7 @@ import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
-import com.yanzhenjie.recyclerview.swipe.widget.GridItemDecoration;
-import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +75,7 @@ public abstract class BaseDragActivity extends AppCompatActivity {
 
         mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(getLayoutManager());
-        mRecyclerView.addItemDecoration(getItemDecoration());
+        mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
 
         addHeaderFooter(mRecyclerView);
 
@@ -111,15 +109,6 @@ public abstract class BaseDragActivity extends AppCompatActivity {
 
     protected RecyclerView.LayoutManager getLayoutManager() {
         return new LinearLayoutManager(this);
-    }
-
-    protected RecyclerView.ItemDecoration getItemDecoration() {
-        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            return new GridItemDecoration(ContextCompat.getColor(this, R.color.divider_color));
-        } else {
-            return new ListItemDecoration(ContextCompat.getColor(this, R.color.divider_color));
-        }
     }
 
     protected abstract OnItemMoveListener getItemMoveListener();

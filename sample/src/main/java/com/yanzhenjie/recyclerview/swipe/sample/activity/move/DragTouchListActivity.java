@@ -15,7 +15,6 @@
  */
 package com.yanzhenjie.recyclerview.swipe.sample.activity.move;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
@@ -32,7 +31,7 @@ import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.DragTouchAdapter;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
-import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,7 +66,7 @@ public class DragTouchListActivity extends AppCompatActivity {
 
         SwipeMenuRecyclerView recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new ListItemDecoration(Color.BLACK));
+        recyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
 
         // 触摸拖拽的代码在下面的Adapter中。
         mDragAdapter = new DragTouchAdapter(recyclerView, mDataList);

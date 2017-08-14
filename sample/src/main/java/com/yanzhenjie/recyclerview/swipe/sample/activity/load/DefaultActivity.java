@@ -30,7 +30,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
-import com.yanzhenjie.recyclerview.swipe.widget.GridItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +62,7 @@ public class DefaultActivity extends AppCompatActivity {
 
         mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        mRecyclerView.addItemDecoration(new GridItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
+        mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
         mRecyclerView.setSwipeItemClickListener(mItemClickListener); // RecyclerView Item点击监听。
 
         mRecyclerView.useDefaultLoadMore(); // 使用默认的加载更多的View。

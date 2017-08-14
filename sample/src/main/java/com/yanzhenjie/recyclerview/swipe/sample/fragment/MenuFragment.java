@@ -34,7 +34,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
-import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +69,7 @@ public class MenuFragment extends Fragment {
             dataList.add("我是第" + i + "个。");
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new ListItemDecoration(ContextCompat.getColor(getContext(), R.color.divider_color)));
+        mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(getContext(), R.color.divider_color)));
 
         mRecyclerView.setSwipeItemClickListener(mItemClickListener);
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);

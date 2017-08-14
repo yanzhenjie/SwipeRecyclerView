@@ -29,7 +29,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
-import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +53,7 @@ public class HeaderViewActivity extends AppCompatActivity implements SwipeItemCl
         SwipeMenuRecyclerView recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setSwipeItemClickListener(this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.addItemDecoration(new ListItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
+        recyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
 
         // HeaderView。
         View headerView = getLayoutInflater().inflate(R.layout.layout_header, recyclerView, false);

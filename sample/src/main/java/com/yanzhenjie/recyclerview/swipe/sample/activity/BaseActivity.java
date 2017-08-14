@@ -29,6 +29,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
+import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 import com.yanzhenjie.recyclerview.swipe.widget.GridItemDecoration;
 import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
 
@@ -94,16 +95,8 @@ public abstract class BaseActivity extends AppCompatActivity implements SwipeIte
         return mLayoutManager;
     }
 
-    /**
-     * 获取RecyclerView的Item分割线。
-     */
     protected RecyclerView.ItemDecoration getItemDecoration() {
-        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            return new GridItemDecoration(ContextCompat.getColor(this, R.color.divider_color));
-        } else {
-            return new ListItemDecoration(ContextCompat.getColor(this, R.color.divider_color));
-        }
+        return new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color));
     }
 
     /**

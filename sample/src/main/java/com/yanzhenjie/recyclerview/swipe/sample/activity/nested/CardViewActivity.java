@@ -1,6 +1,7 @@
 package com.yanzhenjie.recyclerview.swipe.sample.activity.nested;
 
 import android.graphics.Rect;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,6 +74,13 @@ public class CardViewActivity extends BaseActivity {
         public DefaultViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+
+            ((CardView) itemView).getChildAt(0).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "第" + getAdapterPosition() + "个", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void setData(String title) {
@@ -82,7 +90,7 @@ public class CardViewActivity extends BaseActivity {
 
     @Override
     public void onItemClick(View itemView, int position) {
-        Toast.makeText(CardViewActivity.this, "第" + position + "个", Toast.LENGTH_SHORT).show();
+        // Item中的SwipeMenuLayout会拦截掉父控件的点击事件，这里无效。
     }
 
     @Override
