@@ -105,7 +105,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void setOnItemMoveListener(OnItemMoveListener onItemMoveListener) {
         initializeItemTouchHelper();
-        mDefaultItemTouchHelper.setOnItemMoveListener(onItemMoveListener);
+        this.mDefaultItemTouchHelper.setOnItemMoveListener(onItemMoveListener);
     }
 
     /**
@@ -115,7 +115,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void setOnItemMovementListener(OnItemMovementListener onItemMovementListener) {
         initializeItemTouchHelper();
-        mDefaultItemTouchHelper.setOnItemMovementListener(onItemMovementListener);
+        this.mDefaultItemTouchHelper.setOnItemMovementListener(onItemMovementListener);
     }
 
     /**
@@ -135,7 +135,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void setLongPressDragEnabled(boolean canDrag) {
         initializeItemTouchHelper();
-        mDefaultItemTouchHelper.setLongPressDragEnabled(canDrag);
+        this.mDefaultItemTouchHelper.setLongPressDragEnabled(canDrag);
     }
 
     /**
@@ -157,7 +157,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     public void setItemViewSwipeEnabled(boolean canSwipe) {
         initializeItemTouchHelper();
         allowSwipeDelete = canSwipe; // swipe and menu conflict.
-        mDefaultItemTouchHelper.setItemViewSwipeEnabled(canSwipe);
+        this.mDefaultItemTouchHelper.setItemViewSwipeEnabled(canSwipe);
     }
 
     /**
@@ -177,7 +177,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void startDrag(RecyclerView.ViewHolder viewHolder) {
         initializeItemTouchHelper();
-        mDefaultItemTouchHelper.startDrag(viewHolder);
+        this.mDefaultItemTouchHelper.startDrag(viewHolder);
     }
 
     /**
@@ -187,13 +187,48 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      */
     public void startSwipe(RecyclerView.ViewHolder viewHolder) {
         initializeItemTouchHelper();
-        mDefaultItemTouchHelper.startSwipe(viewHolder);
+        this.mDefaultItemTouchHelper.startSwipe(viewHolder);
+    }
+
+    /**
+     * Check the Adapter and throw an exception if it already exists.
+     */
+    private void checkAdapterExist(String message) {
+        if (mAdapterWrapper != null)
+            throw new IllegalStateException(message);
+    }
+
+    /**
+     * Set item click listener.
+     */
+    public void setSwipeItemClickListener(SwipeItemClickListener swipeItemClickListener) {
+        checkAdapterExist("Cannot item click listener, setAdapter has already been called.");
+        this.mSwipeItemClickListener = new ItemClick(this, swipeItemClickListener);
+    }
+
+    private static class ItemClick implements SwipeItemClickListener {
+
+        private SwipeMenuRecyclerView mRecyclerView;
+        private SwipeItemClickListener mCallback;
+
+        public ItemClick(SwipeMenuRecyclerView recyclerView, SwipeItemClickListener callback) {
+            this.mRecyclerView = recyclerView;
+            this.mCallback = callback;
+        }
+
+        @Override
+        public void onItemClick(View itemView, int position) {
+            position = position - mRecyclerView.getHeaderItemCount();
+            if (position >= 0)
+                mCallback.onItemClick(itemView, position);
+        }
     }
 
     /**
      * Set to create menu listener.
      */
     public void setSwipeMenuCreator(SwipeMenuCreator swipeMenuCreator) {
+        checkAdapterExist("Cannot menu creator, setAdapter has already been called.");
         this.mSwipeMenuCreator = swipeMenuCreator;
     }
 
@@ -201,58 +236,29 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Set to click menu listener.
      */
     public void setSwipeMenuItemClickListener(SwipeMenuItemClickListener swipeMenuItemClickListener) {
-        this.mSwipeMenuItemClickListener = swipeMenuItemClickListener;
+        checkAdapterExist("Cannot menu item click listener, setAdapter has already been called.");
+        this.mSwipeMenuItemClickListener = new MenuItemClick(this, swipeMenuItemClickListener);
     }
 
-    /**
-     * Set item click listener.
-     */
-    public void setSwipeItemClickListener(SwipeItemClickListener swipeItemClickListener) {
-        this.mSwipeItemClickListener = swipeItemClickListener;
-    }
+    private static class MenuItemClick implements SwipeMenuItemClickListener {
 
-    /**
-     * Default swipe menu creator.
-     */
-    private SwipeMenuCreator mDefaultMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
-            if (mSwipeMenuCreator != null) {
-                mSwipeMenuCreator.onCreateMenu(swipeLeftMenu, swipeRightMenu, viewType);
-            }
+        private SwipeMenuRecyclerView mRecyclerView;
+        private SwipeMenuItemClickListener mCallback;
+
+        public MenuItemClick(SwipeMenuRecyclerView recyclerView, SwipeMenuItemClickListener callback) {
+            this.mRecyclerView = recyclerView;
+            this.mCallback = callback;
         }
-    };
-
-    /**
-     * Default swipe menu item click listener.
-     */
-    private SwipeMenuItemClickListener mDefaultMenuItemClickListener = new SwipeMenuItemClickListener() {
 
         @Override
         public void onItemClick(SwipeMenuBridge menuBridge) {
-            if (mSwipeMenuItemClickListener != null) {
-                int position = menuBridge.getAdapterPosition();
-                position = position - getHeaderItemCount();
-                if (position >= 0)
-                    menuBridge.mAdapterPosition = position;
-                mSwipeMenuItemClickListener.onItemClick(menuBridge);
-            }
+            int position = menuBridge.getAdapterPosition();
+            position = position - mRecyclerView.getHeaderItemCount();
+            if (position >= 0)
+                menuBridge.mAdapterPosition = position;
+            mCallback.onItemClick(menuBridge);
         }
-    };
-
-    /**
-     * Default item click listener.
-     */
-    private SwipeItemClickListener mDefaultItemClickListener = new SwipeItemClickListener() {
-        @Override
-        public void onItemClick(View itemView, int position) {
-            if (mSwipeItemClickListener != null) {
-                position = position - getHeaderItemCount();
-                if (position >= 0)
-                    mSwipeItemClickListener.onItemClick(itemView, position);
-            }
-        }
-    };
+    }
 
     /**
      * Get the original adapter.
@@ -276,9 +282,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         adapter.registerAdapterDataObserver(mAdapterDataObserver);
 
         mAdapterWrapper = new SwipeAdapterWrapper(adapter);
-        mAdapterWrapper.setSwipeMenuCreator(mDefaultMenuCreator);
-        mAdapterWrapper.setSwipeMenuItemClickListener(mDefaultMenuItemClickListener);
-        mAdapterWrapper.setSwipeItemClickListener(mDefaultItemClickListener);
+        mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
+        mAdapterWrapper.setSwipeMenuItemClickListener(mSwipeMenuItemClickListener);
+        mAdapterWrapper.setSwipeItemClickListener(mSwipeItemClickListener);
         super.setAdapter(mAdapterWrapper);
 
         if (mHeaderViewList.size() > 0)
@@ -344,8 +350,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Add view at the top.
      */
     public void addHeaderView(View view) {
-        if (mAdapterWrapper != null)
-            throw new IllegalStateException("Cannot add header view, setAdapter has already been called.");
+        checkAdapterExist("Cannot add header view, setAdapter has already been called.");
         mHeaderViewList.add(view);
     }
 
@@ -353,8 +358,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Add view at the bottom.
      */
     public void addFooterView(View view) {
-        if (mAdapterWrapper != null)
-            throw new IllegalStateException("Cannot add footer view, setAdapter has already been called.");
+        checkAdapterExist("Cannot add footer view, setAdapter has already been called.");
         mFooterViewList.add(view);
     }
 

@@ -101,9 +101,10 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         final RecyclerView.ViewHolder viewHolder = mAdapter.onCreateViewHolder(parent, viewType);
 
-        SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_swipe_view_item, parent, false);
+        if (mSwipeMenuCreator == null) return viewHolder;
 
+        final SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.recycler_swipe_view_item, parent, false);
         SwipeMenu swipeLeftMenu = new SwipeMenu(swipeMenuLayout, viewType);
         SwipeMenu swipeRightMenu = new SwipeMenu(swipeMenuLayout, viewType);
 
@@ -125,12 +126,14 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
             swipeRightMenuView.createMenu(swipeRightMenu, swipeMenuLayout, mSwipeMenuItemClickListener, SwipeMenuRecyclerView.RIGHT_DIRECTION);
         }
 
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mSwipeItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
-            }
-        });
+        if (mSwipeItemClickListener != null) {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSwipeItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
+                }
+            });
+        }
 
         if (leftMenuCount > 0 || rightMenuCount > 0) {
             ViewGroup viewGroup = (ViewGroup) swipeMenuLayout.findViewById(R.id.swipe_content);
