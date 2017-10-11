@@ -19,99 +19,90 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
+import com.yanzhenjie.recyclerview.swipe.sample.adapter.BaseAdapter;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
-import com.yanzhenjie.recyclerview.swipe.widget.GridItemDecoration;
-import com.yanzhenjie.recyclerview.swipe.widget.ListItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * Demo中很多代码都是通用的，所以封装一下，不然就冗余了。
- * </p>
  * Created by YanZhenjie on 2017/7/21.
  */
-public abstract class BaseActivity extends AppCompatActivity implements SwipeItemClickListener {
+public class BaseActivity extends AppCompatActivity implements SwipeItemClickListener {
 
-    private Toolbar mToolbar;
-    private ActionBar mActionBar;
-    private SwipeMenuRecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private RecyclerView.Adapter mAdapter;
+    protected Toolbar mToolbar;
+    protected ActionBar mActionBar;
+    protected SwipeMenuRecyclerView mRecyclerView;
+    protected RecyclerView.LayoutManager mLayoutManager;
+    protected RecyclerView.ItemDecoration mItemDecoration;
+
+    protected BaseAdapter mAdapter;
+    protected List<String> mDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
+        setContentView(getContentView());
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+
+
         setSupportActionBar(mToolbar);
         mActionBar = getSupportActionBar();
+        if (displayHomeAsUpEnabled()) {
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
-        if (displayHomeAsUpEnabled()) mActionBar.setDisplayHomeAsUpEnabled(true);
+        mLayoutManager = createLayoutManager();
+        mItemDecoration = createItemDecoration();
+        mDataList = createDataList();
+        mAdapter = createAdapter();
 
-        mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(getLayoutManager());
-        mRecyclerView.addItemDecoration(getItemDecoration());
-        mRecyclerView.setAdapter(getAdapter());
-
-        // RecyclerView的Item的点击事件。
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(mItemDecoration);
         mRecyclerView.setSwipeItemClickListener(this);
     }
 
-    public Toolbar getToolbar() {
-        return mToolbar;
+    protected int getContentView() {
+        return R.layout.activity_scroll;
     }
 
-    /**
-     * 获取Content View.
-     */
-    protected int getLayoutId() {
-        return R.layout.activity;
+    protected RecyclerView.LayoutManager createLayoutManager() {
+        return new LinearLayoutManager(this);
     }
 
-    /**
-     * 获取RecyclerView。
-     */
-    protected final SwipeMenuRecyclerView getRecyclerView() {
-        return mRecyclerView;
-    }
-
-    /**
-     * 获取RecyclerView的布局管理器。
-     */
-    protected RecyclerView.LayoutManager getLayoutManager() {
-        if (mLayoutManager == null)
-            mLayoutManager = new LinearLayoutManager(this);
-        return mLayoutManager;
-    }
-
-    protected RecyclerView.ItemDecoration getItemDecoration() {
+    protected RecyclerView.ItemDecoration createItemDecoration() {
         return new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color));
     }
 
-    /**
-     * 获取RecyclerView的适配器。
-     */
-    protected RecyclerView.Adapter getAdapter() {
-        if (mAdapter == null)
-            mAdapter = new MainAdapter(getItemList());
-        return mAdapter;
+    protected List<String> createDataList() {
+        List<String> dataList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            dataList.add("第" + i + "个Item");
+        }
+        return dataList;
     }
 
-    /**
-     * 获取界面需要展示的数据。
-     */
-    protected abstract List<String> getItemList();
+    protected BaseAdapter createAdapter() {
+        return new MainAdapter(this);
+    }
+
+    @Override
+    public void onItemClick(View itemView, int position) {
+        Toast.makeText(this, "第" + position + "个", Toast.LENGTH_SHORT).show();
+    }
 
     protected boolean displayHomeAsUpEnabled() {
         return true;

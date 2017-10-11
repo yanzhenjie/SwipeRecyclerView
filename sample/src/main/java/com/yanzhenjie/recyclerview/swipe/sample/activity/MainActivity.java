@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe.sample.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.yanzhenjie.recyclerview.swipe.sample.R;
@@ -39,8 +40,11 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
 
     @Override
-    protected boolean displayHomeAsUpEnabled() {
-        return false;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
     }
 
     @Override
@@ -74,7 +78,12 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected List<String> getItemList() {
+    protected boolean displayHomeAsUpEnabled() {
+        return false;
+    }
+
+    @Override
+    protected List<String> createDataList() {
         return Arrays.asList(getResources().getStringArray(R.array.main_item));
     }
 }

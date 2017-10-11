@@ -16,26 +16,14 @@
 package com.yanzhenjie.recyclerview.swipe.sample.activity.move;
 
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
-import com.yanzhenjie.recyclerview.swipe.sample.R;
+import com.yanzhenjie.recyclerview.swipe.sample.adapter.BaseAdapter;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.DragTouchAdapter;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
-import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
-import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * <p>
@@ -43,39 +31,24 @@ import java.util.List;
  * </p>
  * Created by Yan Zhenjie on 2016/8/3.
  */
-public class DragTouchListActivity extends AppCompatActivity {
-
-    private List<String> mDataList;
-    private DragTouchAdapter mDragAdapter;
-    private ActionBar mActionBar;
+public class DragTouchListActivity extends BaseDragActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mActionBar = getSupportActionBar();
-        assert mActionBar != null;
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mDataList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            mDataList.add("我是第" + i + "个。");
-        }
+        mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
+        mRecyclerView.setItemViewSwipeEnabled(true); // 滑动删除，默认关闭。
+    }
 
-        SwipeMenuRecyclerView recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
+    @Override
+    protected OnItemMoveListener getItemMoveListener() {
+        return onItemMoveListener;
+    }
 
-        // 触摸拖拽的代码在下面的Adapter中。
-        mDragAdapter = new DragTouchAdapter(recyclerView, mDataList);
-        recyclerView.setAdapter(mDragAdapter);
-
-        recyclerView.setLongPressDragEnabled(true); // 开启拖拽。
-        recyclerView.setItemViewSwipeEnabled(true); // 开启滑动删除。
-        recyclerView.setOnItemMoveListener(onItemMoveListener);// Item的拖拽/侧滑删除时，手指状态发生变化监听。
-        recyclerView.setOnItemStateChangedListener(mOnItemStateChangedListener); // 监听Item上的手指状态。
+    @Override
+    protected BaseAdapter createAdapter() {
+        return new DragTouchAdapter(this, mRecyclerView);
     }
 
     /**
@@ -91,7 +64,7 @@ public class DragTouchListActivity extends AppCompatActivity {
             int toPosition = targetHolder.getAdapterPosition();
 
             Collections.swap(mDataList, fromPosition, toPosition);
-            mDragAdapter.notifyItemMoved(fromPosition, toPosition);
+            mAdapter.notifyItemMoved(fromPosition, toPosition);
             return true;// 返回true表示处理了并可以换位置，返回false表示你没有处理并不能换位置。
         }
 
@@ -99,39 +72,9 @@ public class DragTouchListActivity extends AppCompatActivity {
         public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
             int position = srcHolder.getAdapterPosition();
             mDataList.remove(position);
-            mDragAdapter.notifyItemRemoved(position);
+            mAdapter.notifyItemRemoved(position);
             Toast.makeText(DragTouchListActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
         }
 
     };
-
-    /**
-     * Item的拖拽/侧滑删除时，手指状态发生变化监听。
-     */
-    private OnItemStateChangedListener mOnItemStateChangedListener = new OnItemStateChangedListener() {
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            if (actionState == OnItemStateChangedListener.ACTION_STATE_DRAG) {
-                mActionBar.setSubtitle("状态：拖拽");
-
-                // 拖拽的时候背景就透明了，这里我们可以添加一个特殊背景。
-                viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(DragTouchListActivity.this, R.color.white_pressed));
-            } else if (actionState == OnItemStateChangedListener.ACTION_STATE_SWIPE) {
-                mActionBar.setSubtitle("状态：滑动删除");
-            } else if (actionState == OnItemStateChangedListener.ACTION_STATE_IDLE) {
-                mActionBar.setSubtitle("状态：手指松开");
-
-                // 在手松开的时候还原背景。
-                ViewCompat.setBackground(viewHolder.itemView, ContextCompat.getDrawable(DragTouchListActivity.this, R.drawable.select_white));
-            }
-        }
-    };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-        return true;
-    }
 }

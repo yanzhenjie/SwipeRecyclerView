@@ -17,10 +17,8 @@ package com.yanzhenjie.recyclerview.swipe.sample.activity.menu;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -32,10 +30,6 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.activity.BaseActivity;
-import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -45,15 +39,15 @@ import java.util.List;
  */
 public class ListActivity extends BaseActivity {
 
-    private RecyclerView.Adapter mAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SwipeMenuRecyclerView recyclerView = getRecyclerView();
-        recyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        recyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
+        mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
     }
 
     /**
@@ -138,37 +132,10 @@ public class ListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
         if (item.getItemId() == R.id.menu_open_rv_menu) {
-            getRecyclerView().smoothOpenRightMenu(0);
+            mRecyclerView.smoothOpenRightMenu(0);
+            return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected RecyclerView.Adapter getAdapter() {
-        if (mAdapter == null)
-            mAdapter = new MainAdapter(getItemList()) {
-                @Override
-                public int getItemViewType(int position) {
-                    return position;
-                }
-            };
-        return mAdapter;
-    }
-
-    @Override
-    public void onItemClick(View itemView, int position) {
-        Toast.makeText(this, "第" + position + "个", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected List<String> getItemList() {
-        List<String> strings = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            strings.add("第" + i + "个Item");
-        }
-        return strings;
-    }
-
 }

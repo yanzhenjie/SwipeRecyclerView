@@ -34,9 +34,6 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.activity.BaseActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * <p>
  * 和DrawerLayout结合使用。
@@ -45,32 +42,25 @@ import java.util.List;
  */
 public class DrawerActivity extends BaseActivity {
 
-    private List<String> mStrings;
-
-    private SwipeMenuRecyclerView mMenuRecyclerView;
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_menu_drawer;
-    }
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mStrings = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            mStrings.add("我是第" + i + "个。");
-        }
-        mMenuRecyclerView = getRecyclerView();
-
-        mMenuRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
-        mMenuRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+        mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
+        mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(), R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
+    }
+
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_menu_drawer;
     }
 
     @Override
@@ -135,18 +125,9 @@ public class DrawerActivity extends BaseActivity {
     };
 
     @Override
-    protected List<String> getItemList() {
-        List<String> strings = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
-            strings.add("第" + i + "个Item");
-        }
-        return strings;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_open_rv_menu) {
-            mMenuRecyclerView.smoothOpenRightMenu(0);
+            mRecyclerView.smoothOpenRightMenu(0);
         }
         return true;
     }

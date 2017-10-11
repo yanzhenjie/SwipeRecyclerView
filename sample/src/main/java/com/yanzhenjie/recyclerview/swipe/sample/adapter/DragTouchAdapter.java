@@ -15,8 +15,8 @@
  */
 package com.yanzhenjie.recyclerview.swipe.sample.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,31 +33,37 @@ import java.util.List;
  * </p>
  * Created by YanZhenjie on 2016/7/22.
  */
-public class DragTouchAdapter extends RecyclerView.Adapter<DragTouchAdapter.ViewHolder> {
+public class DragTouchAdapter extends BaseAdapter<DragTouchAdapter.ViewHolder> {
 
     private SwipeMenuRecyclerView mMenuRecyclerView;
-    private List<String> titles;
+    private List<String> mDataList;
 
-    public DragTouchAdapter(SwipeMenuRecyclerView menuRecyclerView, List<String> titles) {
+    public DragTouchAdapter(Context context, SwipeMenuRecyclerView menuRecyclerView) {
+        super(context);
         this.mMenuRecyclerView = menuRecyclerView;
-        this.titles = titles;
+    }
+
+    @Override
+    public void notifyDataSetChanged(List<String> dataList) {
+        this.mDataList = dataList;
+        super.notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return titles == null ? 0 : titles.size();
+        return mDataList == null ? 0 : mDataList.size();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_drag_touch, parent, false));
+        ViewHolder viewHolder = new ViewHolder(getInflater().inflate(R.layout.item_drag_touch, parent, false));
         viewHolder.mMenuRecyclerView = mMenuRecyclerView;
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setData(titles.get(position));
+        holder.setData(mDataList.get(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {

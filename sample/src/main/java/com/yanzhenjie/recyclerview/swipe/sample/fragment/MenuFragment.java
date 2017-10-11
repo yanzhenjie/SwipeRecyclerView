@@ -64,10 +64,6 @@ public class MenuFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        List<String> dataList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            dataList.add("我是第" + i + "个。");
-        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(getContext(), R.color.divider_color)));
 
@@ -75,8 +71,13 @@ public class MenuFragment extends Fragment {
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
-        MainAdapter menuAdapter = new MainAdapter(dataList);
+        MainAdapter menuAdapter = new MainAdapter(getContext());
         mRecyclerView.setAdapter(menuAdapter);
+        List<String> dataList = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            dataList.add("我是第" + i + "个。");
+        }
+        menuAdapter.notifyDataSetChanged(dataList);
     }
 
     /**

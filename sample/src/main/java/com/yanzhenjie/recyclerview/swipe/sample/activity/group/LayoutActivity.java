@@ -18,6 +18,7 @@ package com.yanzhenjie.recyclerview.swipe.sample.activity.group;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -40,10 +41,12 @@ public class LayoutActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
         initTabLayout();
 
-        /**
+        /*
          * 注意：
          * 1. 要给需要sticky的View设置tab属性：android:tag="sticky";
          * 2. 也可以Java动态设置：view.setTag("sticky");

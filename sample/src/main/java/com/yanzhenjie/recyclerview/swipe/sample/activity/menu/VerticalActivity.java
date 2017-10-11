@@ -15,6 +15,7 @@
  */
 package com.yanzhenjie.recyclerview.swipe.sample.activity.menu;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,8 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
+import com.yanzhenjie.recyclerview.swipe.sample.activity.BaseActivity;
+import com.yanzhenjie.recyclerview.swipe.sample.adapter.BaseAdapter;
 
 import java.util.List;
 
@@ -36,23 +39,21 @@ import java.util.List;
  * </p>
  * Created by YanZhenjie on 2017/7/22.
  */
-public class VerticalActivity extends ListActivity {
-
-    VerticalAdapter mAdapter;
+public class VerticalActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getRecyclerView().setSwipeMenuCreator(mSwipeMenuCreator);
+        mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
     }
 
     @Override
-    public VerticalAdapter getAdapter() {
+    public BaseAdapter createAdapter() {
         // 这里只是让Item的高度变高一点，竖向排布的菜单看起来就好看些。
-        if (mAdapter == null)
-            mAdapter = new VerticalAdapter(getItemList());
-        return mAdapter;
+        return new VerticalAdapter(this);
     }
 
     /**
@@ -63,7 +64,7 @@ public class VerticalActivity extends ListActivity {
         public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
             int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
 
-            /**
+            /*
              * 设置竖向菜单的注意点：
              * 1. SwipeMenu.setOrientation(SwipeMenu.VERTICAL);这个是控制Item中的Menu的方向的。
              * 2. SwipeMenuItem.setHeight(0).setWeight(1); // 高度为0，权重为1，和LinearLayout一样。
@@ -115,12 +116,17 @@ public class VerticalActivity extends ListActivity {
         }
     };
 
-    private static class VerticalAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private static class VerticalAdapter extends BaseAdapter<ViewHolder> {
 
         private List<String> mDataList;
 
-        public VerticalAdapter(List<String> dataList) {
-            mDataList = dataList;
+        public VerticalAdapter(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void notifyDataSetChanged(List<String> dataList) {
+            this.mDataList = dataList;
         }
 
         @Override

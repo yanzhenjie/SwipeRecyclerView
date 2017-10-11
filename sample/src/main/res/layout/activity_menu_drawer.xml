@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar_scroll"/>
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"

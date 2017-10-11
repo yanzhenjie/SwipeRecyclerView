@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar_scroll"/>
 
     <com.yanzhenjie.recyclerview.swipe.widget.StickyNestedScrollView
         android:id="@+id/scroll_view"

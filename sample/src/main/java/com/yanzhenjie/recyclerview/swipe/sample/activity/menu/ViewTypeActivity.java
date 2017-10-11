@@ -17,10 +17,8 @@ package com.yanzhenjie.recyclerview.swipe.sample.activity.menu;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -32,6 +30,7 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.activity.BaseActivity;
+import com.yanzhenjie.recyclerview.swipe.sample.adapter.BaseAdapter;
 import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
 
 import java.util.ArrayList;
@@ -45,14 +44,30 @@ import java.util.List;
  */
 public class ViewTypeActivity extends BaseActivity {
 
-    private RecyclerView.Adapter mAdapter;
+    private static final int VIEWTYPE_TWO = 1;
+    private static final int VIEWTYPE_THREE = 2;
+    private static final int VIEWTYPE_OTHER = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SwipeMenuRecyclerView recyclerView = getRecyclerView();
-        recyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        recyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+
+        mRecyclerView.setSwipeMenuCreator(swipeMenuCreator);
+        mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
+    }
+
+    @Override
+    protected BaseAdapter createAdapter() {
+        return new MainAdapter(this) {
+            @Override
+            public int getItemViewType(int position) {
+                if (position % 3 == 0) return VIEWTYPE_THREE;
+                else if (position % 2 == 0) return VIEWTYPE_TWO;
+                else return VIEWTYPE_OTHER;
+            }
+        };
     }
 
     /**
@@ -70,7 +85,7 @@ public class ViewTypeActivity extends BaseActivity {
 
             // 根据ViewType来决定哪一个item该如何添加菜单。
             // 这里模拟业务，实际开发根据自己的业务计算。
-            if (viewType % 3 == 0) {
+            if (viewType == VIEWTYPE_THREE) {
                 SwipeMenuItem deleteItem = new SwipeMenuItem(ViewTypeActivity.this)
                         .setBackground(R.drawable.selector_red)
                         .setImage(R.mipmap.ic_action_delete)
@@ -93,7 +108,7 @@ public class ViewTypeActivity extends BaseActivity {
                         .setWidth(width)
                         .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
-            } else if (viewType % 2 == 0) {
+            } else if (viewType == VIEWTYPE_TWO) {
                 SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this)
                         .setBackground(R.drawable.selector_purple)
                         .setImage(R.mipmap.ic_action_close)
@@ -108,7 +123,7 @@ public class ViewTypeActivity extends BaseActivity {
                         .setWidth(width)
                         .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
-            } else {
+            } else if (viewType == VIEWTYPE_OTHER) {
                 SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this)
                         .setBackground(R.drawable.selector_green)
                         .setImage(R.mipmap.ic_action_add)
@@ -160,30 +175,13 @@ public class ViewTypeActivity extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         } else if (item.getItemId() == R.id.menu_open_rv_menu) {
-            getRecyclerView().smoothOpenRightMenu(0);
+            mRecyclerView.smoothOpenRightMenu(0);
         }
         return true;
     }
 
     @Override
-    protected RecyclerView.Adapter getAdapter() {
-        if (mAdapter == null)
-            mAdapter = new MainAdapter(getItemList()) {
-                @Override
-                public int getItemViewType(int position) {
-                    return position;
-                }
-            };
-        return mAdapter;
-    }
-
-    @Override
-    public void onItemClick(View itemView, int position) {
-        Toast.makeText(this, "第" + position + "个", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected List<String> getItemList() {
+    protected List<String> createDataList() {
         List<String> strings = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             if (i % 3 == 0) {

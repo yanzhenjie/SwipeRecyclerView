@@ -23,13 +23,10 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
-import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 
 import java.util.Collections;
-import java.util.List;
 
 /**
  * <p>
@@ -39,75 +36,70 @@ import java.util.List;
  */
 public class DragGridActivity extends BaseDragActivity {
 
-    private MainAdapter mAdapter;
-    private List<String> mDataList;
+    View mHeaderView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = getAdapter();
-        mDataList = getDataList();
-    }
+        mHeaderView = getLayoutInflater().inflate(R.layout.layout_header_switch, mRecyclerView, false);
+        mRecyclerView.addHeaderView(mHeaderView);
 
-    @Override
-    protected void addHeaderFooter(final SwipeMenuRecyclerView recyclerView) {
-        View header = getLayoutInflater().inflate(R.layout.layout_header_switch, recyclerView, false);
-        recyclerView.addHeaderView(header);
-
-        SwitchCompat switchCompat = (SwitchCompat) header.findViewById(R.id.switch_compat);
+        SwitchCompat switchCompat = (SwitchCompat) mHeaderView.findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // 控制是否可以侧滑删除。
-                recyclerView.setItemViewSwipeEnabled(isChecked);
+                mRecyclerView.setItemViewSwipeEnabled(isChecked);
             }
         });
+
+        mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
+        mRecyclerView.setItemViewSwipeEnabled(false); // 滑动删除，默认关闭。
     }
 
     @Override
-    protected RecyclerView.LayoutManager getLayoutManager() {
+    protected RecyclerView.LayoutManager createLayoutManager() {
         return new GridLayoutManager(this, 2);
     }
 
     @Override
     protected OnItemMoveListener getItemMoveListener() {
         // 监听拖拽和侧滑删除，更新UI和数据源。
-        return onItemMoveListener;
+        return new OnItemMoveListener() {
+            @Override
+            public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
+                // 不同的ViewType不能拖拽换位置。
+                if (srcHolder.getItemViewType() != targetHolder.getItemViewType()) return false;
+
+                // 真实的Position：通过ViewHolder拿到的position都需要减掉HeadView的数量。
+                int fromPosition = srcHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
+                int toPosition = targetHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
+
+                if (fromPosition < toPosition)
+                    for (int i = fromPosition; i < toPosition; i++)
+                        Collections.swap(mDataList, i, i + 1);
+                else
+                    for (int i = fromPosition; i > toPosition; i--)
+                        Collections.swap(mDataList, i, i - 1);
+
+                mAdapter.notifyItemMoved(fromPosition, toPosition);
+                return true;// 返回true表示处理了，返回false表示你没有处理。
+            }
+
+            @Override
+            public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
+                int adapterPosition = srcHolder.getAdapterPosition();
+                int position = adapterPosition - mRecyclerView.getHeaderItemCount();
+
+                if (mRecyclerView.getHeaderItemCount() > 0 && adapterPosition == 0) { // HeaderView。
+                    mRecyclerView.removeHeaderView(mHeaderView);
+                    Toast.makeText(DragGridActivity.this, "HeaderView被删除。", Toast.LENGTH_SHORT).show();
+                } else { // 普通Item。
+                    mDataList.remove(position);
+                    mAdapter.notifyItemRemoved(position);
+                    Toast.makeText(DragGridActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
     }
-
-    /**
-     * 监听拖拽和侧滑删除，更新UI和数据源。
-     */
-    private OnItemMoveListener onItemMoveListener = new OnItemMoveListener() {
-        @Override
-        public boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder) {
-            // 不同的ViewType不能拖拽换位置。
-            if (srcHolder.getItemViewType() != targetHolder.getItemViewType()) return false;
-
-            // 添加了HeadView时，通过ViewHolder拿到的position都需要减掉HeadView的数量。
-            int fromPosition = srcHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
-            int toPosition = targetHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
-
-            if (fromPosition < toPosition)
-                for (int i = fromPosition; i < toPosition; i++)
-                    Collections.swap(mDataList, i, i + 1);
-            else
-                for (int i = fromPosition; i > toPosition; i--)
-                    Collections.swap(mDataList, i, i - 1);
-
-            mAdapter.notifyItemMoved(fromPosition, toPosition);
-            return true;// 返回true表示处理了，返回false表示你没有处理。
-        }
-
-        @Override
-        public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-            int position = srcHolder.getAdapterPosition() - getRecyclerView().getHeaderItemCount();
-            if (position < 0) return; // 因为添加了HeadView，这里的HeadView是第0个，减掉后肯定是负数，所以不许删除。
-
-            mDataList.remove(position);
-            mAdapter.notifyItemRemoved(position);
-            Toast.makeText(DragGridActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
-        }
-    };
 }

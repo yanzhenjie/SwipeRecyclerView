@@ -15,8 +15,8 @@
  */
 package com.yanzhenjie.recyclerview.swipe.sample.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,27 +28,32 @@ import java.util.List;
 /**
  * Created by YOLANDA on 2016/7/22.
  */
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
+public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
 
-    private List<String> titles;
+    private List<String> mDataList;
 
-    public MainAdapter(List<String> titles) {
-        this.titles = titles;
+    public MainAdapter(Context context) {
+        super(context);
+    }
+
+    public void notifyDataSetChanged(List<String> dataList) {
+        this.mDataList = dataList;
+        super.notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return titles == null ? 0 : titles.size();
+        return mDataList == null ? 0 : mDataList.size();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_main, parent, false));
+        return new ViewHolder(getInflater().inflate(R.layout.item_menu_main, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setData(titles.get(position));
+        holder.setData(mDataList.get(position));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

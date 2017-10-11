@@ -42,6 +42,7 @@ import java.util.List;
  */
 public class ViewPagerActivity extends AppCompatActivity {
 
+    private ActionBar mActionBar;
     private ViewPager mViewPager;
 
     @Override
@@ -51,9 +52,9 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar = getSupportActionBar();
+        assert mActionBar != null;
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         findViewById(R.id.btn_one).setOnClickListener(mBtnClickListener);
         findViewById(R.id.btn_two).setOnClickListener(mBtnClickListener);
@@ -93,7 +94,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     private ViewPager.SimpleOnPageChangeListener mPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
-            getSupportActionBar().setSubtitle("第" + position + "个");
+            mActionBar.setSubtitle("第" + position + "个");
             switch (position) {
                 case 0: {
                     mViewPager.setBackgroundColor(ContextCompat.getColor(ViewPagerActivity.this, R.color.colorAccent));

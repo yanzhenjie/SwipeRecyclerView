@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe.sample.activity.load;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.yanzhenjie.recyclerview.swipe.sample.R;
@@ -33,6 +34,14 @@ import java.util.List;
 public class RefreshLoadActivity extends BaseActivity {
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
+    }
+
+    @Override
     public void onItemClick(View itemView, int position) {
         switch (position) {
             case 0: {
@@ -47,7 +56,7 @@ public class RefreshLoadActivity extends BaseActivity {
     }
 
     @Override
-    protected List<String> getItemList() {
+    protected List<String> createDataList() {
         return Arrays.asList(getResources().getStringArray(R.array.refresh_item));
     }
 }

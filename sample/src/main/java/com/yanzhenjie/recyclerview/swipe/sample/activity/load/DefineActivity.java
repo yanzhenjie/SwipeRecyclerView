@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -52,8 +53,8 @@ public class DefineActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mRefreshLayout;
     private SwipeMenuRecyclerView mRecyclerView;
-    private MainAdapter mMainAdapter;
-    private List<String> mItemList = new ArrayList<>();
+    private MainAdapter mAdapter;
+    private List<String> mDataList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,7 +63,9 @@ public class DefineActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(mRefreshListener); // 刷新监听。
@@ -78,8 +81,8 @@ public class DefineActivity extends AppCompatActivity {
         mRecyclerView.setLoadMoreView(loadMoreView); // 设置LoadMoreView更新监听。
         mRecyclerView.setLoadMoreListener(mLoadMoreListener); // 加载更多的监听。
 
-        mMainAdapter = new MainAdapter(mItemList);
-        mRecyclerView.setAdapter(mMainAdapter);
+        mAdapter = new MainAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         // 请求服务器加载数据。
         loadData();
@@ -109,9 +112,10 @@ public class DefineActivity extends AppCompatActivity {
             mRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    List<String> strings = getItemList(mMainAdapter.getItemCount());
-                    mItemList.addAll(strings);
-                    mMainAdapter.notifyItemRangeInserted(mItemList.size() - strings.size(), strings.size());
+                    List<String> strings = createDataList(mAdapter.getItemCount());
+                    mDataList.addAll(strings);
+                    // notifyItemRangeInserted()或者notifyDataSetChanged().
+                    mAdapter.notifyItemRangeInserted(mDataList.size() - strings.size(), strings.size());
 
                     // 数据完更多数据，一定要掉用这个方法。
                     // 第一个参数：表示此次数据是否为空。
@@ -141,9 +145,8 @@ public class DefineActivity extends AppCompatActivity {
      * 第一次加载数据。
      */
     private void loadData() {
-        mItemList.clear();
-        mItemList.addAll(getItemList(0));
-        mMainAdapter.notifyDataSetChanged();
+        mDataList = createDataList(0);
+        mAdapter.notifyDataSetChanged(mDataList);
 
         mRefreshLayout.setRefreshing(false);
 
@@ -260,7 +263,7 @@ public class DefineActivity extends AppCompatActivity {
         }
     }
 
-    protected List<String> getItemList(int start) {
+    protected List<String> createDataList(int start) {
         List<String> strings = new ArrayList<>();
         for (int i = start; i < start + 20; i++) {
             strings.add("第" + i + "个Item");

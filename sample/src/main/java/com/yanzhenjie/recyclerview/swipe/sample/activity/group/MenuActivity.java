@@ -19,6 +19,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -56,7 +57,9 @@ public class MenuActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         SwipeMenuRecyclerView recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setNestedScrollingEnabled(false);
@@ -67,7 +70,7 @@ public class MenuActivity extends AppCompatActivity {
         GroupAdapter adapter = new GroupAdapter();
         recyclerView.setAdapter(adapter);
 
-        adapter.setListItems(getItemList());
+        adapter.setListItems(createDataList());
     }
 
     /**
@@ -192,7 +195,7 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
-    protected List<String> getItemList() {
+    protected List<String> createDataList() {
         List<String> strings = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             strings.add("第" + i + "个Item");

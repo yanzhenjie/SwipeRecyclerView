@@ -18,6 +18,7 @@ package com.yanzhenjie.recyclerview.swipe.sample.activity.header;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -45,10 +46,12 @@ public class HeaderViewActivity extends AppCompatActivity implements SwipeItemCl
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity);
+        setContentView(R.layout.activity_scroll);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         SwipeMenuRecyclerView recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setSwipeItemClickListener(this);
@@ -75,10 +78,12 @@ public class HeaderViewActivity extends AppCompatActivity implements SwipeItemCl
         });
         recyclerView.addFooterView(footerView);
 
-        recyclerView.setAdapter(new MainAdapter(getItemList()));
+        MainAdapter mainAdapter = new MainAdapter(this);
+        recyclerView.setAdapter(mainAdapter);
+        mainAdapter.notifyDataSetChanged(createDataList());
     }
 
-    protected List<String> getItemList() {
+    protected List<String> createDataList() {
         List<String> strings = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             strings.add("第" + i + "个Item");

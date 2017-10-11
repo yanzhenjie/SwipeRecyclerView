@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe.sample.activity.move;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.yanzhenjie.recyclerview.swipe.sample.R;
@@ -31,6 +32,14 @@ import java.util.List;
  * Created by YanZhenjie on 2017/7/21.
  */
 public class MoveActivity extends BaseActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
+    }
 
     @Override
     public void onItemClick(View itemView, int position) {
@@ -55,7 +64,7 @@ public class MoveActivity extends BaseActivity {
     }
 
     @Override
-    protected List<String> getItemList() {
+    protected List<String> createDataList() {
         return Arrays.asList(getResources().getStringArray(R.array.touch_item));
     }
 

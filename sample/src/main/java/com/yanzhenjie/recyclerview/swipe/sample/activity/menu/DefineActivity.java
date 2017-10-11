@@ -15,6 +15,7 @@
  */
 package com.yanzhenjie.recyclerview.swipe.sample.activity.menu;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,9 +25,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yanzhenjie.recyclerview.swipe.SwipeSwitch;
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuLayout;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
 import com.yanzhenjie.recyclerview.swipe.sample.activity.BaseActivity;
+import com.yanzhenjie.recyclerview.swipe.sample.adapter.BaseAdapter;
 
 import java.util.List;
 
@@ -38,19 +40,20 @@ import java.util.List;
  */
 public class DefineActivity extends BaseActivity {
 
-    private SwipeSwitch mSwipeSwitch;
-    private RecyclerView.Adapter mAdapter;
+    private SwipeMenuLayout mSwipeMenuLayout;
 
     @Override
-    protected int getLayoutId() {
+    protected int getContentView() {
         return R.layout.activity_menu_define;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        mRecyclerView.setAdapter(mAdapter);
 
-        mSwipeSwitch = (SwipeSwitch) findViewById(R.id.swipe_layout);
+        mSwipeMenuLayout = (SwipeMenuLayout) findViewById(R.id.swipe_layout);
         TextView btnLeft = (TextView) findViewById(R.id.left_view);
         TextView btnRight = (TextView) findViewById(R.id.right_view);
 
@@ -59,18 +62,21 @@ public class DefineActivity extends BaseActivity {
     }
 
     @Override
-    protected RecyclerView.Adapter getAdapter() {
-        if (mAdapter == null)
-            mAdapter = new DefineAdapter();
-        return mAdapter;
+    protected BaseAdapter createAdapter() {
+        return new DefineAdapter(this);
     }
 
     /**
      * 就是这个适配器的Item的Layout需要处理，其实和CardView的方式一模一样。
      */
-    private static class DefineAdapter extends RecyclerView.Adapter<ViewHolder> {
+    private static class DefineAdapter extends BaseAdapter<ViewHolder> {
 
-        DefineAdapter() {
+        DefineAdapter(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void notifyDataSetChanged(List<String> dataList) {
         }
 
         @Override
@@ -129,10 +135,10 @@ public class DefineActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             if (v.getId() == R.id.left_view) {
-                mSwipeSwitch.smoothCloseMenu();// 关闭菜单。
+                mSwipeMenuLayout.smoothCloseMenu();// 关闭菜单。
                 Toast.makeText(DefineActivity.this, "我是左面的", Toast.LENGTH_SHORT).show();
             } else if (v.getId() == R.id.right_view) {
-                mSwipeSwitch.smoothCloseMenu();// 关闭菜单。
+                mSwipeMenuLayout.smoothCloseMenu();// 关闭菜单。
                 Toast.makeText(DefineActivity.this, "我是右面的", Toast.LENGTH_SHORT).show();
             }
         }
@@ -144,7 +150,7 @@ public class DefineActivity extends BaseActivity {
     }
 
     @Override
-    protected List<String> getItemList() {
+    protected List<String> createDataList() {
         return null;
     }
 }

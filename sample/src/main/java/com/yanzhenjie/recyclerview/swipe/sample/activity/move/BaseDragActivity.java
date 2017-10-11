@@ -19,17 +19,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenu;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuCreator;
@@ -37,13 +31,9 @@ import com.yanzhenjie.recyclerview.swipe.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
-import com.yanzhenjie.recyclerview.swipe.sample.adapter.MainAdapter;
+import com.yanzhenjie.recyclerview.swipe.sample.activity.BaseActivity;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.swipe.touch.OnItemStateChangedListener;
-import com.yanzhenjie.recyclerview.swipe.widget.DefaultItemDecoration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -51,64 +41,21 @@ import java.util.List;
  * </p>
  * Created by YanZhenjie on 2017/7/22.
  */
-public abstract class BaseDragActivity extends AppCompatActivity {
-
-    private List<String> mDataList;
-    private MainAdapter mAdapter;
-    private ActionBar mActionBar;
-    private SwipeMenuRecyclerView mRecyclerView;
+public abstract class BaseDragActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_item_move);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mActionBar = getSupportActionBar();
-        assert mActionBar != null;
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mDataList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            mDataList.add("我是第" + i + "个。");
-        }
-
-        mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(getLayoutManager());
-        mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
-
-        addHeaderFooter(mRecyclerView);
-
-        mRecyclerView.setSwipeItemClickListener(mItemClickListener); // Item点击。
         mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener); // Item的Menu点击。
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator); // 菜单创建器。
 
-        mRecyclerView.setLongPressDragEnabled(true); // 开启长按拖拽，默认关闭。
-        mRecyclerView.setItemViewSwipeEnabled(false); // 不开启滑动删除，默认关闭。
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
+
         mRecyclerView.setOnItemMoveListener(getItemMoveListener());// 监听拖拽和侧滑删除，更新UI和数据源。
         mRecyclerView.setOnItemStateChangedListener(mOnItemStateChangedListener); // 监听Item的手指状态，拖拽、侧滑、松开。
 
-        mAdapter = new MainAdapter(mDataList);
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
-    protected void addHeaderFooter(SwipeMenuRecyclerView recyclerView) {
-    }
-
-    protected final SwipeMenuRecyclerView getRecyclerView() {
-        return mRecyclerView;
-    }
-
-    public final List<String> getDataList() {
-        return mDataList;
-    }
-
-    public final MainAdapter getAdapter() {
-        return mAdapter;
-    }
-
-    protected RecyclerView.LayoutManager getLayoutManager() {
-        return new LinearLayoutManager(this);
     }
 
     protected abstract OnItemMoveListener getItemMoveListener();
@@ -184,16 +131,6 @@ public abstract class BaseDragActivity extends AppCompatActivity {
                         .setHeight(height);
                 swipeRightMenu.addMenuItem(closeItem); // 添加一个按钮到右侧菜单。
             }
-        }
-    };
-
-    /**
-     * Item点击监听。
-     */
-    private SwipeItemClickListener mItemClickListener = new SwipeItemClickListener() {
-        @Override
-        public void onItemClick(View itemView, int position) {
-            Toast.makeText(BaseDragActivity.this, "第" + position + "个", Toast.LENGTH_SHORT).show();
         }
     };
 
