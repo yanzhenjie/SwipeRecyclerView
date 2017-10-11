@@ -13,7 +13,7 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 1. 基于`List/Grid/StaggeredGrid`等`LayoutManager`的`Item`侧滑菜单。
 2. `Item`两侧侧滑菜单支持水平分布、垂直分布。
 3. `Item`拖拽排序、侧滑删除。
-4. 添加`HeaderView`和`FooterView`。
+4. 随时添加或者移除`HeaderView`和`FooterView`。
 5. 提供**自动/点击**加载更多的功能。[[为什么没有下拉刷新？](http://blog.csdn.net/yanzhenjie1003/article/details/75949335)][[ListView和GridView怎么办？](https://github.com/yanzhenjie/LoadMore)]
 6. 用`SwipeMenuLayout`在任何地方都可以实现你自己的侧滑菜单。
 7. 和`ViewPager`、`DrawerLayout`等滑动布局嵌套使用。
@@ -48,7 +48,7 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 ## 引入
 * Gradle
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.1.2'
+compile 'com.yanzhenjie:recyclerview-swipe:1.1.3'
 ```
 
 * Maven
@@ -56,7 +56,7 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.2'
 <dependency>
   <groupId>com.yanzhenjie</groupId>
   <artifactId>recyclerview-swipe</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
   <type>pom</type>
 </dependency>
 ```
@@ -115,6 +115,21 @@ SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
         // 注意：哪边不想要菜单，那么不要添加即可。
     }
 };
+
+// 菜单点击监听。
+swipeRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+
+SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
+    @Override
+    public void onItemClick(SwipeMenuBridge menuBridge) {
+        // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
+        menuBridge.closeMenu();
+        
+        int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
+        int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
+        int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+    }
+};
 ```
 
 **注意**：菜单需要设置高度，关于菜单高度：
@@ -125,8 +140,8 @@ SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
 ### 侧滑删除和拖拽
 拖拽和侧滑删除的功能默认关闭的，所以先要打开功能：
 ```java
-recyclerView.setLongPressDragEnabled(true); // 开启拖拽。
-recyclerView.setItemViewSwipeEnabled(true); // 开启滑动删除。
+recyclerView.setLongPressDragEnabled(true); // 拖拽排序，默认关闭。
+recyclerView.setItemViewSwipeEnabled(true); // 策划删除，默认关闭。
 ```
 
 只需要设置上面两个属性就可以进行相应的动作了，如果不需要哪个，不要打开就可以了。
@@ -204,26 +219,24 @@ swipeRecyclerView.startDrag(ViewHolder);
 swipeRecyclerView.startSwipe(ViewHolder);
 ```
 
-### 添加HeaderView和FooterView
-这里唯一要注意的是：必须先addHeaderView()/addFooterView()，最后setAdapter()。
+### HeaderView和FooterView
+主要方法：
+```java
+addHeaderView(View); // 添加HeaderView。
+removeHeaderView(View); // 移除HeaderView。
+addFooterView(View); // 添加FooterView。
+removeFooterView(View); // 移除FooterView。
+getHeaderItemCount(); // 获取HeaderView个数。
+getFooterItemCount(); // 获取FooterView个数。
+getItemViewType(int); // 获取Item的ViewType，包括HeaderView、FooterView、普通ItemView。
 ```
-// HeaderView。
-View headerView = ...;
-recyclerView.addHeaderView(headerView);
-
-// FooterView。
-View footerView = ...;
-recyclerView.addFooterView(footerView);
-
-// 最后设置适配器。
-recyclerView.setAdapter(new MainAdapter(getItemList()));
-```
+添加/移除HeaderView/FooterView喝setAdapter()的调用不分先后顺序。
 
 **特别注意**：
 1. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`item position`。
 
 ### 加载更多
-本库默认提供了加载更多的动画和View，开发者也可以自定义。
+本库默认提供了加载更多的动画和View，开发者也可以自定义；默认支持`RecyclerView`自带的三种布局管理器。
 
 默认加载更多：
 ```java
