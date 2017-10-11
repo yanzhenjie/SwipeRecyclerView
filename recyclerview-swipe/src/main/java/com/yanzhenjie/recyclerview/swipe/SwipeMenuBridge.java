@@ -30,6 +30,7 @@ import android.widget.TextView;
  */
 public final class SwipeMenuBridge {
 
+    @SwipeMenuRecyclerView.DirectionMode
     private final int mDirection;
     private final int mPosition;
     private final SwipeSwitch mSwipeSwitch;
@@ -39,7 +40,7 @@ public final class SwipeMenuBridge {
     TextView mTextView;
     ImageView mImageView;
 
-    SwipeMenuBridge(int direction, int position, SwipeSwitch swipeSwitch, View viewRoot) {
+    SwipeMenuBridge(@SwipeMenuRecyclerView.DirectionMode int direction, int position, SwipeSwitch swipeSwitch, View viewRoot) {
         mDirection = direction;
         mPosition = position;
         mSwipeSwitch = swipeSwitch;
@@ -84,6 +85,7 @@ public final class SwipeMenuBridge {
         return this;
     }
 
+    @SwipeMenuRecyclerView.DirectionMode
     public int getDirection() {
         return mDirection;
     }

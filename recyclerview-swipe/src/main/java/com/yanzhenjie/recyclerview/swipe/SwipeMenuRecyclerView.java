@@ -17,8 +17,10 @@ package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
 import android.support.annotation.IntDef;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -201,9 +203,10 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     /**
      * Set item click listener.
      */
-    public void setSwipeItemClickListener(SwipeItemClickListener swipeItemClickListener) {
-        checkAdapterExist("Cannot item click listener, setAdapter has already been called.");
-        this.mSwipeItemClickListener = new ItemClick(this, swipeItemClickListener);
+    public void setSwipeItemClickListener(SwipeItemClickListener itemClickListener) {
+        if (itemClickListener == null) return;
+        checkAdapterExist("Cannot set item click listener, setAdapter has already been called.");
+        this.mSwipeItemClickListener = new ItemClick(this, itemClickListener);
     }
 
     private static class ItemClick implements SwipeItemClickListener {
@@ -227,17 +230,19 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     /**
      * Set to create menu listener.
      */
-    public void setSwipeMenuCreator(SwipeMenuCreator swipeMenuCreator) {
-        checkAdapterExist("Cannot menu creator, setAdapter has already been called.");
-        this.mSwipeMenuCreator = swipeMenuCreator;
+    public void setSwipeMenuCreator(SwipeMenuCreator menuCreator) {
+        if (menuCreator == null) return;
+        checkAdapterExist("Cannot set menu creator, setAdapter has already been called.");
+        this.mSwipeMenuCreator = menuCreator;
     }
 
     /**
      * Set to click menu listener.
      */
-    public void setSwipeMenuItemClickListener(SwipeMenuItemClickListener swipeMenuItemClickListener) {
-        checkAdapterExist("Cannot menu item click listener, setAdapter has already been called.");
-        this.mSwipeMenuItemClickListener = new MenuItemClick(this, swipeMenuItemClickListener);
+    public void setSwipeMenuItemClickListener(SwipeMenuItemClickListener menuItemClickListener) {
+        if (menuItemClickListener == null) return;
+        checkAdapterExist("Cannot set menu item click listener, setAdapter has already been called.");
+        this.mSwipeMenuItemClickListener = new MenuItemClick(this, menuItemClickListener);
     }
 
     private static class MenuItemClick implements SwipeMenuItemClickListener {
@@ -254,10 +259,32 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         public void onItemClick(SwipeMenuBridge menuBridge) {
             int position = menuBridge.getAdapterPosition();
             position = position - mRecyclerView.getHeaderItemCount();
-            if (position >= 0)
+            if (position >= 0) {
                 menuBridge.mAdapterPosition = position;
-            mCallback.onItemClick(menuBridge);
+                mCallback.onItemClick(menuBridge);
+            }
         }
+    }
+
+    @Override
+    public void setLayoutManager(LayoutManager layoutManager) {
+        if (layoutManager instanceof GridLayoutManager) {
+            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+            final GridLayoutManager.SpanSizeLookup spanSizeLookupHolder = gridLayoutManager.getSpanSizeLookup();
+
+            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (mAdapterWrapper.isHeaderView(position) || mAdapterWrapper.isFooterView(position)) {
+                        return gridLayoutManager.getSpanCount();
+                    }
+                    if (spanSizeLookupHolder != null)
+                        return spanSizeLookupHolder.getSpanSize(position - getHeaderItemCount());
+                    return 1;
+                }
+            });
+        }
+        super.setLayoutManager(layoutManager);
     }
 
     /**
@@ -271,30 +298,31 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     @Override
     public void setAdapter(Adapter adapter) {
         if (mAdapterWrapper != null) {
-            if (mAdapterWrapper.getOriginAdapter() == adapter) {
-                adapter.notifyDataSetChanged();
-                return;
-            }
-
             mAdapterWrapper.getOriginAdapter().unregisterAdapterDataObserver(mAdapterDataObserver);
         }
 
-        adapter.registerAdapterDataObserver(mAdapterDataObserver);
+        if (adapter == null) {
+            mAdapterWrapper = null;
+        } else {
+            adapter.registerAdapterDataObserver(mAdapterDataObserver);
 
-        mAdapterWrapper = new SwipeAdapterWrapper(adapter);
-        mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
-        mAdapterWrapper.setSwipeMenuItemClickListener(mSwipeMenuItemClickListener);
-        mAdapterWrapper.setSwipeItemClickListener(mSwipeItemClickListener);
+            mAdapterWrapper = new SwipeAdapterWrapper(getContext(), adapter);
+            mAdapterWrapper.setSwipeItemClickListener(mSwipeItemClickListener);
+            mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
+            mAdapterWrapper.setSwipeMenuItemClickListener(mSwipeMenuItemClickListener);
+
+            if (mHeaderViewList.size() > 0) {
+                for (View view : mHeaderViewList) {
+                    mAdapterWrapper.addHeaderView(view);
+                }
+            }
+            if (mFooterViewList.size() > 0) {
+                for (View view : mFooterViewList) {
+                    mAdapterWrapper.addFooterView(view);
+                }
+            }
+        }
         super.setAdapter(mAdapterWrapper);
-
-        if (mHeaderViewList.size() > 0)
-            for (View view : mHeaderViewList) {
-                mAdapterWrapper.addHeaderView(view);
-            }
-        if (mFooterViewList.size() > 0)
-            for (View view : mFooterViewList) {
-                mAdapterWrapper.addFooterView(view);
-            }
     }
 
     @Override
@@ -347,19 +375,40 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private List<View> mFooterViewList = new ArrayList<>();
 
     /**
-     * Add view at the top.
+     * Add view at the headers.
      */
     public void addHeaderView(View view) {
-        checkAdapterExist("Cannot add header view, setAdapter has already been called.");
         mHeaderViewList.add(view);
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.addHeaderViewAndNotify(view);
+        }
     }
 
     /**
-     * Add view at the bottom.
+     * Remove view from header.
+     */
+    public void removeHeaderView(View view) {
+        mHeaderViewList.remove(view);
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.removeHeaderViewAndNotify(view);
+        }
+    }
+
+    /**
+     * Add view at the footer.
      */
     public void addFooterView(View view) {
-        checkAdapterExist("Cannot add footer view, setAdapter has already been called.");
         mFooterViewList.add(view);
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.addFooterViewAndNotify(view);
+        }
+    }
+
+    public void removeFooterView(View view) {
+        mFooterViewList.remove(view);
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.removeFooterViewAndNotify(view);
+        }
     }
 
     /**
@@ -520,8 +569,6 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                     break;
                 }
             }
-
-
         }
         return isIntercepted;
     }
@@ -599,9 +646,24 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
 
             int itemCount = layoutManager.getItemCount();
+            if (itemCount <= 0) return;
+
             int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
 
-            if (itemCount > 0 && itemCount == lastVisiblePosition + 1 &&
+            if (itemCount == lastVisiblePosition + 1 &&
+                    (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                dispatchLoadMore();
+            }
+        } else if (layoutManager != null && layoutManager instanceof StaggeredGridLayoutManager) {
+            StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
+
+            int itemCount = layoutManager.getItemCount();
+            if (itemCount <= 0) return;
+
+            int[] lastVisiblePositionArray = staggeredGridLayoutManager.findLastCompletelyVisibleItemPositions(null);
+            int lastVisiblePosition = lastVisiblePositionArray[lastVisiblePositionArray.length - 1];
+
+            if (itemCount == lastVisiblePosition + 1 &&
                     (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
                 dispatchLoadMore();
             }

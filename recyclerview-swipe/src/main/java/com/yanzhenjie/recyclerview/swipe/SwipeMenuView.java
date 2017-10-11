@@ -36,10 +36,11 @@ import java.util.List;
  */
 public class SwipeMenuView extends LinearLayout implements View.OnClickListener {
 
+    private RecyclerView.ViewHolder mAdapterVIewHolder;
     private SwipeSwitch mSwipeSwitch;
     private SwipeMenuItemClickListener mItemClickListener;
+    @SwipeMenuRecyclerView.DirectionMode
     private int mDirection;
-    private RecyclerView.ViewHolder mAdapterVIewHolder;
 
     public SwipeMenuView(Context context) {
         this(context, null);
@@ -53,7 +54,9 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
         super(context, attrs, defStyleAttr);
     }
 
-    public void createMenu(SwipeMenu swipeMenu, SwipeSwitch swipeSwitch, SwipeMenuItemClickListener swipeMenuItemClickListener, int direction) {
+    public void createMenu(SwipeMenu swipeMenu, SwipeSwitch swipeSwitch,
+                           SwipeMenuItemClickListener swipeMenuItemClickListener,
+                           @SwipeMenuRecyclerView.DirectionMode int direction) {
         removeAllViews();
 
         this.mSwipeSwitch = swipeSwitch;
@@ -62,40 +65,38 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
 
         List<SwipeMenuItem> items = swipeMenu.getMenuItems();
         for (int i = 0; i < items.size(); i++) {
-            addItem(items.get(i), i);
+            SwipeMenuItem item = items.get(i);
+
+            LayoutParams params = new LayoutParams(item.getWidth(), item.getHeight());
+            params.weight = item.getWeight();
+            LinearLayout parent = new LinearLayout(getContext());
+            parent.setId(i);
+            parent.setGravity(Gravity.CENTER);
+            parent.setOrientation(VERTICAL);
+            parent.setLayoutParams(params);
+            ViewCompat.setBackground(parent, item.getBackground());
+            parent.setOnClickListener(this);
+            addView(parent);
+
+            SwipeMenuBridge menuBridge = new SwipeMenuBridge(mDirection, i, mSwipeSwitch, parent);
+            parent.setTag(menuBridge);
+
+            if (item.getImage() != null) {
+                ImageView iv = createIcon(item);
+                menuBridge.mImageView = iv;
+                parent.addView(iv);
+            }
+
+            if (!TextUtils.isEmpty(item.getText())) {
+                TextView tv = createTitle(item);
+                menuBridge.mTextView = tv;
+                parent.addView(tv);
+            }
         }
     }
 
     public void bindViewHolder(RecyclerView.ViewHolder adapterVIewHolder) {
         this.mAdapterVIewHolder = adapterVIewHolder;
-    }
-
-    private void addItem(SwipeMenuItem item, int index) {
-        LayoutParams params = new LayoutParams(item.getWidth(), item.getHeight());
-        params.weight = item.getWeight();
-        LinearLayout parent = new LinearLayout(getContext());
-        parent.setId(index);
-        parent.setGravity(Gravity.CENTER);
-        parent.setOrientation(VERTICAL);
-        parent.setLayoutParams(params);
-        ViewCompat.setBackground(parent, item.getBackground());
-        parent.setOnClickListener(this);
-        addView(parent);
-
-        SwipeMenuBridge menuBridge = new SwipeMenuBridge(mDirection, index, mSwipeSwitch, parent);
-        parent.setTag(menuBridge);
-
-        if (item.getImage() != null) {
-            ImageView iv = createIcon(item);
-            menuBridge.mImageView = iv;
-            parent.addView(iv);
-        }
-
-        if (!TextUtils.isEmpty(item.getText())) {
-            TextView tv = createTitle(item);
-            menuBridge.mTextView = tv;
-            parent.addView(tv);
-        }
     }
 
     private ImageView createIcon(SwipeMenuItem item) {

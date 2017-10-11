@@ -15,8 +15,8 @@
  */
 package com.yanzhenjie.recyclerview.swipe;
 
+import android.content.Context;
 import android.support.v4.util.SparseArrayCompat;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -38,13 +38,15 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     private SparseArrayCompat<View> mFootViews = new SparseArrayCompat<>();
 
     private RecyclerView.Adapter mAdapter;
+    private LayoutInflater mInflater;
 
     private SwipeMenuCreator mSwipeMenuCreator;
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
 
-    SwipeAdapterWrapper(RecyclerView.Adapter adapter) {
-        mAdapter = adapter;
+    SwipeAdapterWrapper(Context context, RecyclerView.Adapter adapter) {
+        this.mInflater = LayoutInflater.from(context);
+        this.mAdapter = adapter;
     }
 
     public RecyclerView.Adapter getOriginAdapter() {
@@ -101,10 +103,18 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         final RecyclerView.ViewHolder viewHolder = mAdapter.onCreateViewHolder(parent, viewType);
 
+        if (mSwipeItemClickListener != null) {
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mSwipeItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
+                }
+            });
+        }
+
         if (mSwipeMenuCreator == null) return viewHolder;
 
-        final SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_swipe_view_item, parent, false);
+        final SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) mInflater.inflate(R.layout.recycler_swipe_view_item, parent, false);
         SwipeMenu swipeLeftMenu = new SwipeMenu(swipeMenuLayout, viewType);
         SwipeMenu swipeRightMenu = new SwipeMenu(swipeMenuLayout, viewType);
 
@@ -126,26 +136,15 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
             swipeRightMenuView.createMenu(swipeRightMenu, swipeMenuLayout, mSwipeMenuItemClickListener, SwipeMenuRecyclerView.RIGHT_DIRECTION);
         }
 
-        if (mSwipeItemClickListener != null) {
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mSwipeItemClickListener.onItemClick(v, viewHolder.getAdapterPosition());
-                }
-            });
-        }
+        ViewGroup viewGroup = (ViewGroup) swipeMenuLayout.findViewById(R.id.swipe_content);
+        viewGroup.addView(viewHolder.itemView);
 
-        if (leftMenuCount > 0 || rightMenuCount > 0) {
-            ViewGroup viewGroup = (ViewGroup) swipeMenuLayout.findViewById(R.id.swipe_content);
-            viewGroup.addView(viewHolder.itemView);
-
-            try {
-                Field itemView = getSupperClass(viewHolder.getClass()).getDeclaredField("itemView");
-                if (!itemView.isAccessible()) itemView.setAccessible(true);
-                itemView.set(viewHolder, swipeMenuLayout);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            Field itemView = getSupperClass(viewHolder.getClass()).getDeclaredField("itemView");
+            if (!itemView.isAccessible()) itemView.setAccessible(true);
+            itemView.set(viewHolder, swipeMenuLayout);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return viewHolder;
     }
@@ -159,11 +158,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
         if (isHeaderView(position) || isFooterView(position)) {
             return;
         }
@@ -186,34 +185,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         mAdapter.onAttachedToRecyclerView(recyclerView);
-
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            final GridLayoutManager.SpanSizeLookup spanSizeLookup = gridLayoutManager.getSpanSizeLookup();
-
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    int viewType = getItemViewType(position);
-                    if (mHeaderViews.get(viewType) != null) {
-                        return gridLayoutManager.getSpanCount();
-                    } else if (mFootViews.get(viewType) != null) {
-                        return gridLayoutManager.getSpanCount();
-                    }
-                    if (spanSizeLookup != null)
-                        return spanSizeLookup.getSpanSize(position);
-                    return 1;
-                }
-            });
-            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
-        }
     }
 
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
-        //noinspection unchecked
-        int position = holder.getLayoutPosition();
+        int position = holder.getAdapterPosition();
 
         if (isHeaderView(position) || isFooterView(position)) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
@@ -226,20 +202,42 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private boolean isHeaderView(int position) {
-        return position < getHeaderItemCount();
+    public boolean isHeaderView(int position) {
+        return position >= 0 && position < getHeaderItemCount();
     }
 
-    private boolean isFooterView(int position) {
+    public boolean isFooterView(int position) {
         return position >= getHeaderItemCount() + getContentItemCount();
     }
 
     public void addHeaderView(View view) {
-        mHeaderViews.put(mHeaderViews.size() + BASE_ITEM_TYPE_HEADER, view);
+        mHeaderViews.put(getHeaderItemCount() + BASE_ITEM_TYPE_HEADER, view);
+    }
+
+    public void addHeaderViewAndNotify(View view) {
+        mHeaderViews.put(getHeaderItemCount() + BASE_ITEM_TYPE_HEADER, view);
+        notifyItemInserted(getHeaderItemCount() - 1);
+    }
+
+    public void removeHeaderViewAndNotify(View view) {
+        int headerIndex = mHeaderViews.indexOfValue(view);
+        mHeaderViews.removeAt(headerIndex);
+        notifyItemRemoved(headerIndex);
     }
 
     public void addFooterView(View view) {
-        mFootViews.put(mFootViews.size() + BASE_ITEM_TYPE_FOOTER, view);
+        mFootViews.put(getFooterItemCount() + BASE_ITEM_TYPE_FOOTER, view);
+    }
+
+    public void addFooterViewAndNotify(View view) {
+        mFootViews.put(getFooterItemCount() + BASE_ITEM_TYPE_FOOTER, view);
+        notifyItemInserted(getHeaderItemCount() + getContentItemCount() + getFooterItemCount() - 1);
+    }
+
+    public void removeFooterViewAndNotify(View view) {
+        int footerIndex = mFootViews.indexOfValue(view);
+        mFootViews.removeAt(footerIndex);
+        notifyItemRemoved(getHeaderItemCount() + getContentItemCount() + footerIndex);
     }
 
     public int getHeaderItemCount() {
@@ -258,7 +256,6 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void setHasStableIds(boolean hasStableIds) {
-        super.setHasStableIds(hasStableIds);
         mAdapter.setHasStableIds(hasStableIds);
     }
 

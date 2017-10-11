@@ -22,10 +22,13 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by YanZhenjie on 2017/8/14.
@@ -35,7 +38,7 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     private int mDividerWidth;
     private int mDividerHeight;
-    private SparseArray<String> mExcludeViewType = new SparseArray<>();
+    private List<Integer> mViewTypeList = new ArrayList<>();
 
     /**
      * @param color decoration line color.
@@ -55,15 +58,16 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
         mDividerWidth = dividerWidth;
         mDividerHeight = dividerHeight;
         for (int i : excludeViewType) {
-            mExcludeViewType.put(i, Integer.toString(i));
+            mViewTypeList.add(i);
         }
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        int position = parent.getChildLayoutPosition(view);
+        int position = parent.getChildAdapterPosition(view);
+        if (position < 0) return;
 
-        if (mExcludeViewType.get(parent.getAdapter().getItemViewType(position)) != null) {
+        if (mViewTypeList.contains(parent.getAdapter().getItemViewType(position))) {
             outRect.set(0, 0, 0, 0);
             return;
         }
@@ -111,6 +115,8 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
             return ((GridLayoutManager) layoutManager).getSpanCount();
+        } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+            return ((StaggeredGridLayoutManager) layoutManager).getSpanCount();
         }
         return 1;
     }
@@ -161,7 +167,8 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             int childPosition = parent.getChildAdapterPosition(child);
-            if (mExcludeViewType.get(parent.getAdapter().getItemViewType(childPosition)) != null) continue;
+            if (childPosition < 0) continue;
+            if (mViewTypeList.contains(parent.getAdapter().getItemViewType(childPosition))) continue;
             if (child instanceof SwipeMenuRecyclerView.LoadMoreView) continue;
             final int left = child.getLeft();
             final int top = child.getBottom();
@@ -179,7 +186,8 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             int childPosition = parent.getChildAdapterPosition(child);
-            if (mExcludeViewType.get(parent.getAdapter().getItemViewType(childPosition)) != null) continue;
+            if (childPosition < 0) continue;
+            if (mViewTypeList.contains(parent.getAdapter().getItemViewType(childPosition))) continue;
             if (child instanceof SwipeMenuRecyclerView.LoadMoreView) continue;
             final int left = child.getRight();
             final int top = child.getTop();
