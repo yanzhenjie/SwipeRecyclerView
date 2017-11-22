@@ -111,7 +111,7 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
         textView.setGravity(Gravity.CENTER);
         int textSize = item.getTextSize();
         if (textSize > 0)
-            textView.setTextSize(textSize);
+            textView.setTextSize(item.getTextSizeUnit(), textSize);
         ColorStateList textColor = item.getTitleColor();
         if (textColor != null)
             textView.setTextColor(textColor);
