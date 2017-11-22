@@ -23,7 +23,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +42,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     private RecyclerView.Adapter mAdapter;
     private LayoutInflater mInflater;
 
+    private boolean mSwipeMenuEnabled = true;
     private SwipeMenuCreator mSwipeMenuCreator;
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
@@ -60,6 +63,16 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
      */
     void setSwipeMenuCreator(SwipeMenuCreator swipeMenuCreator) {
         this.mSwipeMenuCreator = swipeMenuCreator;
+    }
+
+    /**
+     * Set swipe menu enabled.
+     *
+     * @param enabled enabled.
+     */
+    void setSwipeMenuEnabled(boolean enabled) {
+        mSwipeMenuEnabled = enabled;
+        updateSwipeMenuEnabledForCache();
     }
 
     /**
@@ -135,6 +148,8 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
             swipeRightMenuView.setOrientation(swipeRightMenu.getOrientation());
             swipeRightMenuView.createMenu(swipeRightMenu, swipeMenuLayout, mSwipeMenuItemClickListener, SwipeMenuRecyclerView.RIGHT_DIRECTION);
         }
+        swipeMenuLayout.setSwipeEnable(mSwipeMenuEnabled);
+        swipeMenuLayoutCache.add(new WeakReference<>(swipeMenuLayout));
 
         ViewGroup viewGroup = (ViewGroup) swipeMenuLayout.findViewById(R.id.swipe_content);
         viewGroup.addView(viewHolder.itemView);
@@ -305,5 +320,30 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         mAdapter.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    /* SwipeMenuLayout cache for toggle swipe menu enabled */
+
+    private final List<WeakReference<SwipeMenuLayout>> swipeMenuLayoutCache = new ArrayList<>();
+
+    private void updateSwipeMenuEnabledForCache() {
+        List<WeakReference<SwipeMenuLayout>> removeItems = new ArrayList<>();
+        boolean swipeEnabled = mSwipeMenuEnabled;
+
+        synchronized (swipeMenuLayoutCache) {
+            SwipeMenuLayout menuLayout;
+
+            for (WeakReference<SwipeMenuLayout> refLayout : swipeMenuLayoutCache) {
+                menuLayout = refLayout.get();
+
+                if (menuLayout == null) {
+                    removeItems.add(refLayout);
+                } else {
+                    menuLayout.setSwipeEnable(swipeEnabled);
+                }
+            }
+            swipeMenuLayoutCache.removeAll(removeItems);
+            removeItems.clear();
+        }
     }
 }

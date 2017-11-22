@@ -74,6 +74,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
     private DefaultItemTouchHelper mDefaultItemTouchHelper;
 
+    private boolean mSwipeMenuEnabled = true;
     private SwipeMenuCreator mSwipeMenuCreator;
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
@@ -266,6 +267,19 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         }
     }
 
+    /**
+     * Set swipe menu enabled.
+     *
+     * @param enabled enabled.
+     */
+    public void setSwipeMenuEnabled(boolean enabled) {
+        mSwipeMenuEnabled = enabled;
+
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.setSwipeMenuEnabled(enabled);
+        }
+    }
+
     @Override
     public void setLayoutManager(LayoutManager layoutManager) {
         if (layoutManager instanceof GridLayoutManager) {
@@ -309,6 +323,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             mAdapterWrapper = new SwipeAdapterWrapper(getContext(), adapter);
             mAdapterWrapper.setSwipeItemClickListener(mSwipeItemClickListener);
             mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
+            mAdapterWrapper.setSwipeMenuEnabled(mSwipeMenuEnabled);
             mAdapterWrapper.setSwipeMenuItemClickListener(mSwipeMenuItemClickListener);
 
             if (mHeaderViewList.size() > 0) {
