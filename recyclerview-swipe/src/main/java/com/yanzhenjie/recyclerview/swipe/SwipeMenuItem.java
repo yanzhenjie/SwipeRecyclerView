@@ -26,11 +26,14 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Px;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 
 /**
  * Created by Yan Zhenjie on 2016/7/26.
  */
 public class SwipeMenuItem {
+
+    private static final int DEFAULT_TEXT_SIZE_UNIT = TypedValue.COMPLEX_UNIT_PX;
 
     private Context mContext;
     private Drawable background;
@@ -38,6 +41,7 @@ public class SwipeMenuItem {
     private String title;
     private ColorStateList titleColor;
     private int titleSize;
+    private int titleSizeUnit = DEFAULT_TEXT_SIZE_UNIT;
     private Typeface textTypeface;
     private int textAppearance;
     private int width = -2;
@@ -110,12 +114,27 @@ public class SwipeMenuItem {
     }
 
     public SwipeMenuItem setTextSize(@Px int titleSize) {
-        this.titleSize = titleSize;
+        return setTextSize(DEFAULT_TEXT_SIZE_UNIT, titleSize);
+    }
+
+    /**
+     * Set text size with unit.
+     *
+     * @param unit unit like {@link TypedValue#COMPLEX_UNIT_PX}, {@link TypedValue#COMPLEX_UNIT_SP}, default as px.
+     * @param textSize text size.
+     */
+    public SwipeMenuItem setTextSize(int unit, int textSize) {
+        this.titleSize = textSize;
+        this.titleSizeUnit = unit;
         return this;
     }
 
     public int getTextSize() {
         return titleSize;
+    }
+
+    public int getTextSizeUnit() {
+        return titleSizeUnit;
     }
 
     public SwipeMenuItem setTextAppearance(@StyleRes int textAppearance) {
