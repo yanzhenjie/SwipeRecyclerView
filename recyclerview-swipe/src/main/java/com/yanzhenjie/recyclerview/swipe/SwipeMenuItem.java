@@ -23,7 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
-import android.support.annotation.Px;
+import android.support.annotation.StringRes;
 import android.support.annotation.StyleRes;
 import android.support.v4.content.ContextCompat;
 
@@ -70,7 +70,7 @@ public class SwipeMenuItem {
         return background;
     }
 
-    public SwipeMenuItem setImage(int resId) {
+    public SwipeMenuItem setImage(@DrawableRes int resId) {
         return setImage(ContextCompat.getDrawable(mContext, resId));
     }
 
@@ -83,7 +83,7 @@ public class SwipeMenuItem {
         return icon;
     }
 
-    public SwipeMenuItem setText(int resId) {
+    public SwipeMenuItem setText(@StringRes int resId) {
         return setText(mContext.getString(resId));
     }
 
@@ -109,7 +109,7 @@ public class SwipeMenuItem {
         return titleColor;
     }
 
-    public SwipeMenuItem setTextSize(@Px int titleSize) {
+    public SwipeMenuItem setTextSize(int titleSize) {
         this.titleSize = titleSize;
         return this;
     }

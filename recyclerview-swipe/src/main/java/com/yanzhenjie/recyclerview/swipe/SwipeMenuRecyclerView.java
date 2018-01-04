@@ -77,6 +77,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private SwipeMenuCreator mSwipeMenuCreator;
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
+    private SwipeItemLongClickListener mSwipeItemLongClickListener;
 
     private SwipeAdapterWrapper mAdapterWrapper;
 
@@ -228,6 +229,32 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     }
 
     /**
+     * Set item click listener.
+     */
+    public void setSwipeItemLongClickListener(SwipeItemLongClickListener itemLongClickListener) {
+        if (itemLongClickListener == null) return;
+        checkAdapterExist("Cannot set item long click listener, setAdapter has already been called.");
+        this.mSwipeItemLongClickListener = new ItemLongClick(this, itemLongClickListener);
+    }
+
+    private static class ItemLongClick implements SwipeItemLongClickListener {
+        private SwipeMenuRecyclerView mRecyclerView;
+        private SwipeItemLongClickListener mCallback;
+
+        public ItemLongClick(SwipeMenuRecyclerView recyclerView, SwipeItemLongClickListener callback) {
+            this.mRecyclerView = recyclerView;
+            this.mCallback = callback;
+        }
+
+        @Override
+        public void onItemLongClick(View itemView, int position) {
+            position = position - mRecyclerView.getHeaderItemCount();
+            if (position >= 0)
+                mCallback.onItemLongClick(itemView, position);
+        }
+    }
+
+    /**
      * Set to create menu listener.
      */
     public void setSwipeMenuCreator(SwipeMenuCreator menuCreator) {
@@ -308,6 +335,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
             mAdapterWrapper = new SwipeAdapterWrapper(getContext(), adapter);
             mAdapterWrapper.setSwipeItemClickListener(mSwipeItemClickListener);
+            mAdapterWrapper.setSwipeItemLongClickListener(mSwipeItemLongClickListener);
             mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
             mAdapterWrapper.setSwipeMenuItemClickListener(mSwipeMenuItemClickListener);
 
@@ -323,14 +351,6 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             }
         }
         super.setAdapter(mAdapterWrapper);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        if (mAdapterWrapper != null) {
-            mAdapterWrapper.getOriginAdapter().unregisterAdapterDataObserver(mAdapterDataObserver);
-        }
-        super.onDetachedFromWindow();
     }
 
     private AdapterDataObserver mAdapterDataObserver = new AdapterDataObserver() {
