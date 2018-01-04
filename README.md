@@ -48,7 +48,7 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 ## 引入
 * Gradle
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.1.3'
+compile 'com.yanzhenjie:recyclerview-swipe:1.1.4'
 ```
 
 * Maven
@@ -56,8 +56,7 @@ compile 'com.yanzhenjie:recyclerview-swipe:1.1.3'
 <dependency>
   <groupId>com.yanzhenjie</groupId>
   <artifactId>recyclerview-swipe</artifactId>
-  <version>1.1.3</version>
-  <type>pom</type>
+  <version>1.1.4</version>
 </dependency>
 ```
 
