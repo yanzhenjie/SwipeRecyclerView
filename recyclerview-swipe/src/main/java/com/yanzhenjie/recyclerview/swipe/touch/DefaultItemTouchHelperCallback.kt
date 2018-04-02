@@ -20,6 +20,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
 
 /**
  * Default item touch helper callback.
@@ -57,6 +58,13 @@ class DefaultItemTouchHelperCallback : ItemTouchHelper.Callback() {
   override fun getMovementFlags(recyclerView: RecyclerView, targetViewHolder: RecyclerView.ViewHolder): Int {
     val movementListener = onItemMovementListener
     val layoutManager = recyclerView.layoutManager
+
+    // header or footer view
+    // disable drag and swipe as default
+    if (recyclerView is SwipeMenuRecyclerView && (recyclerView.isHeaderViewHolder(targetViewHolder)
+        || recyclerView.isFooterViewHolder(targetViewHolder))) {
+      return ItemTouchHelper.Callback.makeMovementFlags(0, 0)
+    }
 
     return when {
       // custom movement listener

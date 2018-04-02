@@ -58,7 +58,7 @@ public class HeaderViewActivity extends AppCompatActivity implements SwipeItemCl
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         recyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
 
-        // HeaderView。
+        // HeaderView
         View headerView = getLayoutInflater().inflate(R.layout.layout_header, recyclerView, false);
         headerView.findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +68,7 @@ public class HeaderViewActivity extends AppCompatActivity implements SwipeItemCl
         });
         recyclerView.addHeaderView(headerView);
 
-        // FooterView。
+        // FooterView
         View footerView = getLayoutInflater().inflate(R.layout.layout_footer, recyclerView, false);
         footerView.findViewById(R.id.btn_start).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -80,21 +80,21 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
   var isItemViewSwipeEnabled: Boolean
     get() {
       initializeItemTouchHelper()
-      return this.mDefaultItemTouchHelper!!.isItemViewSwipeEnabled
+      return this.mDefaultItemTouchHelper?.isItemViewSwipeEnabled ?: false
     }
     set(canSwipe) {
       initializeItemTouchHelper()
       allowSwipeDelete = canSwipe
-      this.mDefaultItemTouchHelper!!.isItemViewSwipeEnabled = canSwipe
+      this.mDefaultItemTouchHelper?.isItemViewSwipeEnabled = canSwipe
     }
 
   /**
    * Original adapter.
    */
-  val originAdapter: RecyclerView.Adapter<*>?
+  val originAdapter: Adapter<*>?
     get() = mAdapterWrapper?.originAdapter
 
-  private val mAdapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+  private val mAdapterDataObserver = object : AdapterDataObserver() {
     override fun onChanged() {
       mAdapterWrapper?.notifyDataSetChanged()
     }
@@ -192,7 +192,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
    *
    * @param viewHolder the ViewHolder to start dragging. It must be a direct child of RecyclerView.
    */
-  fun startDrag(viewHolder: RecyclerView.ViewHolder) {
+  fun startDrag(viewHolder: ViewHolder) {
     initializeItemTouchHelper()
     this.mDefaultItemTouchHelper?.startDrag(viewHolder)
   }
@@ -202,7 +202,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
    *
    * @param viewHolder the ViewHolder to start swiping. It must be a direct child of RecyclerView.
    */
-  fun startSwipe(viewHolder: RecyclerView.ViewHolder) {
+  fun startSwipe(viewHolder: ViewHolder) {
     initializeItemTouchHelper()
     this.mDefaultItemTouchHelper?.startSwipe(viewHolder)
   }
@@ -274,7 +274,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
     mAdapterWrapper?.setSwipeMenuEnabled(enabled)
   }
 
-  override fun setLayoutManager(layoutManager: RecyclerView.LayoutManager) {
+  override fun setLayoutManager(layoutManager: LayoutManager) {
     if (layoutManager is GridLayoutManager) {
       val spanSizeLookupHolder = layoutManager.spanSizeLookup
 
@@ -293,7 +293,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
     super.setLayoutManager(layoutManager)
   }
 
-  override fun setAdapter(adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>?) {
+  override fun setAdapter(adapter: Adapter<ViewHolder>?) {
     mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
 
     if (adapter == null) {
@@ -342,6 +342,34 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
   fun removeHeaderView(view: View) {
     mHeaderViewList.remove(view)
     mAdapterWrapper?.removeHeaderViewAndNotify(view)
+  }
+
+  /**
+   * Returns header view holder status.
+   *
+   * @param holder view holder.
+   */
+  fun isHeaderViewHolder(holder: ViewHolder): Boolean {
+    val adapterWrapper = this.mAdapterWrapper ?: return false
+    val headerCount = adapterWrapper.headerItemCount
+    val position = holder.adapterPosition
+
+    return headerCount > 0 && position < headerCount
+  }
+
+  /**
+   * Returns footer view holder status.
+   *
+   * @param holder view holder.
+   */
+  fun isFooterViewHolder(holder: ViewHolder): Boolean {
+    val adapterWrapper = this.mAdapterWrapper ?: return false
+    val itemCount = adapterWrapper.itemCount
+    val footerCount = adapterWrapper.footerItemCount
+    val position = holder.adapterPosition
+
+    return footerCount > 0 && position < itemCount
+        && position >= (itemCount - footerCount)
   }
 
   /**
@@ -582,7 +610,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
       }
       val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
 
-      if (itemCount == lastVisiblePosition + 1 && (mScrollState == RecyclerView.SCROLL_STATE_DRAGGING || mScrollState == RecyclerView.SCROLL_STATE_SETTLING)) {
+      if (itemCount == lastVisiblePosition + 1 && (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
         dispatchLoadMore()
       }
 
@@ -595,7 +623,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
       val lastVisiblePositionArray = layoutManager.findLastCompletelyVisibleItemPositions(null)
       val lastVisiblePosition = lastVisiblePositionArray[lastVisiblePositionArray.size - 1]
 
-      if (itemCount == lastVisiblePosition + 1 && (mScrollState == RecyclerView.SCROLL_STATE_DRAGGING || mScrollState == RecyclerView.SCROLL_STATE_SETTLING)) {
+      if (itemCount == lastVisiblePosition + 1 && (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
         dispatchLoadMore()
       }
     }
