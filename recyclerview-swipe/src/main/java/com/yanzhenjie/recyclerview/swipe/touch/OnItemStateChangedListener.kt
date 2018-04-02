@@ -13,39 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.recyclerview.swipe.touch;
+package com.yanzhenjie.recyclerview.swipe.touch
 
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 
 /**
+ * Item state changed listener.
+ *
  * Created by Yan Zhenjie on 2016/8/12.
  */
-public interface OnItemStateChangedListener {
+interface OnItemStateChangedListener {
+
+  /**
+   * Called when the ViewHolder swiped or dragged by the ItemTouchHelper is changed.
+   *
+   * @param viewHolder  The new ViewHolder that is being swiped or dragged. Might be null if it is cleared.
+   * @param actionState One of [OnItemStateChangedListener.ACTION_STATE_IDLE],
+   * [OnItemStateChangedListener.ACTION_STATE_SWIPE] or
+   * [OnItemStateChangedListener.ACTION_STATE_DRAG].
+   */
+  fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder, actionState: Int)
+
+  companion object {
 
     /**
      * ItemTouchHelper is in idle state. At this state, either there is no related motion event by
      * the user or latest motion events have not yet triggered a swipe or drag.
      */
-    int ACTION_STATE_IDLE = ItemTouchHelper.ACTION_STATE_IDLE;
+    const val ACTION_STATE_IDLE = ItemTouchHelper.ACTION_STATE_IDLE
 
     /**
      * A View is currently being swiped.
      */
-    int ACTION_STATE_SWIPE = ItemTouchHelper.ACTION_STATE_SWIPE;
+    const val ACTION_STATE_SWIPE = ItemTouchHelper.ACTION_STATE_SWIPE
 
     /**
      * A View is currently being dragged.
      */
-    int ACTION_STATE_DRAG = ItemTouchHelper.ACTION_STATE_DRAG;
-
-    /**
-     * Called when the ViewHolder swiped or dragged by the ItemTouchHelper is changed.
-     *
-     * @param viewHolder  The new ViewHolder that is being swiped or dragged. Might be null if it is cleared.
-     * @param actionState One of {@link OnItemStateChangedListener#ACTION_STATE_IDLE},
-     *                    {@link OnItemStateChangedListener#ACTION_STATE_SWIPE} or
-     *                    {@link OnItemStateChangedListener#ACTION_STATE_DRAG}.
-     */
-    void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState);
+    const val ACTION_STATE_DRAG = ItemTouchHelper.ACTION_STATE_DRAG
+  }
 }

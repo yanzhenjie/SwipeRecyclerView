@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.recyclerview.swipe;
+package com.yanzhenjie.recyclerview.swipe.widget
+
+import android.support.annotation.ColorInt
 
 /**
- * Created by Yan Zhenjie on 2016/7/26.
+ * RecyclerView's Item Split Line.
+ *
+ * Created by Yan Zhenjie on 2016/7/27.
  */
-public interface SwipeMenuItemClickListener {
+@Deprecated("use {@link DefaultItemDecoration} instead.")
+class ListItemDecoration : DefaultItemDecoration {
 
-    /**
-     * Invoke when the menu item is clicked.
-     *
-     * @param menuBridge menu.
-     */
-    void onItemClick(SwipeMenuBridge menuBridge);
+  constructor(@ColorInt color: Int) : super(color)
+
+  constructor(@ColorInt color: Int, dividerWidth: Int, dividerHeight: Int, vararg excludeViewType: Int) : super(color, dividerWidth, dividerHeight, *excludeViewType)
 
 }

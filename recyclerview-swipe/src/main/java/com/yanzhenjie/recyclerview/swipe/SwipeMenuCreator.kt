@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.recyclerview.swipe.widget;
-
-import android.support.annotation.ColorInt;
+package com.yanzhenjie.recyclerview.swipe
 
 /**
- * <p>
- * RecyclerView's Item Split Line.
- * </p>
- * Created by Yan Zhenjie on 2016/7/27.
+ * Swipe menu creator.
  *
- * @deprecated use {@link DefaultItemDecoration} instead.
+ * Created by Yan Zhenjie on 2016/7/26.
  */
-@Deprecated
-public class ListItemDecoration extends DefaultItemDecoration {
+interface SwipeMenuCreator {
 
-    public ListItemDecoration(@ColorInt int color) {
-        super(color);
-    }
+  /**
+   * Create menu for recyclerVie item.
+   *
+   * @param swipeLeftMenu  The menu on the left.
+   * @param swipeRightMenu The menu on the right.
+   * @param viewType       The view type of the new view.
+   */
+  fun onCreateMenu(swipeLeftMenu: SwipeMenu, swipeRightMenu: SwipeMenu, viewType: Int)
 
-    public ListItemDecoration(@ColorInt int color, int dividerWidth, int dividerHeight, int... excludeViewType) {
-        super(color, dividerWidth, dividerHeight, excludeViewType);
-    }
 }

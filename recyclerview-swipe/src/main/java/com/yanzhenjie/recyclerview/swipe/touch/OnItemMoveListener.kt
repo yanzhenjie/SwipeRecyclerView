@@ -13,29 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.recyclerview.swipe.touch;
+package com.yanzhenjie.recyclerview.swipe.touch
 
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView
 
 /**
+ * Item move listener.
+ *
  * Created by Yolanda on 2016/4/19.
  */
-public interface OnItemMoveListener {
+interface OnItemMoveListener {
 
-    /**
-     * When drag and drop the callback.
-     *
-     * @param srcHolder    src.
-     * @param targetHolder target.
-     * @return To deal with the returns true, false otherwise.
-     */
-    boolean onItemMove(RecyclerView.ViewHolder srcHolder, RecyclerView.ViewHolder targetHolder);
+  /**
+   * When drag and drop the callback.
+   *
+   * @param srcHolder    src.
+   * @param targetHolder target.
+   * @return To deal with the returns true, false otherwise.
+   */
+  fun onItemMove(srcHolder: RecyclerView.ViewHolder, targetHolder: RecyclerView.ViewHolder): Boolean
 
-    /**
-     * When items should be removed when the callback.
-     *
-     * @param srcHolder src.
-     */
-    void onItemDismiss(RecyclerView.ViewHolder srcHolder);
+  /**
+   * When items should be removed when the callback.
+   *
+   * @param srcHolder src.
+   */
+  fun onItemDismiss(srcHolder: RecyclerView.ViewHolder)
 
 }

@@ -14,9 +14,9 @@ android {
 }
 
 dependencies {
-    compile rootProject.ext.dependencies.swipeRecyclerView
     compile rootProject.ext.dependencies.design
     compile rootProject.ext.dependencies.appCompat
     compile rootProject.ext.dependencies.cardView
     compile rootProject.ext.dependencies.loading
+    implementation project(':recyclerview-swipe')
 }

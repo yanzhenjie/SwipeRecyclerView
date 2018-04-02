@@ -1,4 +1,5 @@
 apply plugin: rootProject.ext.plugins.library
+apply plugin: 'kotlin-android'
 
 android {
 
@@ -14,6 +15,8 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+
     compile rootProject.ext.dependencies.recyclerView
     compile rootProject.ext.dependencies.loading
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Yan Zhenjie
+ * Copyright 2017 Yan Zhenjie
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package android.support.v7.widget.helper;
+package com.yanzhenjie.recyclerview.swipe
+
+import android.view.View
 
 /**
- * Created by Yan Zhenjie on 2016/8/1.
+ * Swipe item click listener.
+ *
+ * Created by YanZhenjie on 2017/7/21.
  */
-public class CompatItemTouchHelper extends ItemTouchHelper {
+interface SwipeItemClickListener {
 
-    public CompatItemTouchHelper(ItemTouchHelper.Callback callback) {
-        super(callback);
-    }
+  fun onItemClick(itemView: View, position: Int)
 
-    /**
-     * Developer callback which controls the behavior of ItemTouchHelper.
-     *
-     * @return {@link Callback}
-     */
-    public ItemTouchHelper.Callback getCallback() {
-        return mCallback;
-    }
 }

@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.yanzhenjie.recyclerview.swipe;
+package com.yanzhenjie.recyclerview.swipe
 
 /**
+ * Swipe menu item click listener.
+ *
  * Created by Yan Zhenjie on 2016/7/26.
  */
-public interface SwipeMenuCreator {
+interface SwipeMenuItemClickListener {
 
-    /**
-     * Create menu for recyclerVie item.
-     *
-     * @param swipeLeftMenu  The menu on the left.
-     * @param swipeRightMenu The menu on the right.
-     * @param viewType       The view type of the new view.
-     */
-    void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType);
+  /**
+   * Invoke when the menu item is clicked.
+   *
+   * @param menuBridge menu.
+   */
+  fun onItemClick(menuBridge: SwipeMenuBridge)
 
 }
