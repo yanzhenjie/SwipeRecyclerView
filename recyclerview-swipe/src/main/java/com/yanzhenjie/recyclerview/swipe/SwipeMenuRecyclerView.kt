@@ -119,6 +119,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
       mAdapterWrapper?.notifyItemMoved(fromPosition + headerItemCount, toPosition + headerItemCount)
     }
   }
+  private var mDataObserverRegistered = false
 
   private val mHeaderViewList = ArrayList<View>()
   private val mFooterViewList = ArrayList<View>()
@@ -294,6 +295,7 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
   }
 
   override fun setAdapter(adapter: Adapter<ViewHolder>?) {
+    mDataObserverRegistered = false
     mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
 
     if (adapter == null) {
@@ -319,12 +321,16 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
         }
       }
       mAdapterWrapper = adapterWrapper
+      mDataObserverRegistered = true
     }
     super.setAdapter(mAdapterWrapper)
   }
 
   override fun onDetachedFromWindow() {
-    mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
+    if (mDataObserverRegistered) {
+      mDataObserverRegistered = false
+      mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
+    }
     super.onDetachedFromWindow()
   }
 

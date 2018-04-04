@@ -24,7 +24,7 @@ import android.support.v7.widget.helper.CompatItemTouchHelper
  */
 class DefaultItemTouchHelper : CompatItemTouchHelper {
 
-  private val mDefaultItemTouchHelperCallback: DefaultItemTouchHelperCallback
+  private val touchCallback: DefaultItemTouchHelperCallback
 
   /**
    * Create default item touch helper.
@@ -37,52 +37,52 @@ class DefaultItemTouchHelper : CompatItemTouchHelper {
    * @param callback the behavior of ItemTouchHelper.
    */
   private constructor(callback: DefaultItemTouchHelperCallback): super(callback) {
-    mDefaultItemTouchHelperCallback = callback
+    touchCallback = callback
   }
 
   /**
    * Item move listener.
    */
   var onItemMoveListener: OnItemMoveListener?
-    get() = mDefaultItemTouchHelperCallback.onItemMoveListener
+    get() = touchCallback.onItemMoveListener
     set(onItemMoveListener) {
-      mDefaultItemTouchHelperCallback.onItemMoveListener = onItemMoveListener
+      touchCallback.onItemMoveListener = onItemMoveListener
     }
 
   /**
    * Item movement listener.
    */
   var onItemMovementListener: OnItemMovementListener?
-    get() = mDefaultItemTouchHelperCallback.onItemMovementListener
+    get() = touchCallback.onItemMovementListener
     set(onItemMovementListener) {
-      mDefaultItemTouchHelperCallback.onItemMovementListener = onItemMovementListener
+      touchCallback.onItemMovementListener = onItemMovementListener
     }
 
   /**
    * Long press drag enabled status.
    */
   var isLongPressDragEnabled: Boolean
-    get() = mDefaultItemTouchHelperCallback.isLongPressDragEnabled
+    get() = touchCallback.isLongPressDragEnabled
     set(canDrag) {
-      mDefaultItemTouchHelperCallback.isLongPressDragEnabled = canDrag
+      touchCallback.isLongPressDragEnabled = canDrag
     }
 
   /**
    * Item view swipe enabled status.
    */
   var isItemViewSwipeEnabled: Boolean
-    get() = this.mDefaultItemTouchHelperCallback.isItemViewSwipeEnabled
+    get() = this.touchCallback.isItemViewSwipeEnabled
     set(canSwipe) {
-      mDefaultItemTouchHelperCallback.isItemViewSwipeEnabled = canSwipe
+      touchCallback.isItemViewSwipeEnabled = canSwipe
     }
 
   /**
    * Item state changed listener.
    */
   var onItemStateChangedListener: OnItemStateChangedListener?
-    get() = this.mDefaultItemTouchHelperCallback.onItemStateChangedListener
+    get() = this.touchCallback.onItemStateChangedListener
     set(onItemStateChangedListener) {
-      this.mDefaultItemTouchHelperCallback.onItemStateChangedListener = onItemStateChangedListener
+      this.touchCallback.onItemStateChangedListener = onItemStateChangedListener
     }
 
 }
