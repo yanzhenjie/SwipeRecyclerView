@@ -70,6 +70,7 @@ class DefineActivity : BaseActivity() {
     super.onCreate(savedInstanceState)
 
     mRecyclerView.adapter = mAdapter
+    mRecyclerView.setSwipeMenuEnabled(false)
     mSwipeMenuLayout = findViewById(R.id.swipe_layout) as SwipeMenuLayout
 
     val btnLeft = findViewById(R.id.left_view) as TextView

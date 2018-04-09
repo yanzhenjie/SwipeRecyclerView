@@ -111,7 +111,17 @@ class SwipeAdapterWrapper internal constructor(
       viewHolder.itemView.setOnClickListener { listener.onItemClick(it, viewHolder.adapterPosition) }
     }
 
-    val menuCreator = mSwipeMenuCreator ?: return viewHolder
+    val menuCreator = mSwipeMenuCreator
+
+    if (menuCreator == null) {
+      val itemView = viewHolder.itemView
+
+      if (itemView is SwipeMenuLayout) {
+        itemView.isSwipeEnable = mSwipeMenuEnabled
+        swipeMenuLayoutCache.add(WeakReference(itemView))
+      }
+      return viewHolder
+    }
 
     val swipeMenuLayout = mInflater.inflate(R.layout.recycler_swipe_view_item, parent, false) as SwipeMenuLayout
     val swipeLeftMenu = SwipeMenu(swipeMenuLayout, viewType)
