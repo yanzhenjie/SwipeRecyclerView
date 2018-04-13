@@ -578,9 +578,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
                     int disX = mDownX - x;
                     // 向左滑，显示右侧菜单，或者关闭左侧菜单。
-                    boolean showRightCloseLeft = disX > 0 && (mOldSwipedLayout.hasRightMenu() || mOldSwipedLayout.isLeftCompleteOpen());
+                    boolean showRightCloseLeft = disX > mScaleTouchSlop && (mOldSwipedLayout.hasRightMenu() || mOldSwipedLayout.isLeftCompleteOpen());
                     // 向右滑，显示左侧菜单，或者关闭右侧菜单。
-                    boolean showLeftCloseRight = disX < 0 && (mOldSwipedLayout.hasLeftMenu() || mOldSwipedLayout.isRightCompleteOpen());
+                    boolean showLeftCloseRight = disX < -mScaleTouchSlop && (mOldSwipedLayout.hasLeftMenu() || mOldSwipedLayout.isRightCompleteOpen());
                     viewParent.requestDisallowInterceptTouchEvent(showRightCloseLeft || showLeftCloseRight);
                 }
                 case MotionEvent.ACTION_UP:
