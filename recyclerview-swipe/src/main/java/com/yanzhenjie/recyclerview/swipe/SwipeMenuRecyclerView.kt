@@ -327,9 +327,12 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
   }
 
   override fun onDetachedFromWindow() {
+    val oldAdapterWrapper = mAdapterWrapper
+    mAdapterWrapper = null
+
     if (mDataObserverRegistered) {
       mDataObserverRegistered = false
-      mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
+      oldAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
     }
     super.onDetachedFromWindow()
   }
