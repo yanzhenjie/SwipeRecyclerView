@@ -295,8 +295,10 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
   }
 
   override fun setAdapter(adapter: Adapter<ViewHolder>?) {
-    mDataObserverRegistered = false
-    mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
+    if (mDataObserverRegistered) {
+      mDataObserverRegistered = false
+      mAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
+    }
 
     if (adapter == null) {
       mAdapterWrapper = null
@@ -324,17 +326,6 @@ class SwipeMenuRecyclerView @JvmOverloads constructor(context: Context, attrs: A
       mDataObserverRegistered = true
     }
     super.setAdapter(mAdapterWrapper)
-  }
-
-  override fun onDetachedFromWindow() {
-    val oldAdapterWrapper = mAdapterWrapper
-    mAdapterWrapper = null
-
-    if (mDataObserverRegistered) {
-      mDataObserverRegistered = false
-      oldAdapterWrapper?.originAdapter?.unregisterAdapterDataObserver(mAdapterDataObserver)
-    }
-    super.onDetachedFromWindow()
   }
 
   /**
