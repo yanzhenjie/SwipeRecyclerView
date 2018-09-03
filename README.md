@@ -13,11 +13,12 @@ QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)
 1. 基于`List/Grid/StaggeredGrid`等`LayoutManager`的`Item`侧滑菜单。
 2. `Item`两侧侧滑菜单支持水平分布、垂直分布。
 3. `Item`拖拽排序、侧滑删除。
-4. 随时添加或者移除`HeaderView`和`FooterView`。
-5. 提供**自动/点击**加载更多的功能。[[为什么没有下拉刷新？](http://blog.csdn.net/yanzhenjie1003/article/details/75949335)][[ListView和GridView怎么办？](https://github.com/yanzhenjie/LoadMore)]
-6. 用`SwipeMenuLayout`在任何地方都可以实现你自己的侧滑菜单。
-7. 和`ViewPager`、`DrawerLayout`等滑动布局嵌套使用。
-8. `Sticky`普通布局黏贴和`ReyclerView`分组黏贴。
+4. 可以随意控制`Item`是否启用侧滑菜单。
+5. 随时添加或者移除`HeaderView`和`FooterView`。
+6. 提供**自动/点击**加载更多的功能。[[为什么没有下拉刷新？](http://blog.csdn.net/yanzhenjie1003/article/details/75949335)][[ListView和GridView怎么办？](https://github.com/yanzhenjie/LoadMore)]
+7. 用`SwipeMenuLayout`在任何地方都可以实现你自己的侧滑菜单。
+8. 和`ViewPager`、`DrawerLayout`等滑动布局嵌套使用。
+9. `Sticky`普通布局黏贴和`ReyclerView`分组黏贴。
 
 > **注意**：使用本库只需要使用`SwipeMenuRecyclerView`即可，可是使用任何第三方的Adapter，比如`BaseRecyclerViewAdapterHelper`。
 
@@ -217,6 +218,19 @@ swipeRecyclerView.startDrag(ViewHolder);
 ```java
 swipeRecyclerView.startSwipe(ViewHolder);
 ```
+
+### 控制`Item`是否启用侧滑菜单
+
+```java
+swipeRecyclerView.setSwipeItemIsShowCallback(new SwipeItemIsShowCallback() {
+        @Override
+        public boolean isShow(int position) {
+            //隐藏第一个Item的侧滑菜单
+            return position != 0;
+        }
+    });
+```
+
 
 ### HeaderView和FooterView
 主要方法：

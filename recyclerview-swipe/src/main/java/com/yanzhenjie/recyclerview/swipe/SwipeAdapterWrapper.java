@@ -44,6 +44,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
     private SwipeItemLongClickListener mSwipeItemLongClickListener;
+    private SwipeItemIsShowCallback mSwipeItemIsShowCallback;
 
     SwipeAdapterWrapper(Context context, RecyclerView.Adapter adapter) {
         this.mInflater = LayoutInflater.from(context);
@@ -78,6 +79,10 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     void setSwipeItemLongClickListener(SwipeItemLongClickListener swipeItemLongClickListener) {
         this.mSwipeItemLongClickListener = swipeItemLongClickListener;
+    }
+
+    public void setSwipeItemIsShowCallback(SwipeItemIsShowCallback swipeItemIsShowCallback) {
+        mSwipeItemIsShowCallback = swipeItemIsShowCallback;
     }
 
     @Override
@@ -184,6 +189,10 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         View itemView = holder.itemView;
         if (itemView instanceof SwipeMenuLayout) {
             SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) itemView;
+
+            //Controls whether a menu is displayed
+            swipeMenuLayout.setSwipeEnable(mSwipeItemIsShowCallback == null || mSwipeItemIsShowCallback.isShow(position));
+
             int childCount = swipeMenuLayout.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childView = swipeMenuLayout.getChildAt(i);
@@ -262,12 +271,6 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         return mFootViews.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
     @Override
     public void setHasStableIds(boolean hasStableIds) {
         mAdapter.setHasStableIds(hasStableIds);
@@ -319,5 +322,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         mAdapter.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 }
