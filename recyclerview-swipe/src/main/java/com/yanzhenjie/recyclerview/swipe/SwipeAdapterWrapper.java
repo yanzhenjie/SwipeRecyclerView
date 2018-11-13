@@ -284,6 +284,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
         int position = holder.getAdapterPosition();
+        if (position == RecyclerView.NO_POSITION) {
+            if (holder instanceof ViewHolder) {
+                return;
+            }
+        }
 
         if (!isHeaderView(position) && !isFooterView(position))
             mAdapter.onViewRecycled(holder);
@@ -292,6 +297,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
         int position = holder.getAdapterPosition();
+        if (position == RecyclerView.NO_POSITION) {
+            if (holder instanceof ViewHolder) {
+                return false;
+            }
+        }
 
         if (!isHeaderView(position) && !isFooterView(position))
             return mAdapter.onFailedToRecycleView(holder);
@@ -301,6 +311,11 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         int position = holder.getAdapterPosition();
+        if (position == RecyclerView.NO_POSITION) {
+            if (holder instanceof ViewHolder) {
+                return;
+            }
+        }
 
         if (!isHeaderView(position) && !isFooterView(position))
             mAdapter.onViewDetachedFromWindow(holder);
