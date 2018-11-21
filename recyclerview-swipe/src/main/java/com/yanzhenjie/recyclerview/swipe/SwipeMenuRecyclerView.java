@@ -77,8 +77,10 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private SwipeMenuItemClickListener mSwipeMenuItemClickListener;
     private SwipeItemClickListener mSwipeItemClickListener;
     private SwipeItemLongClickListener mSwipeItemLongClickListener;
-
     private SwipeAdapterWrapper mAdapterWrapper;
+
+    private boolean mSwipeItemMenuEnable = true;
+    private List<Integer> mDisableSwipeItemMenuList = new ArrayList<>();
 
     public SwipeMenuRecyclerView(Context context) {
         this(context, null);
@@ -128,6 +130,49 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     public void setOnItemStateChangedListener(OnItemStateChangedListener onItemStateChangedListener) {
         initializeItemTouchHelper();
         this.mDefaultItemTouchHelper.setOnItemStateChangedListener(onItemStateChangedListener);
+    }
+
+    /**
+     * Set the item menu to enable status.
+     *
+     * @param enabled true means available, otherwise not available; default is true.
+     */
+    public void setSwipeItemMenuEnabled(boolean enabled) {
+        this.mSwipeItemMenuEnable = enabled;
+    }
+
+    /**
+     * True means available, otherwise not available; default is true.
+     */
+    public boolean isSwipeItemMenuEnabled() {
+        return mSwipeItemMenuEnable;
+    }
+
+    /**
+     * Set the item menu to enable status.
+     *
+     * @param position the position of the item.
+     * @param enabled true means available, otherwise not available; default is true.
+     */
+    public void setSwipeItemMenuEnabled(int position, boolean enabled) {
+        if (enabled) {
+            if (mDisableSwipeItemMenuList.contains(position)) {
+                mDisableSwipeItemMenuList.remove(Integer.valueOf(position));
+            }
+        } else {
+            if (!mDisableSwipeItemMenuList.contains(position)) {
+                mDisableSwipeItemMenuList.add(position);
+            }
+        }
+    }
+
+    /**
+     * True means available, otherwise not available; default is true.
+     *
+     * @param position the position of the item.
+     */
+    public boolean isSwipeItemMenuEnabled(int position) {
+        return !mDisableSwipeItemMenuList.contains(position);
     }
 
     /**
@@ -533,7 +578,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
         boolean isIntercepted = super.onInterceptTouchEvent(e);
-        if (allowSwipeDelete || mSwipeMenuCreator == null) {
+        if (allowSwipeDelete || !mSwipeItemMenuEnable || mSwipeMenuCreator == null) {
             return isIntercepted;
         } else {
             if (e.getPointerCount() > 1) return true;
@@ -544,9 +589,11 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                 case MotionEvent.ACTION_DOWN: {
                     mDownX = x;
                     mDownY = y;
-                    isIntercepted = false;
 
                     int touchingPosition = getChildAdapterPosition(findChildViewUnder(x, y));
+                    if (mDisableSwipeItemMenuList.contains(touchingPosition)) break;
+
+                    isIntercepted = false;
                     if (touchingPosition != mOldTouchedPosition && mOldSwipedLayout != null &&
                         mOldSwipedLayout.isMenuOpen()) {
                         mOldSwipedLayout.smoothCloseMenu();
