@@ -77,7 +77,8 @@ public class CardViewActivity extends BaseActivity {
 
         @Override
         public DefaultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new DefaultViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_card, parent, false));
+            return new DefaultViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_card, parent, false));
         }
 
         @Override
@@ -87,13 +88,14 @@ public class CardViewActivity extends BaseActivity {
     }
 
     static class DefaultViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvTitle;
 
         public DefaultViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            tvTitle = itemView.findViewById(R.id.tv_title);
 
-            ((CardView) itemView).getChildAt(0).setOnClickListener(new View.OnClickListener() {
+            ((CardView)itemView).getChildAt(0).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "第" + getAdapterPosition() + "个", Toast.LENGTH_SHORT).show();

@@ -73,7 +73,7 @@ public class DragTouchAdapter extends BaseAdapter<DragTouchAdapter.ViewHolder> {
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            tvTitle = itemView.findViewById(R.id.tv_title);
             itemView.findViewById(R.id.iv_touch).setOnTouchListener(this);
         }
 

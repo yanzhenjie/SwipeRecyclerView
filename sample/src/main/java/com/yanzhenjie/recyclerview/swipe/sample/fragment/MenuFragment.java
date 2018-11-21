@@ -51,13 +51,14 @@ public class MenuFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_menu, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mRecyclerView = (SwipeMenuRecyclerView) view.findViewById(R.id.recycler_view);
+        mRecyclerView = view.findViewById(R.id.recycler_view);
     }
 
     @Override
@@ -65,7 +66,8 @@ public class MenuFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(getContext(), R.color.divider_color)));
+        mRecyclerView.addItemDecoration(
+            new DefaultItemDecoration(ContextCompat.getColor(getContext(), R.color.divider_color)));
 
         mRecyclerView.setSwipeItemClickListener(mItemClickListener);
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
@@ -103,9 +105,11 @@ public class MenuFragment extends Fragment {
             int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(getContext(), "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(getContext(), "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             }
         }
     };
@@ -123,18 +127,16 @@ public class MenuFragment extends Fragment {
             // 3. WRAP_CONTENT，自身高度，不推荐;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            SwipeMenuItem addItem = new SwipeMenuItem(getContext())
-                    .setBackground(R.drawable.selector_green)
-                    .setImage(R.mipmap.ic_action_add)
-                    .setWidth(width)
-                    .setHeight(height);
+            SwipeMenuItem addItem = new SwipeMenuItem(getContext()).setBackground(R.drawable.selector_green)
+                .setImage(R.mipmap.ic_action_add)
+                .setWidth(width)
+                .setHeight(height);
             swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
-            SwipeMenuItem closeItem = new SwipeMenuItem(getContext())
-                    .setBackground(R.drawable.selector_green)
-                    .setImage(R.mipmap.ic_action_close)
-                    .setWidth(width)
-                    .setHeight(height);
+            SwipeMenuItem closeItem = new SwipeMenuItem(getContext()).setBackground(R.drawable.selector_green)
+                .setImage(R.mipmap.ic_action_close)
+                .setWidth(width)
+                .setHeight(height);
             swipeRightMenu.addMenuItem(closeItem); // 添加菜单到右侧。
         }
     };

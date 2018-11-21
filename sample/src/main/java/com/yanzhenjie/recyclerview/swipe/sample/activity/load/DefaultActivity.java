@@ -54,16 +54,16 @@ public class DefaultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refresh_loadmore);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+        mRefreshLayout = findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(mRefreshListener); // 刷新监听。
 
-        mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
         mRecyclerView.setSwipeItemClickListener(mItemClickListener); // RecyclerView Item点击监听。

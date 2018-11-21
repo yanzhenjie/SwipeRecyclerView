@@ -50,7 +50,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_pager_);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         assert mActionBar != null;
@@ -60,7 +60,7 @@ public class ViewPagerActivity extends AppCompatActivity {
         findViewById(R.id.btn_two).setOnClickListener(mBtnClickListener);
         findViewById(R.id.btn_three).setOnClickListener(mBtnClickListener);
 
-        mViewPager = (ViewPager) findViewById(R.id.view_pager_menu);
+        mViewPager = findViewById(R.id.view_pager_menu);
         mViewPager.addOnPageChangeListener(mPageChangeListener);
         mViewPager.setOffscreenPageLimit(2);
 

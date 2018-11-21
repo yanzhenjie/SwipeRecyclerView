@@ -55,8 +55,8 @@ public class BaseActivity extends AppCompatActivity implements SwipeItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        mToolbar = findViewById(R.id.toolbar);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
 
         setSupportActionBar(mToolbar);

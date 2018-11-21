@@ -50,12 +50,12 @@ public class DefineActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         mRecyclerView.setAdapter(mAdapter);
 
-        mSwipeMenuLayout = (SwipeMenuLayout) findViewById(R.id.swipe_layout);
-        TextView btnLeft = (TextView) findViewById(R.id.left_view);
-        TextView btnRight = (TextView) findViewById(R.id.right_view);
+        mSwipeMenuLayout = findViewById(R.id.swipe_layout);
+        TextView btnLeft = findViewById(R.id.left_view);
+        TextView btnRight = findViewById(R.id.right_view);
 
         btnLeft.setOnClickListener(xOnClickListener);
         btnRight.setOnClickListener(xOnClickListener);
@@ -86,7 +86,8 @@ public class DefineActivity extends BaseActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_define, parent, false));
+            return new ViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_define, parent, false));
         }
 
         @Override
@@ -101,9 +102,9 @@ public class DefineActivity extends BaseActivity {
         ViewHolder(View itemView) {
             super(itemView);
 
-            mLeftBtn = (Button) itemView.findViewById(R.id.left_view);
-            mMiddleBtn = (Button) itemView.findViewById(R.id.btn_start);
-            mRightBtn = (Button) itemView.findViewById(R.id.right_view);
+            mLeftBtn = itemView.findViewById(R.id.left_view);
+            mMiddleBtn = itemView.findViewById(R.id.btn_start);
+            mRightBtn = itemView.findViewById(R.id.right_view);
             mLeftBtn.setOnClickListener(this);
             mMiddleBtn.setOnClickListener(this);
             mRightBtn.setOnClickListener(this);
@@ -113,15 +114,18 @@ public class DefineActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.left_view: {
-                    Toast.makeText(v.getContext(), "我是第" + getAdapterPosition() + "个Item的左边的Button", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "我是第" + getAdapterPosition() + "个Item的左边的Button", Toast.LENGTH_SHORT)
+                        .show();
                     break;
                 }
                 case R.id.btn_start: {
-                    Toast.makeText(v.getContext(), "我是第" + getAdapterPosition() + "个Item的中间的Button", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "我是第" + getAdapterPosition() + "个Item的中间的Button", Toast.LENGTH_SHORT)
+                        .show();
                     break;
                 }
                 case R.id.right_view: {
-                    Toast.makeText(v.getContext(), "我是第" + getAdapterPosition() + "个Item的右边的Button", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), "我是第" + getAdapterPosition() + "个Item的右边的Button", Toast.LENGTH_SHORT)
+                        .show();
                     break;
                 }
             }

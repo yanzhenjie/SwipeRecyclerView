@@ -45,7 +45,7 @@ public class DragGridActivity extends BaseDragActivity {
         mHeaderView = getLayoutInflater().inflate(R.layout.layout_header_switch, mRecyclerView, false);
         mRecyclerView.addHeaderView(mHeaderView);
 
-        SwitchCompat switchCompat = (SwitchCompat) mHeaderView.findViewById(R.id.switch_compat);
+        SwitchCompat switchCompat = mHeaderView.findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -75,12 +75,13 @@ public class DragGridActivity extends BaseDragActivity {
                 int fromPosition = srcHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
                 int toPosition = targetHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
 
-                if (fromPosition < toPosition)
+                if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++)
                         Collections.swap(mDataList, i, i + 1);
-                else
+                } else {
                     for (int i = fromPosition; i > toPosition; i--)
                         Collections.swap(mDataList, i, i - 1);
+                }
 
                 mAdapter.notifyItemMoved(fromPosition, toPosition);
                 return true;// 返回true表示处理了，返回false表示你没有处理。

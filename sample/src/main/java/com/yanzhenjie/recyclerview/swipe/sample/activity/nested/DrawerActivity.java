@@ -49,8 +49,9 @@ public class DrawerActivity extends BaseActivity {
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.app_name, R.string.app_name);
+        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.app_name,
+            R.string.app_name);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
@@ -85,19 +86,15 @@ public class DrawerActivity extends BaseActivity {
 
             // 只添加Item右侧的菜单。
             {
-                SwipeMenuItem closeItem = new SwipeMenuItem(DrawerActivity.this)
-                        .setBackground(R.drawable.selector_purple)
-                        .setImage(R.mipmap.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem closeItem = new SwipeMenuItem(DrawerActivity.this).setBackground(
+                    R.drawable.selector_purple).setImage(R.mipmap.ic_action_close).setWidth(width).setHeight(height);
                 swipeRightMenu.addMenuItem(closeItem); // 添加菜单到左侧。
 
-                SwipeMenuItem addItem = new SwipeMenuItem(DrawerActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(DrawerActivity.this).setBackground(R.drawable.selector_green)
+                    .setText("添加")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到左侧。
             }
         }
@@ -116,9 +113,11 @@ public class DrawerActivity extends BaseActivity {
             int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(DrawerActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(DrawerActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition,
+                    Toast.LENGTH_SHORT).show();
             } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(DrawerActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(DrawerActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition,
+                    Toast.LENGTH_SHORT).show();
             }
         }
 

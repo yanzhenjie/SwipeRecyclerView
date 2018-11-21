@@ -55,13 +55,13 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_menu);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        SwipeMenuRecyclerView recyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        SwipeMenuRecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
@@ -87,20 +87,18 @@ public class MenuActivity extends AppCompatActivity {
                 // 3. WRAP_CONTENT，自身高度，不推荐;
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-                SwipeMenuItem closeItem = new SwipeMenuItem(MenuActivity.this)
-                        .setBackground(R.drawable.selector_purple)
-                        .setImage(R.mipmap.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem closeItem = new SwipeMenuItem(MenuActivity.this).setBackground(R.drawable.selector_purple)
+                    .setImage(R.mipmap.ic_action_close)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
                 swipeRightMenu.addMenuItem(closeItem); // 添加菜单到右侧。
 
-                SwipeMenuItem addItem = new SwipeMenuItem(MenuActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(MenuActivity.this).setBackground(R.drawable.selector_green)
+                    .setText("添加")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
             }
@@ -172,7 +170,7 @@ public class MenuActivity extends AppCompatActivity {
 
         GroupViewHolder(View itemView) {
             super(itemView);
-            text = (TextView) itemView.findViewById(R.id.tv_title);
+            text = itemView.findViewById(R.id.tv_title);
         }
 
         void bind(ListItem item) {
@@ -190,6 +188,7 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     private static class StickyListItem extends ListItem {
+
         StickyListItem(String text) {
             super(text);
         }

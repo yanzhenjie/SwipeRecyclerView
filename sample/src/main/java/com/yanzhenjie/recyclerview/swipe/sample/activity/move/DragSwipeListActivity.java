@@ -44,7 +44,7 @@ public class DragSwipeListActivity extends BaseDragActivity {
         mHeaderView = getLayoutInflater().inflate(R.layout.layout_header_switch, mRecyclerView, false);
         mRecyclerView.addHeaderView(mHeaderView);
 
-        SwitchCompat switchCompat = (SwitchCompat) mHeaderView.findViewById(R.id.switch_compat);
+        SwitchCompat switchCompat = mHeaderView.findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
