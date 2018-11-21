@@ -235,6 +235,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void removeHeaderViewAndNotify(View view) {
         int headerIndex = mHeaderViews.indexOfValue(view);
+        if(headerIndex==-1) return;
         mHeaderViews.removeAt(headerIndex);
         notifyItemRemoved(headerIndex);
     }
@@ -250,6 +251,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void removeFooterViewAndNotify(View view) {
         int footerIndex = mFootViews.indexOfValue(view);
+        if(footerIndex ==-1) return;
         mFootViews.removeAt(footerIndex);
         notifyItemRemoved(getHeaderItemCount() + getContentItemCount() + footerIndex);
     }
