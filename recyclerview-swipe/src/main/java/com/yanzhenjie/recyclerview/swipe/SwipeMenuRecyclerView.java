@@ -55,8 +55,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
     @IntDef({LEFT_DIRECTION, RIGHT_DIRECTION})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface DirectionMode {
-    }
+    public @interface DirectionMode {}
 
     /**
      * Invalid position.
@@ -70,7 +69,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     private int mDownX;
     private int mDownY;
 
-    private boolean allowSwipeDelete = false;
+    private boolean allowSwipeDelete;
 
     private DefaultItemTouchHelper mDefaultItemTouchHelper;
 
@@ -197,8 +196,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Check the Adapter and throw an exception if it already exists.
      */
     private void checkAdapterExist(String message) {
-        if (mAdapterWrapper != null)
-            throw new IllegalStateException(message);
+        if (mAdapterWrapper != null) throw new IllegalStateException(message);
     }
 
     /**
@@ -223,8 +221,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         @Override
         public void onItemClick(View itemView, int position) {
             position = position - mRecyclerView.getHeaderItemCount();
-            if (position >= 0)
-                mCallback.onItemClick(itemView, position);
+            if (position >= 0) mCallback.onItemClick(itemView, position);
         }
     }
 
@@ -238,6 +235,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     }
 
     private static class ItemLongClick implements SwipeItemLongClickListener {
+
         private SwipeMenuRecyclerView mRecyclerView;
         private SwipeItemLongClickListener mCallback;
 
@@ -249,8 +247,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         @Override
         public void onItemLongClick(View itemView, int position) {
             position = position - mRecyclerView.getHeaderItemCount();
-            if (position >= 0)
-                mCallback.onItemLongClick(itemView, position);
+            if (position >= 0) mCallback.onItemLongClick(itemView, position);
         }
     }
 
@@ -296,7 +293,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     @Override
     public void setLayoutManager(LayoutManager layoutManager) {
         if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+            final GridLayoutManager gridLayoutManager = (GridLayoutManager)layoutManager;
             final GridLayoutManager.SpanSizeLookup spanSizeLookupHolder = gridLayoutManager.getSpanSizeLookup();
 
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -305,8 +302,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                     if (mAdapterWrapper.isHeaderView(position) || mAdapterWrapper.isFooterView(position)) {
                         return gridLayoutManager.getSpanCount();
                     }
-                    if (spanSizeLookupHolder != null)
+                    if (spanSizeLookupHolder != null) {
                         return spanSizeLookupHolder.getSpanSize(position - getHeaderItemCount());
+                    }
                     return 1;
                 }
             });
@@ -496,9 +494,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     /**
      * open menu.
      *
-     * @param position  position.
+     * @param position position.
      * @param direction use {@link #LEFT_DIRECTION}, {@link #RIGHT_DIRECTION}.
-     * @param duration  time millis.
+     * @param duration time millis.
      */
     public void smoothOpenMenu(int position, @DirectionMode int direction, int duration) {
         if (mOldSwipedLayout != null) {
@@ -511,7 +509,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         if (vh != null) {
             View itemView = getSwipeMenuView(vh.itemView);
             if (itemView instanceof SwipeMenuLayout) {
-                mOldSwipedLayout = (SwipeMenuLayout) itemView;
+                mOldSwipedLayout = (SwipeMenuLayout)itemView;
                 if (direction == RIGHT_DIRECTION) {
                     mOldTouchedPosition = position;
                     mOldSwipedLayout.smoothOpenRightMenu(duration);
@@ -535,13 +533,13 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
         boolean isIntercepted = super.onInterceptTouchEvent(e);
-        if (allowSwipeDelete)  // swipe and menu conflict.
+        if (allowSwipeDelete || mSwipeMenuCreator == null) {
             return isIntercepted;
-        else {
+        } else {
             if (e.getPointerCount() > 1) return true;
             int action = e.getAction();
-            int x = (int) e.getX();
-            int y = (int) e.getY();
+            int x = (int)e.getX();
+            int y = (int)e.getY();
             switch (action) {
                 case MotionEvent.ACTION_DOWN: {
                     mDownX = x;
@@ -549,7 +547,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                     isIntercepted = false;
 
                     int touchingPosition = getChildAdapterPosition(findChildViewUnder(x, y));
-                    if (touchingPosition != mOldTouchedPosition && mOldSwipedLayout != null && mOldSwipedLayout.isMenuOpen()) {
+                    if (touchingPosition != mOldTouchedPosition && mOldSwipedLayout != null &&
+                        mOldSwipedLayout.isMenuOpen()) {
                         mOldSwipedLayout.smoothCloseMenu();
                         isIntercepted = true;
                     }
@@ -562,7 +561,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                         if (vh != null) {
                             View itemView = getSwipeMenuView(vh.itemView);
                             if (itemView instanceof SwipeMenuLayout) {
-                                mOldSwipedLayout = (SwipeMenuLayout) itemView;
+                                mOldSwipedLayout = (SwipeMenuLayout)itemView;
                                 mOldTouchedPosition = touchingPosition;
                             }
                         }
@@ -578,9 +577,11 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
                     int disX = mDownX - x;
                     // 向左滑，显示右侧菜单，或者关闭左侧菜单。
-                    boolean showRightCloseLeft = disX > 0 && (mOldSwipedLayout.hasRightMenu() || mOldSwipedLayout.isLeftCompleteOpen());
+                    boolean showRightCloseLeft = disX > 0 &&
+                        (mOldSwipedLayout.hasRightMenu() || mOldSwipedLayout.isLeftCompleteOpen());
                     // 向右滑，显示左侧菜单，或者关闭右侧菜单。
-                    boolean showLeftCloseRight = disX < 0 && (mOldSwipedLayout.hasLeftMenu() || mOldSwipedLayout.isRightCompleteOpen());
+                    boolean showLeftCloseRight = disX < 0 &&
+                        (mOldSwipedLayout.hasLeftMenu() || mOldSwipedLayout.isRightCompleteOpen());
                     viewParent.requestDisallowInterceptTouchEvent(showRightCloseLeft || showLeftCloseRight);
                 }
                 case MotionEvent.ACTION_UP:
@@ -598,11 +599,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         int disY = mDownY - y;
 
         // swipe
-        if (Math.abs(disX) > mScaleTouchSlop && Math.abs(disX) > Math.abs(disY))
-            return false;
+        if (Math.abs(disX) > mScaleTouchSlop && Math.abs(disX) > Math.abs(disY)) return false;
         // click
-        if (Math.abs(disY) < mScaleTouchSlop && Math.abs(disX) < mScaleTouchSlop)
-            return false;
+        if (Math.abs(disY) < mScaleTouchSlop && Math.abs(disX) < mScaleTouchSlop) return false;
         return defaultValue;
     }
 
@@ -635,7 +634,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                 continue;
             }
             if (child instanceof SwipeMenuLayout) return child;
-            ViewGroup group = (ViewGroup) child;
+            ViewGroup group = (ViewGroup)child;
             final int childCount = group.getChildCount();
             for (int i = 0; i < childCount; i++) unvisited.add(group.getChildAt(i));
         }
@@ -663,7 +662,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     public void onScrolled(int dx, int dy) {
         LayoutManager layoutManager = getLayoutManager();
         if (layoutManager != null && layoutManager instanceof LinearLayoutManager) {
-            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager)layoutManager;
 
             int itemCount = layoutManager.getItemCount();
             if (itemCount <= 0) return;
@@ -671,11 +670,11 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             int lastVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
 
             if (itemCount == lastVisiblePosition + 1 &&
-                    (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
                 dispatchLoadMore();
             }
         } else if (layoutManager != null && layoutManager instanceof StaggeredGridLayoutManager) {
-            StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
+            StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager)layoutManager;
 
             int itemCount = layoutManager.getItemCount();
             if (itemCount <= 0) return;
@@ -684,7 +683,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             int lastVisiblePosition = lastVisiblePositionArray[lastVisiblePositionArray.length - 1];
 
             if (itemCount == lastVisiblePosition + 1 &&
-                    (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
+                (mScrollState == SCROLL_STATE_DRAGGING || mScrollState == SCROLL_STATE_SETTLING)) {
                 dispatchLoadMore();
             }
         }
@@ -694,18 +693,15 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         if (isLoadError) return;
 
         if (!isAutoLoadMore) {
-            if (mLoadMoreView != null)
-                mLoadMoreView.onWaitToLoadMore(mLoadMoreListener);
+            if (mLoadMoreView != null) mLoadMoreView.onWaitToLoadMore(mLoadMoreListener);
         } else {
             if (isLoadMore || mDataEmpty || !mHasMore) return;
 
             isLoadMore = true;
 
-            if (mLoadMoreView != null)
-                mLoadMoreView.onLoading();
+            if (mLoadMoreView != null) mLoadMoreView.onLoading();
 
-            if (mLoadMoreListener != null)
-                mLoadMoreListener.onLoadMore();
+            if (mLoadMoreListener != null) mLoadMoreListener.onLoadMore();
         }
     }
 
@@ -739,6 +735,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * </p>
      *
      * @param autoLoadMore you can use false.
+     *
      * @see LoadMoreView#onWaitToLoadMore(LoadMoreListener)
      */
     public void setAutoLoadMore(boolean autoLoadMore) {
@@ -749,7 +746,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
      * Load more done.
      *
      * @param dataEmpty data is empty ?
-     * @param hasMore   has more data ?
+     * @param hasMore has more data ?
      */
     public final void loadMoreFinish(boolean dataEmpty, boolean hasMore) {
         isLoadMore = false;
@@ -766,7 +763,8 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     /**
      * Called when data is loaded incorrectly.
      *
-     * @param errorCode    Error code, will be passed to the LoadView, you can according to it to customize the prompt information.
+     * @param errorCode Error code, will be passed to the LoadView, you can according to it to customize the prompt
+     *     information.
      * @param errorMessage Error message.
      */
     public void loadMoreError(int errorCode, String errorMessage) {
