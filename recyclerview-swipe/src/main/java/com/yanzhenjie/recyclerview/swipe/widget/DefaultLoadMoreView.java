@@ -17,7 +17,6 @@ package com.yanzhenjie.recyclerview.swipe.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -25,18 +24,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.yanzhenjie.loading.LoadingView;
 import com.yanzhenjie.recyclerview.swipe.R;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 
 /**
  * Created by YanZhenjie on 2017/7/21.
  */
-public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecyclerView.LoadMoreView, View.OnClickListener {
+public class DefaultLoadMoreView extends LinearLayout
+    implements SwipeMenuRecyclerView.LoadMoreView, View.OnClickListener {
 
-    private LoadingView mLoadingView;
+    private ProgressBar mProgressBar;
     private TextView mTvMessage;
 
     private SwipeMenuRecyclerView.LoadMoreListener mLoadMoreListener;
@@ -53,26 +53,19 @@ public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecycl
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
-        int minHeight = (int) (displayMetrics.density * 60 + 0.5);
+        int minHeight = (int)(displayMetrics.density * 60 + 0.5);
         setMinimumHeight(minHeight);
 
         inflate(getContext(), R.layout.recycler_swipe_view_load_more, this);
-        mLoadingView = (LoadingView) findViewById(R.id.loading_view);
-        mTvMessage = (TextView) findViewById(R.id.tv_load_more_message);
-
-        int color1 = ContextCompat.getColor(getContext(), R.color.recycler_swipe_color_loading_color1);
-        int color2 = ContextCompat.getColor(getContext(), R.color.recycler_swipe_color_loading_color2);
-        int color3 = ContextCompat.getColor(getContext(), R.color.recycler_swipe_color_loading_color3);
-
-        mLoadingView.setCircleColors(color1, color2, color3);
-
+        mProgressBar = findViewById(R.id.progress_bar);
+        mTvMessage = findViewById(R.id.tv_load_more_message);
         setOnClickListener(this);
     }
 
     @Override
     public void onLoading() {
         setVisibility(VISIBLE);
-        mLoadingView.setVisibility(VISIBLE);
+        mProgressBar.setVisibility(VISIBLE);
         mTvMessage.setVisibility(VISIBLE);
         mTvMessage.setText(R.string.recycler_swipe_load_more_message);
     }
@@ -83,11 +76,11 @@ public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecycl
             setVisibility(VISIBLE);
 
             if (dataEmpty) {
-                mLoadingView.setVisibility(GONE);
+                mProgressBar.setVisibility(GONE);
                 mTvMessage.setVisibility(VISIBLE);
                 mTvMessage.setText(R.string.recycler_swipe_data_empty);
             } else {
-                mLoadingView.setVisibility(GONE);
+                mProgressBar.setVisibility(GONE);
                 mTvMessage.setVisibility(VISIBLE);
                 mTvMessage.setText(R.string.recycler_swipe_more_not);
             }
@@ -101,7 +94,7 @@ public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecycl
         this.mLoadMoreListener = loadMoreListener;
 
         setVisibility(VISIBLE);
-        mLoadingView.setVisibility(GONE);
+        mProgressBar.setVisibility(GONE);
         mTvMessage.setVisibility(VISIBLE);
         mTvMessage.setText(R.string.recycler_swipe_click_load_more);
     }
@@ -109,9 +102,11 @@ public class DefaultLoadMoreView extends LinearLayout implements SwipeMenuRecycl
     @Override
     public void onLoadError(int errorCode, String errorMessage) {
         setVisibility(VISIBLE);
-        mLoadingView.setVisibility(GONE);
+        mProgressBar.setVisibility(GONE);
         mTvMessage.setVisibility(VISIBLE);
-        mTvMessage.setText(TextUtils.isEmpty(errorMessage) ? getContext().getString(R.string.recycler_swipe_load_error) : errorMessage);
+        mTvMessage.setText(TextUtils.isEmpty(errorMessage)
+            ? getContext().getString(R.string.recycler_swipe_load_error)
+            : errorMessage);
     }
 
     @Override

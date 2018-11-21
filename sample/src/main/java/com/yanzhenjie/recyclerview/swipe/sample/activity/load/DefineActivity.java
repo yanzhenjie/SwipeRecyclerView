@@ -30,10 +30,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.yanzhenjie.loading.LoadingView;
 import com.yanzhenjie.recyclerview.swipe.SwipeItemClickListener;
 import com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView;
 import com.yanzhenjie.recyclerview.swipe.sample.R;
@@ -61,16 +61,16 @@ public class DefineActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_refresh_loadmore);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh_layout);
+        mRefreshLayout = findViewById(R.id.refresh_layout);
         mRefreshLayout.setOnRefreshListener(mRefreshListener); // 刷新监听。
 
-        mRecyclerView = (SwipeMenuRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
         mRecyclerView.setSwipeItemClickListener(mItemClickListener);
@@ -159,9 +159,10 @@ public class DefineActivity extends AppCompatActivity {
     /**
      * 这是这个类的主角，如何自定义LoadMoreView。
      */
-    static final class DefineLoadMoreView extends LinearLayout implements SwipeMenuRecyclerView.LoadMoreView, View.OnClickListener {
+    static final class DefineLoadMoreView extends LinearLayout
+        implements SwipeMenuRecyclerView.LoadMoreView, View.OnClickListener {
 
-        private LoadingView mLoadingView;
+        private ProgressBar mProgressBar;
         private TextView mTvMessage;
 
         private SwipeMenuRecyclerView.LoadMoreListener mLoadMoreListener;
@@ -174,18 +175,12 @@ public class DefineActivity extends AppCompatActivity {
 
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 
-            int minHeight = (int) (displayMetrics.density * 60 + 0.5);
+            int minHeight = (int)(displayMetrics.density * 60 + 0.5);
             setMinimumHeight(minHeight);
 
             inflate(context, R.layout.layout_fotter_loadmore, this);
-            mLoadingView = (LoadingView) findViewById(R.id.loading_view);
-            mTvMessage = (TextView) findViewById(R.id.tv_message);
-
-            int color1 = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-            int color2 = ContextCompat.getColor(getContext(), R.color.colorPrimaryDark);
-            int color3 = ContextCompat.getColor(getContext(), R.color.colorAccent);
-
-            mLoadingView.setCircleColors(color1, color2, color3);
+            mProgressBar = findViewById(R.id.progress_bar);
+            mTvMessage = findViewById(R.id.tv_message);
             setOnClickListener(this);
         }
 
@@ -195,7 +190,7 @@ public class DefineActivity extends AppCompatActivity {
         @Override
         public void onLoading() {
             setVisibility(VISIBLE);
-            mLoadingView.setVisibility(VISIBLE);
+            mProgressBar.setVisibility(VISIBLE);
             mTvMessage.setVisibility(VISIBLE);
             mTvMessage.setText("正在努力加载，请稍后");
         }
@@ -204,7 +199,7 @@ public class DefineActivity extends AppCompatActivity {
          * 加载更多完成了。
          *
          * @param dataEmpty 是否请求到空数据。
-         * @param hasMore   是否还有更多数据等待请求。
+         * @param hasMore 是否还有更多数据等待请求。
          */
         @Override
         public void onLoadFinish(boolean dataEmpty, boolean hasMore) {
@@ -212,11 +207,11 @@ public class DefineActivity extends AppCompatActivity {
                 setVisibility(VISIBLE);
 
                 if (dataEmpty) {
-                    mLoadingView.setVisibility(GONE);
+                    mProgressBar.setVisibility(GONE);
                     mTvMessage.setVisibility(VISIBLE);
                     mTvMessage.setText("暂时没有数据");
                 } else {
-                    mLoadingView.setVisibility(GONE);
+                    mProgressBar.setVisibility(GONE);
                     mTvMessage.setVisibility(VISIBLE);
                     mTvMessage.setText("没有更多数据啦");
                 }
@@ -233,7 +228,7 @@ public class DefineActivity extends AppCompatActivity {
             this.mLoadMoreListener = loadMoreListener;
 
             setVisibility(VISIBLE);
-            mLoadingView.setVisibility(GONE);
+            mProgressBar.setVisibility(GONE);
             mTvMessage.setVisibility(VISIBLE);
             mTvMessage.setText("点我加载更多");
         }
@@ -241,13 +236,13 @@ public class DefineActivity extends AppCompatActivity {
         /**
          * 加载出错啦，下面的错误码和错误信息二选一。
          *
-         * @param errorCode    错误码。
+         * @param errorCode 错误码。
          * @param errorMessage 错误信息。
          */
         @Override
         public void onLoadError(int errorCode, String errorMessage) {
             setVisibility(VISIBLE);
-            mLoadingView.setVisibility(GONE);
+            mProgressBar.setVisibility(GONE);
             mTvMessage.setVisibility(VISIBLE);
 
             // 这里要不直接设置错误信息，要不根据errorCode动态设置错误数据。
