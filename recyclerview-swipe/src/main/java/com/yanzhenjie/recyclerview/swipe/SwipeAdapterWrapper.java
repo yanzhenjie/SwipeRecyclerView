@@ -128,7 +128,8 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (mSwipeMenuCreator == null) return viewHolder;
 
-        final SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) mInflater.inflate(R.layout.recycler_swipe_view_item, parent, false);
+        final SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout)mInflater.inflate(R.layout.recycler_swipe_view_item,
+            parent, false);
         SwipeMenu swipeLeftMenu = new SwipeMenu(swipeMenuLayout, viewType);
         SwipeMenu swipeRightMenu = new SwipeMenu(swipeMenuLayout, viewType);
 
@@ -136,21 +137,23 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
         int leftMenuCount = swipeLeftMenu.getMenuItems().size();
         if (leftMenuCount > 0) {
-            SwipeMenuView swipeLeftMenuView = (SwipeMenuView) swipeMenuLayout.findViewById(R.id.swipe_left);
+            SwipeMenuView swipeLeftMenuView = swipeMenuLayout.findViewById(R.id.swipe_left);
             // noinspection WrongConstant
             swipeLeftMenuView.setOrientation(swipeLeftMenu.getOrientation());
-            swipeLeftMenuView.createMenu(swipeLeftMenu, swipeMenuLayout, mSwipeMenuItemClickListener, SwipeMenuRecyclerView.LEFT_DIRECTION);
+            swipeLeftMenuView.createMenu(swipeLeftMenu, swipeMenuLayout, mSwipeMenuItemClickListener,
+                SwipeMenuRecyclerView.LEFT_DIRECTION);
         }
 
         int rightMenuCount = swipeRightMenu.getMenuItems().size();
         if (rightMenuCount > 0) {
-            SwipeMenuView swipeRightMenuView = (SwipeMenuView) swipeMenuLayout.findViewById(R.id.swipe_right);
+            SwipeMenuView swipeRightMenuView = swipeMenuLayout.findViewById(R.id.swipe_right);
             // noinspection WrongConstant
             swipeRightMenuView.setOrientation(swipeRightMenu.getOrientation());
-            swipeRightMenuView.createMenu(swipeRightMenu, swipeMenuLayout, mSwipeMenuItemClickListener, SwipeMenuRecyclerView.RIGHT_DIRECTION);
+            swipeRightMenuView.createMenu(swipeRightMenu, swipeMenuLayout, mSwipeMenuItemClickListener,
+                SwipeMenuRecyclerView.RIGHT_DIRECTION);
         }
 
-        ViewGroup viewGroup = (ViewGroup) swipeMenuLayout.findViewById(R.id.swipe_content);
+        ViewGroup viewGroup = swipeMenuLayout.findViewById(R.id.swipe_content);
         viewGroup.addView(viewHolder.itemView);
 
         try {
@@ -183,12 +186,12 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
         View itemView = holder.itemView;
         if (itemView instanceof SwipeMenuLayout) {
-            SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout) itemView;
+            SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout)itemView;
             int childCount = swipeMenuLayout.getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childView = swipeMenuLayout.getChildAt(i);
                 if (childView instanceof SwipeMenuView) {
-                    ((SwipeMenuView) childView).bindViewHolder(holder);
+                    ((SwipeMenuView)childView).bindViewHolder(holder);
                 }
             }
         }
@@ -208,7 +211,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         if (isHeaderView(position) || isFooterView(position)) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
             if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
-                StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams) lp;
+                StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams)lp;
                 p.setFullSpan(true);
             }
         } else {
@@ -235,7 +238,8 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void removeHeaderViewAndNotify(View view) {
         int headerIndex = mHeaderViews.indexOfValue(view);
-        if(headerIndex==-1) return;
+        if (headerIndex == -1) return;
+
         mHeaderViews.removeAt(headerIndex);
         notifyItemRemoved(headerIndex);
     }
@@ -251,7 +255,8 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void removeFooterViewAndNotify(View view) {
         int footerIndex = mFootViews.indexOfValue(view);
-        if(footerIndex ==-1) return;
+        if (footerIndex == -1) return;
+
         mFootViews.removeAt(footerIndex);
         notifyItemRemoved(getHeaderItemCount() + getContentItemCount() + footerIndex);
     }
@@ -265,6 +270,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+
         public ViewHolder(View itemView) {
             super(itemView);
         }
@@ -287,16 +293,14 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
         int position = holder.getAdapterPosition();
 
-        if (!isHeaderView(position) && !isFooterView(position))
-            mAdapter.onViewRecycled(holder);
+        if (!isHeaderView(position) && !isFooterView(position)) mAdapter.onViewRecycled(holder);
     }
 
     @Override
     public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
         int position = holder.getAdapterPosition();
 
-        if (!isHeaderView(position) && !isFooterView(position))
-            return mAdapter.onFailedToRecycleView(holder);
+        if (!isHeaderView(position) && !isFooterView(position)) return mAdapter.onFailedToRecycleView(holder);
         return false;
     }
 
@@ -304,8 +308,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
         int position = holder.getAdapterPosition();
 
-        if (!isHeaderView(position) && !isFooterView(position))
-            mAdapter.onViewDetachedFromWindow(holder);
+        if (!isHeaderView(position) && !isFooterView(position)) mAdapter.onViewDetachedFromWindow(holder);
     }
 
     @Override
