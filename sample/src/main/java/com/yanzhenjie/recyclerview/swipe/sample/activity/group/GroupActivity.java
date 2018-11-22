@@ -38,6 +38,7 @@ public class GroupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged(mDataList);
     }
 
     @Override
