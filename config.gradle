@@ -12,9 +12,9 @@ ext {
                targetSdkVersion : 27,
 
                versionCode      : 9,
-               versionName      : "1.1.4",]
+               versionName      : "1.2.0",]
 
-    bintray = [version       : "1.1.4",
+    bintray = [version       : "1.2.0",
 
                siteUrl       : 'https://github.com/yanzhenjie/SwipeRecyclerView',
                gitUrl        : 'git@github.com:yanzhenjie/SwipeRecyclerView.git',
@@ -33,7 +33,7 @@ ext {
                // project.developers
                developerId   : 'yanzhenjie',
                developerName : 'yanzhenjie',
-               developerEmail: 'smallajax@foxmail.com',
+               developerEmail: 'im.yanzhenjie@foxmail.com',
 
                // bintray
                binrayLibrary : "recyclerview-swipe",
@@ -45,5 +45,5 @@ ext {
                     design           : 'com.android.support:design:27.1.1',
                     cardView         : 'com.android.support:cardview-v7:27.1.1',
                     recyclerView     : 'com.android.support:recyclerview-v7:27.1.1',
-                    swipeRecyclerView: 'com.yanzhenjie:recyclerview-swipe:1.1.4']
+                    swipeRecyclerView: 'com.yanzhenjie:recyclerview-swipe:1.2.0']
 }
