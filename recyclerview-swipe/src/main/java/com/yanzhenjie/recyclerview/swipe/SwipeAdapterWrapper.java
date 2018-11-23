@@ -180,9 +180,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
-        if (isHeaderView(position) || isFooterView(position)) {
-            return;
-        }
+        if (isHeaderOrFooter(holder)) return;
 
         View itemView = holder.itemView;
         if (itemView instanceof SwipeMenuLayout) {
@@ -206,9 +204,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition();
-
-        if (isHeaderView(position) || isFooterView(position)) {
+        if (isHeaderOrFooter(holder)) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
             if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
                 StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams)lp;
@@ -217,6 +213,16 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         } else {
             mAdapter.onViewAttachedToWindow(holder);
         }
+    }
+
+    public boolean isHeaderOrFooter(RecyclerView.ViewHolder holder) {
+        if (holder instanceof ViewHolder) return true;
+
+        return isHeaderOrFooter(holder.getAdapterPosition());
+    }
+
+    public boolean isHeaderOrFooter(int position) {
+        return isHeaderView(position) || isFooterView(position);
     }
 
     public boolean isHeaderView(int position) {
@@ -283,7 +289,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public long getItemId(int position) {
-        if (!isHeaderView(position) && !isFooterView(position)) {
+        if (!isHeaderOrFooter(position)) {
             return mAdapter.getItemId(position);
         }
         return super.getItemId(position);
@@ -291,39 +297,18 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition();
-        if (position == RecyclerView.NO_POSITION) {
-            if (holder instanceof ViewHolder) {
-                return;
-            }
-        }
-
-        if (!isHeaderView(position) && !isFooterView(position)) mAdapter.onViewRecycled(holder);
+        if (!isHeaderOrFooter(holder)) mAdapter.onViewRecycled(holder);
     }
 
     @Override
     public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition();
-        if (position == RecyclerView.NO_POSITION) {
-            if (holder instanceof ViewHolder) {
-                return false;
-            }
-        }
-
-        if (!isHeaderView(position) && !isFooterView(position)) return mAdapter.onFailedToRecycleView(holder);
+        if (!isHeaderOrFooter(holder)) return mAdapter.onFailedToRecycleView(holder);
         return false;
     }
 
     @Override
     public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
-        int position = holder.getAdapterPosition();
-        if (position == RecyclerView.NO_POSITION) {
-            if (holder instanceof ViewHolder) {
-                return;
-            }
-        }
-
-        if (!isHeaderView(position) && !isFooterView(position)) mAdapter.onViewDetachedFromWindow(holder);
+        if (!isHeaderOrFooter(holder)) mAdapter.onViewDetachedFromWindow(holder);
     }
 
     @Override
