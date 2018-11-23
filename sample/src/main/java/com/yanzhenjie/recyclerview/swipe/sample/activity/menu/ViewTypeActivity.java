@@ -63,9 +63,13 @@ public class ViewTypeActivity extends BaseActivity {
         return new MainAdapter(this) {
             @Override
             public int getItemViewType(int position) {
-                if (position % 3 == 0) return VIEWTYPE_THREE;
-                else if (position % 2 == 0) return VIEWTYPE_TWO;
-                else return VIEWTYPE_OTHER;
+                if (position % 3 == 0) {
+                    return VIEWTYPE_THREE;
+                } else if (position % 2 == 0) {
+                    return VIEWTYPE_TWO;
+                } else {
+                    return VIEWTYPE_OTHER;
+                }
             }
         };
     }
@@ -75,68 +79,55 @@ public class ViewTypeActivity extends BaseActivity {
      */
     private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
         @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
             int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
-
             // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
             // 2. 指定具体的高，比如80;
             // 3. WRAP_CONTENT，自身高度，不推荐;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            // 根据ViewType来决定哪一个item该如何添加菜单。
-            // 这里模拟业务，实际开发根据自己的业务计算。
+            // 1. 根据ViewType来决定哪一个item该如何添加菜单。
+            // 2. 更多的开发者需要的是根据position，因为不同的ViewType之间不会有缓存优化效果。
+            int viewType = mAdapter.getItemViewType(position);
             if (viewType == VIEWTYPE_THREE) {
-                SwipeMenuItem deleteItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_red)
-                        .setImage(R.mipmap.ic_action_delete)
-                        .setText("删除")
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem deleteItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_red)
+                    .setImage(R.mipmap.ic_action_delete)
+                    .setText("删除")
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeRightMenu.addMenuItem(deleteItem);// 添加菜单到右侧。
 
-                SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_purple)
-                        .setImage(R.mipmap.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_purple).setImage(R.mipmap.ic_action_close).setWidth(width).setHeight(height);
                 swipeRightMenu.addMenuItem(closeItem); // 添加菜单到右侧。
 
-                SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_green)
+                    .setText("添加")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
             } else if (viewType == VIEWTYPE_TWO) {
-                SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_purple)
-                        .setImage(R.mipmap.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_purple).setImage(R.mipmap.ic_action_close).setWidth(width).setHeight(height);
                 swipeRightMenu.addMenuItem(closeItem); // 添加菜单到右侧。
 
-                SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_green)
+                    .setText("添加")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
             } else if (viewType == VIEWTYPE_OTHER) {
-                SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setImage(R.mipmap.ic_action_add)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_green).setImage(R.mipmap.ic_action_add).setWidth(width).setHeight(height);
                 swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
-                SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this)
-                        .setBackground(R.drawable.selector_red)
-                        .setText("删除")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem closeItem = new SwipeMenuItem(ViewTypeActivity.this).setBackground(
+                    R.drawable.selector_red).setText("删除").setTextColor(Color.WHITE).setWidth(width).setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
             }
         }
@@ -147,17 +138,18 @@ public class ViewTypeActivity extends BaseActivity {
      */
     private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
         @Override
-        public void onItemClick(SwipeMenuBridge menuBridge) {
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
             menuBridge.closeMenu();
 
             int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-            int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
             int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(ViewTypeActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewTypeActivity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(ViewTypeActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewTypeActivity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             }
         }
     };

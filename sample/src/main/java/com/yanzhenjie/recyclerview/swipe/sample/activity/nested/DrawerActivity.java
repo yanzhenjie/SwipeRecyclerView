@@ -49,7 +49,7 @@ public class DrawerActivity extends BaseActivity {
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
         mRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
-        DrawerLayout drawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, mToolbar, R.string.app_name,
             R.string.app_name);
         drawerLayout.addDrawerListener(drawerToggle);
@@ -74,7 +74,7 @@ public class DrawerActivity extends BaseActivity {
      */
     private SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
         @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
             int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
 
             // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
@@ -105,19 +105,18 @@ public class DrawerActivity extends BaseActivity {
      */
     private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
         @Override
-        public void onItemClick(SwipeMenuBridge menuBridge) {
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
             menuBridge.closeMenu();
 
             int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-            int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
             int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(DrawerActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition,
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(DrawerActivity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(DrawerActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition,
-                    Toast.LENGTH_SHORT).show();
+                Toast.makeText(DrawerActivity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             }
         }
 

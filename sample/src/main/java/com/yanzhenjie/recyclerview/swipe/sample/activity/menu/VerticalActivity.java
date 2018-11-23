@@ -61,7 +61,7 @@ public class VerticalActivity extends BaseActivity {
      */
     private SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
         @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
             int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
 
             /*
@@ -75,42 +75,42 @@ public class VerticalActivity extends BaseActivity {
             swipeRightMenu.setOrientation(SwipeMenu.VERTICAL);
             // 添加左侧的，如果不添加，则左侧不会出现菜单。
             {
-                SwipeMenuItem addItem = new SwipeMenuItem(VerticalActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setImage(R.mipmap.ic_action_add)
-                        .setWidth(width)
-                        .setHeight(0)
-                        .setWeight(1);
+                SwipeMenuItem addItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
+                    R.drawable.selector_green)
+                    .setImage(R.mipmap.ic_action_add)
+                    .setWidth(width)
+                    .setHeight(0)
+                    .setWeight(1);
                 swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
-                SwipeMenuItem closeItem = new SwipeMenuItem(VerticalActivity.this)
-                        .setBackground(R.drawable.selector_red)
-                        .setImage(R.mipmap.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(0)
-                        .setWeight(1);
+                SwipeMenuItem closeItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
+                    R.drawable.selector_red)
+                    .setImage(R.mipmap.ic_action_close)
+                    .setWidth(width)
+                    .setHeight(0)
+                    .setWeight(1);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
             }
 
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
             {
-                SwipeMenuItem deleteItem = new SwipeMenuItem(VerticalActivity.this)
-                        .setBackground(R.drawable.selector_red)
-                        .setImage(R.mipmap.ic_action_delete)
-                        .setText("删除")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(0)
-                        .setWeight(1);
+                SwipeMenuItem deleteItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
+                    R.drawable.selector_red)
+                    .setImage(R.mipmap.ic_action_delete)
+                    .setText("删除")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(0)
+                    .setWeight(1);
                 swipeRightMenu.addMenuItem(deleteItem);// 添加菜单到右侧。
 
-                SwipeMenuItem addItem = new SwipeMenuItem(VerticalActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(0)
-                        .setWeight(1);
+                SwipeMenuItem addItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
+                    R.drawable.selector_green)
+                    .setText("添加")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(0)
+                    .setWeight(1);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
             }
         }
@@ -131,7 +131,8 @@ public class VerticalActivity extends BaseActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_vertical, parent, false));
+            return new ViewHolder(
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.item_menu_vertical, parent, false));
         }
 
         @Override
@@ -152,7 +153,7 @@ public class VerticalActivity extends BaseActivity {
         public ViewHolder(View itemView) {
             super(itemView);
 
-            mTv1 = (TextView) itemView.findViewById(R.id.tv_title);
+            mTv1 = (TextView)itemView.findViewById(R.id.tv_title);
         }
 
         void setData(String data) {

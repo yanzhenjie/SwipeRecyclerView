@@ -62,7 +62,7 @@ public class GridActivity extends BaseActivity {
      */
     private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
         @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
             int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
 
             // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
@@ -72,38 +72,34 @@ public class GridActivity extends BaseActivity {
 
             // 添加左侧的，如果不添加，则左侧不会出现菜单。
             {
-                SwipeMenuItem addItem = new SwipeMenuItem(GridActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setImage(R.mipmap.ic_action_add)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_green)
+                    .setImage(R.mipmap.ic_action_add)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
-                SwipeMenuItem closeItem = new SwipeMenuItem(GridActivity.this)
-                        .setBackground(R.drawable.selector_red)
-                        .setImage(R.mipmap.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem closeItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_red)
+                    .setImage(R.mipmap.ic_action_close)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
             }
 
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
             {
-                SwipeMenuItem deleteItem = new SwipeMenuItem(GridActivity.this)
-                        .setBackground(R.drawable.selector_red)
-                        .setImage(R.mipmap.ic_action_delete)
-                        .setText("删除")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem deleteItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_red)
+                    .setImage(R.mipmap.ic_action_delete)
+                    .setText("删除")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeRightMenu.addMenuItem(deleteItem);// 添加菜单到右侧。
 
-                SwipeMenuItem addItem = new SwipeMenuItem(GridActivity.this)
-                        .setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
+                SwipeMenuItem addItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_green)
+                    .setText("添加")
+                    .setTextColor(Color.WHITE)
+                    .setWidth(width)
+                    .setHeight(height);
                 swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
             }
         }
@@ -114,17 +110,18 @@ public class GridActivity extends BaseActivity {
      */
     private SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
         @Override
-        public void onItemClick(SwipeMenuBridge menuBridge) {
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
             menuBridge.closeMenu();
 
             int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-            int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
             int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
             if (direction == SwipeMenuRecyclerView.RIGHT_DIRECTION) {
-                Toast.makeText(GridActivity.this, "list第" + adapterPosition + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(GridActivity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             } else if (direction == SwipeMenuRecyclerView.LEFT_DIRECTION) {
-                Toast.makeText(GridActivity.this, "list第" + adapterPosition + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(GridActivity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+                    .show();
             }
         }
     };

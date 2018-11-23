@@ -55,7 +55,7 @@ public class LayoutActivity extends AppCompatActivity {
     }
 
     private void initTabLayout() {
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tab_layout);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
         TabLayout.Tab tab = tabLayout.newTab();
         tab.setText("商品预览");
         tabLayout.addTab(tab);
