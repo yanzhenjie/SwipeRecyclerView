@@ -8,6 +8,7 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
+        consumerProguardFiles 'proguard-rules.txt'
     }
 
     resourcePrefix 'recycler_swipe_'
