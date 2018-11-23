@@ -26,6 +26,9 @@ import android.view.ViewGroup;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView.LEFT_DIRECTION;
+import static com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView.RIGHT_DIRECTION;
+
 /**
  * Created by YanZhenjie on 2017/7/20.
  */
@@ -128,50 +131,17 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (mSwipeMenuCreator == null) return viewHolder;
 
-        final SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout)mInflater.inflate(R.layout.recycler_swipe_view_item,
-            parent, false);
-        SwipeMenu swipeLeftMenu = new SwipeMenu(swipeMenuLayout, viewType);
-        SwipeMenu swipeRightMenu = new SwipeMenu(swipeMenuLayout, viewType);
-
-        mSwipeMenuCreator.onCreateMenu(swipeLeftMenu, swipeRightMenu, viewType);
-
-        int leftMenuCount = swipeLeftMenu.getMenuItems().size();
-        if (leftMenuCount > 0) {
-            SwipeMenuView swipeLeftMenuView = swipeMenuLayout.findViewById(R.id.swipe_left);
-            // noinspection WrongConstant
-            swipeLeftMenuView.setOrientation(swipeLeftMenu.getOrientation());
-            swipeLeftMenuView.createMenu(swipeLeftMenu, swipeMenuLayout, mSwipeMenuItemClickListener,
-                SwipeMenuRecyclerView.LEFT_DIRECTION);
-        }
-
-        int rightMenuCount = swipeRightMenu.getMenuItems().size();
-        if (rightMenuCount > 0) {
-            SwipeMenuView swipeRightMenuView = swipeMenuLayout.findViewById(R.id.swipe_right);
-            // noinspection WrongConstant
-            swipeRightMenuView.setOrientation(swipeRightMenu.getOrientation());
-            swipeRightMenuView.createMenu(swipeRightMenu, swipeMenuLayout, mSwipeMenuItemClickListener,
-                SwipeMenuRecyclerView.RIGHT_DIRECTION);
-        }
-
-        ViewGroup viewGroup = swipeMenuLayout.findViewById(R.id.swipe_content);
+        final View contentView = mInflater.inflate(R.layout.recycler_swipe_view_item, parent, false);
+        ViewGroup viewGroup = contentView.findViewById(R.id.swipe_content);
         viewGroup.addView(viewHolder.itemView);
 
         try {
             Field itemView = getSupperClass(viewHolder.getClass()).getDeclaredField("itemView");
             if (!itemView.isAccessible()) itemView.setAccessible(true);
-            itemView.set(viewHolder, swipeMenuLayout);
-        } catch (Exception e) {
-            e.printStackTrace();
+            itemView.set(viewHolder, contentView);
+        } catch (Exception ignored) {
         }
         return viewHolder;
-    }
-
-    private Class<?> getSupperClass(Class<?> aClass) {
-        Class<?> supperClass = aClass.getSuperclass();
-        if (supperClass != null && !supperClass.equals(Object.class)) {
-            return getSupperClass(supperClass);
-        }
-        return aClass;
     }
 
     @Override
@@ -183,18 +153,36 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         if (isHeaderOrFooter(holder)) return;
 
         View itemView = holder.itemView;
+        position -= getHeaderItemCount();
+
         if (itemView instanceof SwipeMenuLayout) {
-            SwipeMenuLayout swipeMenuLayout = (SwipeMenuLayout)itemView;
-            int childCount = swipeMenuLayout.getChildCount();
-            for (int i = 0; i < childCount; i++) {
-                View childView = swipeMenuLayout.getChildAt(i);
-                if (childView instanceof SwipeMenuView) {
-                    ((SwipeMenuView)childView).bindViewHolder(holder);
-                }
+            SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
+            SwipeMenu leftMenu = new SwipeMenu(menuLayout);
+            SwipeMenu rightMenu = new SwipeMenu(menuLayout);
+            mSwipeMenuCreator.onCreateMenu(leftMenu, rightMenu, position);
+
+            if (leftMenu.hasMenuItems()) {
+                SwipeMenuView menuView = (SwipeMenuView)menuLayout.getChildAt(0);
+                menuView.setOrientation(leftMenu.getOrientation());
+                menuView.createMenu(holder, leftMenu, menuLayout, LEFT_DIRECTION, mSwipeMenuItemClickListener);
+            }
+
+            if (rightMenu.hasMenuItems()) {
+                SwipeMenuView menuView = (SwipeMenuView)menuLayout.getChildAt(2);
+                menuView.setOrientation(rightMenu.getOrientation());
+                menuView.createMenu(holder, rightMenu, menuLayout, RIGHT_DIRECTION, mSwipeMenuItemClickListener);
             }
         }
 
-        mAdapter.onBindViewHolder(holder, position - getHeaderItemCount(), payloads);
+        mAdapter.onBindViewHolder(holder, position, payloads);
+    }
+
+    private Class<?> getSupperClass(Class<?> aClass) {
+        Class<?> supperClass = aClass.getSuperclass();
+        if (supperClass != null && !supperClass.equals(Object.class)) {
+            return getSupperClass(supperClass);
+        }
+        return aClass;
     }
 
     @Override
@@ -206,7 +194,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         if (isHeaderOrFooter(holder)) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
-            if (lp != null && lp instanceof StaggeredGridLayoutManager.LayoutParams) {
+            if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
                 StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams)lp;
                 p.setFullSpan(true);
             }

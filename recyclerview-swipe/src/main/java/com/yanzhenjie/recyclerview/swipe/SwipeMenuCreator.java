@@ -23,10 +23,9 @@ public interface SwipeMenuCreator {
     /**
      * Create menu for recyclerVie item.
      *
-     * @param swipeLeftMenu  The menu on the left.
-     * @param swipeRightMenu The menu on the right.
-     * @param viewType       The view type of the new view.
+     * @param leftMenu the menu on the left.
+     * @param rightMenu the menu on the right.
+     * @param position the position of item.
      */
-    void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType);
-
+    void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position);
 }

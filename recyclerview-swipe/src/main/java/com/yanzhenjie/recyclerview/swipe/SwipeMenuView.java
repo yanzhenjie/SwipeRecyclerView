@@ -37,11 +37,8 @@ import java.util.List;
  */
 public class SwipeMenuView extends LinearLayout implements View.OnClickListener {
 
-    private RecyclerView.ViewHolder mAdapterVIewHolder;
-    private SwipeSwitch mSwipeSwitch;
+    private RecyclerView.ViewHolder mViewHolder;
     private SwipeMenuItemClickListener mItemClickListener;
-    @SwipeMenuRecyclerView.DirectionMode
-    private int mDirection;
 
     public SwipeMenuView(Context context) {
         this(context, null);
@@ -55,14 +52,12 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
         super(context, attrs, defStyleAttr);
     }
 
-    public void createMenu(SwipeMenu swipeMenu, SwipeSwitch swipeSwitch,
-                           SwipeMenuItemClickListener swipeMenuItemClickListener,
-                           @SwipeMenuRecyclerView.DirectionMode int direction) {
+    public void createMenu(RecyclerView.ViewHolder viewHolder, SwipeMenu swipeMenu, SwipeSwitch swipeSwitch,
+        int direction, SwipeMenuItemClickListener itemClickListener) {
         removeAllViews();
 
-        this.mSwipeSwitch = swipeSwitch;
-        this.mItemClickListener = swipeMenuItemClickListener;
-        this.mDirection = direction;
+        this.mViewHolder = viewHolder;
+        this.mItemClickListener = itemClickListener;
 
         List<SwipeMenuItem> items = swipeMenu.getMenuItems();
         for (int i = 0; i < items.size(); i++) {
@@ -79,25 +74,26 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
             parent.setOnClickListener(this);
             addView(parent);
 
-            SwipeMenuBridge menuBridge = new SwipeMenuBridge(mDirection, i, mSwipeSwitch, parent);
+            SwipeMenuBridge menuBridge = new SwipeMenuBridge(swipeSwitch, direction, i);
             parent.setTag(menuBridge);
 
             if (item.getImage() != null) {
                 ImageView iv = createIcon(item);
-                menuBridge.mImageView = iv;
                 parent.addView(iv);
             }
 
             if (!TextUtils.isEmpty(item.getText())) {
                 TextView tv = createTitle(item);
-                menuBridge.mTextView = tv;
                 parent.addView(tv);
             }
         }
     }
 
-    public void bindViewHolder(RecyclerView.ViewHolder adapterVIewHolder) {
-        this.mAdapterVIewHolder = adapterVIewHolder;
+    @Override
+    public void onClick(View v) {
+        if (mItemClickListener != null) {
+            mItemClickListener.onItemClick((SwipeMenuBridge)v.getTag(), mViewHolder.getAdapterPosition());
+        }
     }
 
     private ImageView createIcon(SwipeMenuItem item) {
@@ -111,26 +107,13 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
         textView.setText(item.getText());
         textView.setGravity(Gravity.CENTER);
         int textSize = item.getTextSize();
-        if (textSize > 0)
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
+        if (textSize > 0) textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         ColorStateList textColor = item.getTitleColor();
-        if (textColor != null)
-            textView.setTextColor(textColor);
+        if (textColor != null) textView.setTextColor(textColor);
         int textAppearance = item.getTextAppearance();
-        if (textAppearance != 0)
-            TextViewCompat.setTextAppearance(textView, textAppearance);
+        if (textAppearance != 0) TextViewCompat.setTextAppearance(textView, textAppearance);
         Typeface typeface = item.getTextTypeface();
-        if (typeface != null)
-            textView.setTypeface(typeface);
+        if (typeface != null) textView.setTypeface(typeface);
         return textView;
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (mItemClickListener != null && mSwipeSwitch.isMenuOpen()) {
-            SwipeMenuBridge menuBridge = (SwipeMenuBridge) v.getTag();
-            menuBridge.mAdapterPosition = mAdapterVIewHolder.getAdapterPosition();
-            mItemClickListener.onItemClick(menuBridge);
-        }
     }
 }

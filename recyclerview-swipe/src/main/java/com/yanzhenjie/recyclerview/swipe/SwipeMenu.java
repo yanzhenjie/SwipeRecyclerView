@@ -15,8 +15,9 @@
  */
 package com.yanzhenjie.recyclerview.swipe;
 
-import android.content.Context;
+import android.support.annotation.FloatRange;
 import android.support.annotation.IntDef;
+import android.support.annotation.IntRange;
 import android.widget.LinearLayout;
 
 import java.lang.annotation.Retention;
@@ -31,23 +32,19 @@ public class SwipeMenu {
 
     @IntDef({HORIZONTAL, VERTICAL})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface OrientationMode {
-    }
+    public @interface OrientationMode {}
 
     public static final int HORIZONTAL = LinearLayout.HORIZONTAL;
     public static final int VERTICAL = LinearLayout.VERTICAL;
 
-    private SwipeMenuLayout mSwipeMenuLayout;
+    private SwipeMenuLayout mMenuLayout;
+    private int mOrientation;
+    private List<SwipeMenuItem> mSwipeMenuItems;
 
-    private int mViewType;
-
-    private int orientation = HORIZONTAL;
-
-    private List<SwipeMenuItem> mSwipeMenuItems = new ArrayList<>(2);
-
-    public SwipeMenu(SwipeMenuLayout swipeMenuLayout, int viewType) {
-        this.mSwipeMenuLayout = swipeMenuLayout;
-        this.mViewType = viewType;
+    public SwipeMenu(SwipeMenuLayout menuLayout) {
+        this.mMenuLayout = menuLayout;
+        this.mOrientation = SwipeMenu.HORIZONTAL;
+        this.mSwipeMenuItems = new ArrayList<>(2);
     }
 
     /**
@@ -55,11 +52,8 @@ public class SwipeMenu {
      *
      * @param openPercent such as 0.5F.
      */
-    public void setOpenPercent(float openPercent) {
-        if (openPercent != mSwipeMenuLayout.getOpenPercent()) {
-            openPercent = openPercent > 1 ? 1 : (openPercent < 0 ? 0 : openPercent);
-            mSwipeMenuLayout.setOpenPercent(openPercent);
-        }
+    public void setOpenPercent(@FloatRange(from = 0.1, to = 1) float openPercent) {
+        mMenuLayout.setOpenPercent(openPercent);
     }
 
     /**
@@ -67,31 +61,30 @@ public class SwipeMenu {
      *
      * @param scrollerDuration such 500.
      */
-    public void setScrollerDuration(int scrollerDuration) {
-        this.mSwipeMenuLayout.setScrollerDuration(scrollerDuration);
+    public void setScrollerDuration(@IntRange(from = 1) int scrollerDuration) {
+        mMenuLayout.setScrollerDuration(scrollerDuration);
     }
 
     /**
-     * Set the menu orientation.
+     * Set the menu mOrientation.
      *
      * @param orientation use {@link SwipeMenu#HORIZONTAL} or {@link SwipeMenu#VERTICAL}.
+     *
      * @see SwipeMenu#HORIZONTAL
      * @see SwipeMenu#VERTICAL
      */
     public void setOrientation(@OrientationMode int orientation) {
-        if (orientation != HORIZONTAL && orientation != VERTICAL)
-            throw new IllegalArgumentException("Use SwipeMenu#HORIZONTAL or SwipeMenu#VERTICAL.");
-        this.orientation = orientation;
+        this.mOrientation = orientation;
     }
 
     /**
-     * Get the menu orientation.
+     * Get the menu mOrientation.
      *
      * @return {@link SwipeMenu#HORIZONTAL} or {@link SwipeMenu#VERTICAL}.
      */
     @OrientationMode
     public int getOrientation() {
-        return orientation;
+        return mOrientation;
     }
 
     public void addMenuItem(SwipeMenuItem item) {
@@ -106,15 +99,7 @@ public class SwipeMenu {
         return mSwipeMenuItems;
     }
 
-    public SwipeMenuItem getMenuItem(int index) {
-        return mSwipeMenuItems.get(index);
-    }
-
-    public Context getContext() {
-        return mSwipeMenuLayout.getContext();
-    }
-
-    public int getViewType() {
-        return mViewType;
+    public boolean hasMenuItems() {
+        return !mSwipeMenuItems.isEmpty();
     }
 }

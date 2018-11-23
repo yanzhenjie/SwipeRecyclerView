@@ -265,7 +265,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
         @Override
         public void onItemClick(View itemView, int position) {
-            position = position - mRecyclerView.getHeaderItemCount();
+            position -= mRecyclerView.getHeaderItemCount();
             if (position >= 0) mCallback.onItemClick(itemView, position);
         }
     }
@@ -291,7 +291,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
 
         @Override
         public void onItemLongClick(View itemView, int position) {
-            position = position - mRecyclerView.getHeaderItemCount();
+            position -= mRecyclerView.getHeaderItemCount();
             if (position >= 0) mCallback.onItemLongClick(itemView, position);
         }
     }
@@ -325,12 +325,10 @@ public class SwipeMenuRecyclerView extends RecyclerView {
         }
 
         @Override
-        public void onItemClick(SwipeMenuBridge menuBridge) {
-            int position = menuBridge.getAdapterPosition();
-            position = position - mRecyclerView.getHeaderItemCount();
+        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+            position -= mRecyclerView.getHeaderItemCount();
             if (position >= 0) {
-                menuBridge.mAdapterPosition = position;
-                mCallback.onItemClick(menuBridge);
+                mCallback.onItemClick(menuBridge, position);
             }
         }
     }

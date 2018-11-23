@@ -25,6 +25,6 @@ public interface SwipeMenuItemClickListener {
      *
      * @param menuBridge menu.
      */
-    void onItemClick(SwipeMenuBridge menuBridge);
+    void onItemClick(SwipeMenuBridge menuBridge, int position);
 
 }
