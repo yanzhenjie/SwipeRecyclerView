@@ -1,95 +1,94 @@
-﻿我的主页：[http://www.yanzhenjie.com](http://www.yanzhenjie.com)  
-欢迎关注我的微博：[http://weibo.com/yanzhenjieit](http://weibo.com/yanzhenjieit)  
+﻿# SwipeMenuRecyclerView
 
-QQ技术交流群：[547839514](https://jq.qq.com/?_wv=1027&k=4CHkvzr)  
+作者的主页：[https://www.yanzhenjie.com](https://www.yanzhenjie.com)  
+技术交流群：[46505645](https://jq.qq.com/?_wv=1027&k=5wY8UWl)  
 
 ----
 
-本库是基于RecyclerView的封装。
+本库是基于RecyclerView的封装，提供了Item侧滑菜单、Item滑动删除、Item长按拖拽、添加HeaderView/FooterView、加载更多、Item点击监听等基本功能。
 
-> **注意**：本库在1.1.0版做了全新升级，没有最1.0.x版本做向下兼容，但是新版在API使用和功能方面都是个全新的升级。使用旧版本的同学升级时需要把ReadMe和Demo认真看一遍。
+## 特性
+1. Item侧滑菜单，支持水平分布、垂直分布
+2. Item长按拖拽、侧滑删除
+3. 添加/移除HeaderView/FooterView
+4. **自动/点击**加载更多的功能
+5. Sticky普通布局黏贴和ReyclerView分组黏贴
 
-# 特性
-1. 基于`List/Grid/StaggeredGrid`等`LayoutManager`的`Item`侧滑菜单。
-2. `Item`两侧侧滑菜单支持水平分布、垂直分布。
-3. `Item`拖拽排序、侧滑删除。
-4. 随时添加或者移除`HeaderView`和`FooterView`。
-5. 提供**自动/点击**加载更多的功能。[[为什么没有下拉刷新？](http://blog.csdn.net/yanzhenjie1003/article/details/75949335)][[ListView和GridView怎么办？](https://github.com/yanzhenjie/LoadMore)]
-6. 用`SwipeMenuLayout`在任何地方都可以实现你自己的侧滑菜单。
-7. 和`ViewPager`、`DrawerLayout`等滑动布局嵌套使用。
-8. `Sticky`普通布局黏贴和`ReyclerView`分组黏贴。
+> 使用本库只需要使用SwipeMenuRecyclerView即可，用法和原生RecyclerView一模一样，本库比原生的RecyclerView多了几个扩展方法。
 
-> **注意**：使用本库只需要使用`SwipeMenuRecyclerView`即可，可是使用任何第三方的Adapter，比如`BaseRecyclerViewAdapterHelper`。
+## 截图
+对上面提到的效果基本都有演示，但不是全部，更多效果可以下载Demo查看。
 
-# 截图
-对上面提到的效果都例举演示，但不是全部，更多效果可以下载Demo查看。
+### Item侧滑菜单
+<img src="./image/1.gif" width="180px"/> <img src="./image/2.gif" width="180px"/> <img src="./image/3.gif" width="180px"/>
 
-## Item侧滑菜单
-<image src="./image/1.gif" width="180px"/> <image src="./image/2.gif" width="180px"/> <image src="./image/3.gif" width="180px"/>
+### Item侧滑删除、拖拽
+<img src="./image/4.gif" width="180px"/> <img src="./image/5.gif" width="180px"/> <img src="./image/6.gif" width="180px"/>
 
-## Item侧滑删除、拖拽
-<image src="./image/4.gif" width="180px"/> <image src="./image/5.gif" width="180px"/> <image src="./image/6.gif" width="180px"/>
+### 下拉刷新和加载更多
+<img src="./image/7.gif" width="180px"/>
 
-## 下拉刷新和加载更多
-<image src="./image/7.gif" width="180px"/>
+### HeaderView和FooterView
+<img src="./image/8.gif" width="180px"/>
 
-## HeaderView和FooterView
-<image src="./image/8.gif" width="180px"/>
+### Sticky效果和Item分组
+<img src="./image/9.gif" width="180px"/>  <img src="./image/10.gif" width="180px"/>
 
-## Sticky效果和Item分组
-<image src="./image/9.gif" width="180px"/>  <image src="./image/10.gif" width="180px"/>
+### 和DrawerLayout嵌套
+<img src="./image/11.gif" width="180px"/>
 
-## 和DrawerLayout嵌套
-<image src="./image/11.gif" width="180px"/>
-
-# 如何使用
-首先引入`SwipeRecyclerView`到你的项目中，然后就可以进行开发工作了。
-
-## 引入
-* Gradle
+## 如何使用
+首先在要使用本库的`module`的`build.gradle`中添加依赖：
 ```groovy
-compile 'com.yanzhenjie:recyclerview-swipe:1.1.4'
+implementation 'com.yanzhenjie:recyclerview-swipe:1.2.0'
 ```
 
-* Maven
-```xml
-<dependency>
-  <groupId>com.yanzhenjie</groupId>
-  <artifactId>recyclerview-swipe</artifactId>
-  <version>1.1.4</version>
-</dependency>
+<b><font color="red">特别注意1</font></b>：从1.2.0版本开始，`SwipeMenuCreator`的`onCreateMenu()`方法的第三个参数，**由原来的Item对应的`viewType`变成Item对应的`position`**，即由：
+```java
+public interface SwipeMenuCreator {
+    void onCreateMenu(..., int viewType);
+}
+```
+变成：
+```java
+public interface SwipeMenuCreator {
+    void onCreateMenu(..., int position);
+}
 ```
 
-## 开发
-在xml中引用SwipeRecyclerView：
+<b><font color="red">特别注意2</font></b>：从1.2.0版本开始，`SwipeMenuRecyclerView`底层创建Item菜单的时机不再是`onCreateViewHolder()`时了，而是在`onBindViewHolder()`时，也就是说**每次刷新Item时菜单将会被重新创建**，也就是说**Item菜单支持刷新啦**。
+
+使用该项目时如果遇到任何问题，请加本文档开头给出的QQ技术群进行讨论或者咨询作者本人。
+
+### 加入布局
+在布局的xml中加入`SwipeMenuRecyclerView`：
 ```xml
 <com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
     .../>
 ```
 
-**注意**：
-1. 新版从1.1.0开始不再需要继承`SwipeMenuAdapter`了，只需要使用`SwipeMenuRecyclerView`即可。
-2. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`item position`。
-
 ### ItemDecoration
 也就是分割线，支持Grid形式和Linear形式，可以选择某个ViewType不画分割线：
 ```java
 // 默认构造，传入颜色即可。
-new DefaultDecoration(color);
+ItemDecoration itemDecoration = new DefaultDecoration(color);
 
-// 颜色，宽，高，最后一个参数是不画分割线的ViewType，可以传入多个。
-new DefaultDecoration(color, width, height, excludeViewType);
+// 或者：颜色，宽，高，最后一个参数是不画分割线的ViewType，可以传入多个。
+itemDecoration = new DefaultDecoration(color, width, height, excludeViewType);
 
-// 例如下面的123都是不画分割线的ViewType：
-new DefaultDecoration(color, width, height, 1, 2, 3);
+// 或者：例如下面的123都是不画分割线的ViewType：
+itemDecoration = new DefaultDecoration(color, width, height, 1, 2, 3);
+
+SwipeMenuRecyclerView recyclerView = ...;
+recyclerView.setDecoration(itemDecoration);
 ```
 
 ### Item点击监听
-```
+```java
 recyclerView.setSwipeItemClickListener(new SwipeItemClickListener() {
     @Override
     public void onItemClick(View view, int position) {
-        // TODO，搞事情...
+        // TODO...
     }
 });
 ```
@@ -102,7 +101,7 @@ swipeRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
 // 创建菜单：
 SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
     @Override
-    public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int viewType) {
+    public void onCreateMenu(SwipeMenu leftMenu, SwipeMenu rightMenu, int position) {
         SwipeMenuItem deleteItem = new SwipeMenuItem(mContext)
             ...; // 各种文字和图标属性设置。
         leftMenu.addMenuItem(deleteItem); // 在Item左侧添加一个菜单。
@@ -120,13 +119,14 @@ swipeRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
 
 SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
     @Override
-    public void onItemClick(SwipeMenuBridge menuBridge) {
+    public void onItemClick(SwipeMenuBridge menuBridge, int position) {
         // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
         menuBridge.closeMenu();
         
-        int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-        int adapterPosition = menuBridge.getAdapterPosition(); // RecyclerView的Item的position。
-        int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+        // 左侧还是右侧菜单：
+        int direction = menuBridge.getDirection();
+        // 菜单在Item中的Position：
+        int menuPosition = menuBridge.getPosition();
     }
 };
 ```
@@ -140,7 +140,7 @@ SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListen
 拖拽和侧滑删除的功能默认关闭的，所以先要打开功能：
 ```java
 recyclerView.setLongPressDragEnabled(true); // 拖拽排序，默认关闭。
-recyclerView.setItemViewSwipeEnabled(true); // 策划删除，默认关闭。
+recyclerView.setItemViewSwipeEnabled(true); // 侧滑删除，默认关闭。
 ```
 
 只需要设置上面两个属性就可以进行相应的动作了，如果不需要哪个，不要打开就可以了。
@@ -152,19 +152,25 @@ recyclerView.setOnItemMoveListener(mItemMoveListener);// 监听拖拽，更新UI
 OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
     @Override
     public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
+        // 此方法在Item拖拽交换位置时被调用。
+        // 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+
+        // 交换数据，并更新adapter。
         int fromPosition = srcHolder.getAdapterPosition();
         int toPosition = targetHolder.getAdapterPosition();
-        
-        // Item被拖拽时，交换数据，并更新adapter。
         Collections.swap(mDataList, fromPosition, toPosition);
         adapter.notifyItemMoved(fromPosition, toPosition);
+
+        // 返回true，表示数据交换成功，ItemView可以交换位置。
         return true;
     }
 
     @Override
     public void onItemDismiss(ViewHolder srcHolder) {
+        // 此方法在Item在侧滑删除时被调用。
+
+        // 从数据源移除该Item对应的数据，并刷新Adapter。
         int position = srcHolder.getAdapterPosition();
-        // Item被侧滑删除时，删除数据，并更新adapter。
         mDataList.remove(position);
         adapter.notifyItemRemoved(position);
     }
@@ -177,12 +183,15 @@ OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
 public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
     int fromPosition = srcHolder.getAdapterPosition();
     int toPosition = targetHolder.getAdapterPosition();
-    if (fromPosition < toPosition)
-        for (int i = fromPosition; i < toPosition; i++)
+    if (fromPosition < toPosition) {
+        for (int i = fromPosition; i < toPosition; i++) {
             Collections.swap(mDataList, i, i + 1);
-    else
-        for (int i = fromPosition; i > toPosition; i--)
+        }
+    } else {
+        for (int i = fromPosition; i > toPosition; i--) {
             Collections.swap(mDataList, i, i - 1);
+        }
+    }
 
     mMenuAdapter.notifyItemMoved(fromPosition, toPosition);
     return true;
@@ -229,13 +238,13 @@ getHeaderItemCount(); // 获取HeaderView个数。
 getFooterItemCount(); // 获取FooterView个数。
 getItemViewType(int); // 获取Item的ViewType，包括HeaderView、FooterView、普通ItemView。
 ```
-添加/移除HeaderView/FooterView喝setAdapter()的调用不分先后顺序。
+添加/移除`HeaderView`/`FooterView`和`setAdapter()`的调用不分先后顺序。
 
 **特别注意**：
-1. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`item position`。
+1. 如果添加了`HeaderView`，凡是通过`ViewHolder`拿到的`position`都要减掉`HeaderView`的数量才能得到正确的`position`。
 
 ### 加载更多
-本库默认提供了加载更多的动画和View，开发者也可以自定义；默认支持`RecyclerView`自带的三种布局管理器。
+本库默认提供了加载更多的动画和View，开发者也可以自定义，默认支持`RecyclerView`自带的三种布局管理器。
 
 默认加载更多：
 ```java
@@ -329,28 +338,16 @@ public class DefineLoadMoreView extends LinearLayout
 }
 ```
 
-# 混淆
-```
--keepclasseswithmembers class android.support.v7.widget.RecyclerView$ViewHolder {
-   public final View *;
-}
-```
-其它类都是可以混淆的，如果添加了上述规则后还是存在问题，那么再追加：
-```
--dontwarn com.yanzhenjie.recyclerview.swipe.**
--keep class com.yanzhenjie.recyclerview.swipe.** {*;}
-```
-
-# 引用资料
+## 引用资料
 * [cube-sdk](https://github.com/liaohuqiu/cube-sdk)
 * [SwipeMenu](https://github.com/TUBB/SwipeMenu/)
 * [HeaderAndFooterWrapper](https://github.com/hongyangAndroid/baseAdapter/blob/master/baseadapter-recyclerview/src/main/java/com/zhy/adapter/recyclerview/wrapper/HeaderAndFooterWrapper.java)
 
 加载更多的灵感来自`cube-sdk`，侧滑菜单参考了`SwipeMenu`，添加`HeaderView`参考了`HeaderAndFooterWrapper`类，特别感谢上述开源库及其作者。
 
-# License
+## License
 ```text
-Copyright 2017 Yan Zhenjie
+Copyright 2018 Zhenjie Yan
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
