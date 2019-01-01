@@ -161,16 +161,20 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
             SwipeMenu rightMenu = new SwipeMenu(menuLayout);
             mSwipeMenuCreator.onCreateMenu(leftMenu, rightMenu, position);
 
+            SwipeMenuView leftMenuView = (SwipeMenuView)menuLayout.getChildAt(0);
             if (leftMenu.hasMenuItems()) {
-                SwipeMenuView menuView = (SwipeMenuView)menuLayout.getChildAt(0);
-                menuView.setOrientation(leftMenu.getOrientation());
-                menuView.createMenu(holder, leftMenu, menuLayout, LEFT_DIRECTION, mSwipeMenuItemClickListener);
+                leftMenuView.setOrientation(leftMenu.getOrientation());
+                leftMenuView.createMenu(holder, leftMenu, menuLayout, LEFT_DIRECTION, mSwipeMenuItemClickListener);
+            } else if (leftMenuView.getChildCount() > 0) {
+                leftMenuView.removeAllViews();
             }
 
+            SwipeMenuView rightMenuView = (SwipeMenuView)menuLayout.getChildAt(2);
             if (rightMenu.hasMenuItems()) {
-                SwipeMenuView menuView = (SwipeMenuView)menuLayout.getChildAt(2);
-                menuView.setOrientation(rightMenu.getOrientation());
-                menuView.createMenu(holder, rightMenu, menuLayout, RIGHT_DIRECTION, mSwipeMenuItemClickListener);
+                rightMenuView.setOrientation(rightMenu.getOrientation());
+                rightMenuView.createMenu(holder, rightMenu, menuLayout, RIGHT_DIRECTION, mSwipeMenuItemClickListener);
+            } else if (rightMenuView.getChildCount() > 0) {
+                rightMenuView.removeAllViews();
             }
         }
 
