@@ -15,7 +15,7 @@ android {
 }
 
 dependencies {
-    implementation rootProject.ext.dependencies.recyclerView
+    compileOnly rootProject.ext.dependencies.recyclerView
 }
 
 apply from: "https://raw.githubusercontent.com/yanzhenjie/bintray/master/maven.gradle"
