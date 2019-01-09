@@ -576,23 +576,37 @@ public class SwipeMenuRecyclerView extends RecyclerView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
         boolean isIntercepted = super.onInterceptTouchEvent(e);
-        if (allowSwipeDelete || !mSwipeItemMenuEnable || mSwipeMenuCreator == null) {
+        if (allowSwipeDelete || mSwipeMenuCreator == null) {
             return isIntercepted;
         } else {
             if (e.getPointerCount() > 1) return true;
             int action = e.getAction();
             int x = (int)e.getX();
             int y = (int)e.getY();
+
+            int touchPosition = getChildAdapterPosition(findChildViewUnder(x, y));
+            ViewHolder touchVH = findViewHolderForAdapterPosition(touchPosition);
+            SwipeMenuLayout touchView = null;
+            if (touchVH != null) {
+                View itemView = getSwipeMenuView(touchVH.itemView);
+                if (itemView instanceof SwipeMenuLayout) {
+                    touchView = (SwipeMenuLayout)itemView;
+                }
+            }
+
+            boolean touchMenuEnable = mSwipeItemMenuEnable && !mDisableSwipeItemMenuList.contains(touchPosition);
+            if (touchView != null) {
+                touchView.setSwipeEnable(touchMenuEnable);
+            }
+            if (!touchMenuEnable) return isIntercepted;
+
             switch (action) {
                 case MotionEvent.ACTION_DOWN: {
                     mDownX = x;
                     mDownY = y;
 
-                    int touchingPosition = getChildAdapterPosition(findChildViewUnder(x, y));
-                    if (mDisableSwipeItemMenuList.contains(touchingPosition)) break;
-
                     isIntercepted = false;
-                    if (touchingPosition != mOldTouchedPosition && mOldSwipedLayout != null &&
+                    if (touchPosition != mOldTouchedPosition && mOldSwipedLayout != null &&
                         mOldSwipedLayout.isMenuOpen()) {
                         mOldSwipedLayout.smoothCloseMenu();
                         isIntercepted = true;
@@ -601,15 +615,9 @@ public class SwipeMenuRecyclerView extends RecyclerView {
                     if (isIntercepted) {
                         mOldSwipedLayout = null;
                         mOldTouchedPosition = INVALID_POSITION;
-                    } else {
-                        ViewHolder vh = findViewHolderForAdapterPosition(touchingPosition);
-                        if (vh != null) {
-                            View itemView = getSwipeMenuView(vh.itemView);
-                            if (itemView instanceof SwipeMenuLayout) {
-                                mOldSwipedLayout = (SwipeMenuLayout)itemView;
-                                mOldTouchedPosition = touchingPosition;
-                            }
-                        }
+                    } else if (touchView != null) {
+                        mOldSwipedLayout = touchView;
+                        mOldTouchedPosition = touchPosition;
                     }
                     break;
                 }

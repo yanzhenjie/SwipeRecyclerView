@@ -15,14 +15,14 @@
  */
 package com.yanzhenjie.recyclerview.swipe.touch;
 
-import android.support.v7.widget.helper.CompatItemTouchHelper;
+import android.support.v7.widget.helper.ItemTouchHelper;
 
 /**
  * Created by Yolanda on 2016/4/19.
  */
-public class DefaultItemTouchHelper extends CompatItemTouchHelper {
+public class DefaultItemTouchHelper extends ItemTouchHelper {
 
-    private DefaultItemTouchHelperCallback mDefaultItemTouchHelperCallback;
+    private DefaultItemTouchHelperCallback mItemTouchHelperCallback;
 
     /**
      * Create default item touch helper.
@@ -36,7 +36,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      */
     private DefaultItemTouchHelper(DefaultItemTouchHelperCallback callback) {
         super(callback);
-        mDefaultItemTouchHelperCallback = (DefaultItemTouchHelperCallback) getCallback();
+        mItemTouchHelperCallback = callback;
     }
 
     /**
@@ -45,7 +45,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @param onItemMoveListener {@link OnItemMoveListener}.
      */
     public void setOnItemMoveListener(OnItemMoveListener onItemMoveListener) {
-        mDefaultItemTouchHelperCallback.setOnItemMoveListener(onItemMoveListener);
+        mItemTouchHelperCallback.setOnItemMoveListener(onItemMoveListener);
     }
 
     /**
@@ -54,7 +54,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @return {@link OnItemMoveListener}.
      */
     public OnItemMoveListener getOnItemMoveListener() {
-        return mDefaultItemTouchHelperCallback.getOnItemMoveListener();
+        return mItemTouchHelperCallback.getOnItemMoveListener();
     }
 
     /**
@@ -63,7 +63,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @param onItemMovementListener {@link OnItemMovementListener}.
      */
     public void setOnItemMovementListener(OnItemMovementListener onItemMovementListener) {
-        mDefaultItemTouchHelperCallback.setOnItemMovementListener(onItemMovementListener);
+        mItemTouchHelperCallback.setOnItemMovementListener(onItemMovementListener);
     }
 
     /**
@@ -72,7 +72,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @return {@link OnItemMovementListener}.
      */
     public OnItemMovementListener getOnItemMovementListener() {
-        return mDefaultItemTouchHelperCallback.getOnItemMovementListener();
+        return mItemTouchHelperCallback.getOnItemMovementListener();
     }
 
     /**
@@ -81,7 +81,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @param canDrag drag true, otherwise is can't.
      */
     public void setLongPressDragEnabled(boolean canDrag) {
-        mDefaultItemTouchHelperCallback.setLongPressDragEnabled(canDrag);
+        mItemTouchHelperCallback.setLongPressDragEnabled(canDrag);
     }
 
     /**
@@ -90,9 +90,8 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @return drag true, otherwise is can't.
      */
     public boolean isLongPressDragEnabled() {
-        return mDefaultItemTouchHelperCallback.isLongPressDragEnabled();
+        return mItemTouchHelperCallback.isLongPressDragEnabled();
     }
-
 
     /**
      * Set can long press swipe.
@@ -100,7 +99,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @param canSwipe swipe true, otherwise is can't.
      */
     public void setItemViewSwipeEnabled(boolean canSwipe) {
-        mDefaultItemTouchHelperCallback.setItemViewSwipeEnabled(canSwipe);
+        mItemTouchHelperCallback.setItemViewSwipeEnabled(canSwipe);
     }
 
     /**
@@ -109,7 +108,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @return swipe true, otherwise is can't.
      */
     public boolean isItemViewSwipeEnabled() {
-        return this.mDefaultItemTouchHelperCallback.isItemViewSwipeEnabled();
+        return this.mItemTouchHelperCallback.isItemViewSwipeEnabled();
     }
 
     /**
@@ -118,7 +117,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @param onItemStateChangedListener {@link OnItemStateChangedListener}.
      */
     public void setOnItemStateChangedListener(OnItemStateChangedListener onItemStateChangedListener) {
-        this.mDefaultItemTouchHelperCallback.setOnItemStateChangedListener(onItemStateChangedListener);
+        this.mItemTouchHelperCallback.setOnItemStateChangedListener(onItemStateChangedListener);
     }
 
     /**
@@ -127,7 +126,7 @@ public class DefaultItemTouchHelper extends CompatItemTouchHelper {
      * @return {@link OnItemStateChangedListener}.
      */
     public OnItemStateChangedListener getOnItemStateChangedListener() {
-        return this.mDefaultItemTouchHelperCallback.getOnItemStateChangedListener();
+        return this.mItemTouchHelperCallback.getOnItemStateChangedListener();
     }
 
 }
