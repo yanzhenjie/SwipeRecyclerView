@@ -50,6 +50,8 @@ import java.util.List;
  */
 public class MenuActivity extends AppCompatActivity {
 
+    private GroupAdapter mAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +69,10 @@ public class MenuActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
         recyclerView.setSwipeMenuCreator(mSwipeMenuCreator);
 
-        GroupAdapter adapter = new GroupAdapter();
-        recyclerView.setAdapter(adapter);
+        mAdapter = new GroupAdapter();
+        recyclerView.setAdapter(mAdapter);
 
-        adapter.setListItems(createDataList());
+        mAdapter.setListItems(createDataList());
     }
 
     /**
@@ -78,7 +80,8 @@ public class MenuActivity extends AppCompatActivity {
      */
     private SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
         @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int viewType) {
+        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
+            int viewType = mAdapter.getItemViewType(position);
             if (viewType == GroupAdapter.VIEW_TYPE_NON_STICKY) {
                 int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
 
