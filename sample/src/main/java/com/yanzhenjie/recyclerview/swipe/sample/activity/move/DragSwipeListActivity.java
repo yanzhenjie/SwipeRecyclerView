@@ -54,7 +54,7 @@ public class DragSwipeListActivity extends BaseDragActivity {
         });
 
         mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
-        mRecyclerView.setItemViewSwipeEnabled(true); // 滑动删除，默认关闭。
+        mRecyclerView.setItemViewSwipeEnabled(false); // 滑动删除，默认关闭。
     }
 
     @Override

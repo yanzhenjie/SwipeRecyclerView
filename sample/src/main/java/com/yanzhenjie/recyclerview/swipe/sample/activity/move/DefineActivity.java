@@ -46,7 +46,7 @@ public class DefineActivity extends BaseDragActivity {
         View header = getLayoutInflater().inflate(R.layout.layout_header_switch, mRecyclerView, false);
         mRecyclerView.addHeaderView(header);
 
-        SwitchCompat switchCompat = (SwitchCompat) header.findViewById(R.id.switch_compat);
+        SwitchCompat switchCompat = header.findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -56,7 +56,7 @@ public class DefineActivity extends BaseDragActivity {
         });
 
         mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
-        mRecyclerView.setItemViewSwipeEnabled(true); // 滑动删除，默认关闭。
+        mRecyclerView.setItemViewSwipeEnabled(false); // 滑动删除，默认关闭。
 
         // 自定义拖拽控制参数。
         mRecyclerView.setOnItemMovementListener(mItemMovementListener);
@@ -84,12 +84,10 @@ public class DefineActivity extends BaseDragActivity {
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
             if (layoutManager instanceof GridLayoutManager) {
                 // Grid可以上下左右拖拽。
-                return OnItemMovementListener.LEFT |
-                        OnItemMovementListener.UP |
-                        OnItemMovementListener.RIGHT |
-                        OnItemMovementListener.DOWN;
+                return OnItemMovementListener.LEFT | OnItemMovementListener.UP | OnItemMovementListener.RIGHT |
+                    OnItemMovementListener.DOWN;
             } else if (layoutManager instanceof LinearLayoutManager) {
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager)layoutManager;
 
                 // 横向List只能左右拖拽。
                 if (linearLayoutManager.getOrientation() == LinearLayoutManager.HORIZONTAL) {
@@ -120,7 +118,7 @@ public class DefineActivity extends BaseDragActivity {
 
             RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
             if (layoutManager instanceof GridLayoutManager) {
-                LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
+                LinearLayoutManager manager = (LinearLayoutManager)layoutManager;
                 // 横向Grid上下侧滑。
                 if (manager.getOrientation() == LinearLayoutManager.HORIZONTAL) {
                     return ItemTouchHelper.UP | ItemTouchHelper.DOWN;
@@ -130,7 +128,7 @@ public class DefineActivity extends BaseDragActivity {
                     return ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                 }
             } else if (layoutManager instanceof LinearLayoutManager) {
-                LinearLayoutManager manager = (LinearLayoutManager) layoutManager;
+                LinearLayoutManager manager = (LinearLayoutManager)layoutManager;
                 // 横向List上下侧滑。
                 if (manager.getOrientation() == LinearLayoutManager.HORIZONTAL) {
                     return OnItemMovementListener.UP | OnItemMovementListener.DOWN;
@@ -160,12 +158,13 @@ public class DefineActivity extends BaseDragActivity {
                 if (toPosition == 0) {// 保证第一个不被挤走。
                     return false;
                 }
-                if (fromPosition < toPosition)
+                if (fromPosition < toPosition) {
                     for (int i = fromPosition; i < toPosition; i++)
                         Collections.swap(mDataList, i, i + 1);
-                else
+                } else {
                     for (int i = fromPosition; i > toPosition; i--)
                         Collections.swap(mDataList, i, i - 1);
+                }
 
                 mAdapter.notifyItemMoved(fromPosition, toPosition);
 
