@@ -491,39 +491,6 @@ public class SwipeMenuLayout extends FrameLayout implements SwipeSwitch {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int contentViewHeight = 0;
-
-        if (mContentView != null) {
-            measureChildWithMargins(mContentView, widthMeasureSpec, 0, heightMeasureSpec, 0);
-            contentViewHeight = mContentView.getMeasuredHeight();
-        }
-
-        if (mSwipeLeftHorizontal != null) {
-            View leftMenu = mSwipeLeftHorizontal.getMenuView();
-            int menuViewHeight = contentViewHeight == 0 ? leftMenu.getMeasuredHeightAndState() : contentViewHeight;
-
-            int menuWidthSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
-            int menuHeightSpec = MeasureSpec.makeMeasureSpec(menuViewHeight, MeasureSpec.EXACTLY);
-            leftMenu.measure(menuWidthSpec, menuHeightSpec);
-        }
-
-        if (mSwipeRightHorizontal != null) {
-            View rightMenu = mSwipeRightHorizontal.getMenuView();
-            int menuViewHeight = contentViewHeight == 0 ? rightMenu.getMeasuredHeightAndState() : contentViewHeight;
-
-            int menuWidthSpec = MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.AT_MOST);
-            int menuHeightSpec = MeasureSpec.makeMeasureSpec(menuViewHeight, MeasureSpec.EXACTLY);
-            rightMenu.measure(menuWidthSpec, menuHeightSpec);
-        }
-
-        if (contentViewHeight > 0) {
-            setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), contentViewHeight);
-        }
-    }
-
-    @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int contentViewHeight;
         if (mContentView != null) {
