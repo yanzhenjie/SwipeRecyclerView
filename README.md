@@ -40,7 +40,7 @@
 ## 如何使用
 首先在要使用本库的`module`的`build.gradle`中添加依赖：
 ```groovy
-implementation 'com.yanzhenjie:recyclerview-swipe:1.2.0'
+implementation 'com.yanzhenjie:recyclerview-swipe:1.2.1'
 ```
 
 <b><font color="red">特别注意1</font></b>：从1.2.0版本开始，`SwipeMenuCreator`的`onCreateMenu()`方法的第三个参数，**由原来的Item对应的`viewType`变成Item对应的`position`**，即由：
@@ -338,7 +338,7 @@ public class DefineLoadMoreView extends LinearLayout
 }
 ```
 
-## 引用资料
+## 感谢与参考
 * [cube-sdk](https://github.com/liaohuqiu/cube-sdk)
 * [SwipeMenu](https://github.com/TUBB/SwipeMenu/)
 * [HeaderAndFooterWrapper](https://github.com/hongyangAndroid/baseAdapter/blob/master/baseadapter-recyclerview/src/main/java/com/zhy/adapter/recyclerview/wrapper/HeaderAndFooterWrapper.java)
@@ -347,7 +347,7 @@ public class DefineLoadMoreView extends LinearLayout
 
 ## License
 ```text
-Copyright 2018 Zhenjie Yan
+Copyright 2019 Zhenjie Yan
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
