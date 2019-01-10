@@ -155,7 +155,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         View itemView = holder.itemView;
         position -= getHeaderItemCount();
 
-        if (itemView instanceof SwipeMenuLayout) {
+        if (itemView instanceof SwipeMenuLayout && mSwipeMenuCreator != null) {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
             SwipeMenu leftMenu = new SwipeMenu(menuLayout);
             SwipeMenu rightMenu = new SwipeMenu(menuLayout);
