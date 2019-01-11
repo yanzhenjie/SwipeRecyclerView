@@ -46,6 +46,7 @@ ext {
                     cardView           : 'com.android.support:cardview-v7:27.1.1',
 
                     supportRecyclerView: 'com.android.support:recyclerview-v7:27.1.1',
+                    xRecyclerView      : 'androidx.recyclerview:recyclerview:1.0.0',
 
                     swipeRecyclerView  : 'com.yanzhenjie:recyclerview-swipe:1.2.1']
 }

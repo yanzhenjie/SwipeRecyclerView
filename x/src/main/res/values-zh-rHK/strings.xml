@@ -16,10 +16,10 @@
 -->
 <resources>
 
-    <string name="recycler_swipe_data_empty">暂时没有数据</string>
-    <string name="recycler_swipe_more_not">没有更多数据啦</string>
-    <string name="recycler_swipe_click_load_more">点击加载更多</string>
-    <string name="recycler_swipe_load_error">加载出错啦，请稍后重试</string>
-    <string name="recycler_swipe_load_more_message">正在加载更多数据，请稍后</string>
+    <string name="x_recycler_data_empty">暫時沒有數據</string>
+    <string name="x_recycler_more_not">沒有更多數據啦</string>
+    <string name="x_recycler_click_load_more">點擊加載更多</string>
+    <string name="x_recycler_load_error">加載出錯啦，請稍後重試</string>
+    <string name="x_recycler_load_more_message">正在加載更多數據，請稍後</string>
 
 </resources>

@@ -16,10 +16,10 @@
 -->
 <resources>
 
-    <color name="recycler_swipe_color_text_gray">#FF777777</color>
-
-    <color name="recycler_swipe_color_loading_color1">#55777777</color>
-    <color name="recycler_swipe_color_loading_color2">#B1777777</color>
-    <color name="recycler_swipe_color_loading_color3">#FF777777</color>
+    <string name="x_recycler_data_empty">暫時沒有數據</string>
+    <string name="x_recycler_more_not">沒有更多數據啦</string>
+    <string name="x_recycler_click_load_more">點擊加載更多</string>
+    <string name="x_recycler_load_error">加載出錯啦，請稍後重試</string>
+    <string name="x_recycler_load_more_message">正在加載更多數據，請稍後</string>
 
 </resources>

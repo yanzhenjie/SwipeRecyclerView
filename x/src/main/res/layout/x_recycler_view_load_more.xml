@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:textColor="@color/recycler_swipe_color_text_gray"
+        android:textColor="@color/x_recycler_color_text_gray"
         android:visibility="gone"
         tools:text="Loading..."
         tools:visibility="invisible"/>

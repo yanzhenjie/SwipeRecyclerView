@@ -1,0 +1,3 @@
+-keepclasseswithmembers class androidx.recyclerview.widget.RecyclerView$ViewHolder {
+   public final View *;
+}
