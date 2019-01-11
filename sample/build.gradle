@@ -18,6 +18,6 @@ dependencies {
 
     implementation rootProject.ext.dependencies.appCompat
     implementation rootProject.ext.dependencies.design
-    implementation rootProject.ext.dependencies.recyclerView
+    implementation rootProject.ext.dependencies.supportRecyclerView
     implementation rootProject.ext.dependencies.cardView
 }

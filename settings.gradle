@@ -1,1 +1,1 @@
-include ':sample', ':recyclerview-swipe'
+include ':sample', ':support'

@@ -41,9 +41,11 @@ ext {
                bintrayUser   : 'yolanda',
                bintrayLicense: "Apache-2.0"]
 
-    dependencies = [appCompat        : 'com.android.support:appcompat-v7:27.1.1',
-                    design           : 'com.android.support:design:27.1.1',
-                    cardView         : 'com.android.support:cardview-v7:27.1.1',
-                    recyclerView     : 'com.android.support:recyclerview-v7:27.1.1',
-                    swipeRecyclerView: 'com.yanzhenjie:recyclerview-swipe:1.2.1']
+    dependencies = [appCompat          : 'com.android.support:appcompat-v7:27.1.1',
+                    design             : 'com.android.support:design:27.1.1',
+                    cardView           : 'com.android.support:cardview-v7:27.1.1',
+
+                    supportRecyclerView: 'com.android.support:recyclerview-v7:27.1.1',
+
+                    swipeRecyclerView  : 'com.yanzhenjie:recyclerview-swipe:1.2.1']
 }
