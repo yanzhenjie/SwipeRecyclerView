@@ -76,7 +76,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return getHeaderItemCount() + getContentItemCount() + getFooterItemCount();
+        return getHeaderCount() + getContentItemCount() + getFooterCount();
     }
 
     private int getContentItemCount() {
@@ -85,23 +85,28 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        if (isHeaderView(position)) {
+        if (isHeader(position)) {
             return mHeaderViews.keyAt(position);
-        } else if (isFooterView(position)) {
-            return mFootViews.keyAt(position - getHeaderItemCount() - getContentItemCount());
+        } else if (isFooter(position)) {
+            return mFootViews.keyAt(position - getHeaderCount() - getContentItemCount());
         }
-        return mAdapter.getItemViewType(position - getHeaderItemCount());
+        return mAdapter.getItemViewType(position - getHeaderCount());
     }
 
+    @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (mHeaderViews.get(viewType) != null) {
-            return new ViewHolder(mHeaderViews.get(viewType));
-        } else if (mFootViews.get(viewType) != null) {
-            return new ViewHolder(mFootViews.get(viewType));
+        View contentView = mHeaderViews.get(viewType);
+        if (contentView != null) {
+            return new ViewHolder(contentView);
         }
-        final RecyclerView.ViewHolder viewHolder = mAdapter.onCreateViewHolder(parent, viewType);
 
+        contentView = mFootViews.get(viewType);
+        if (contentView != null) {
+            return new ViewHolder(contentView);
+        }
+
+        final RecyclerView.ViewHolder viewHolder = mAdapter.onCreateViewHolder(parent, viewType);
         if (mOnItemClickListener != null) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -122,7 +127,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (mSwipeMenuCreator == null) return viewHolder;
 
-        final View contentView = mInflater.inflate(R.layout.support_recycler_view_item, parent, false);
+        contentView = mInflater.inflate(R.layout.support_recycler_view_item, parent, false);
         ViewGroup viewGroup = contentView.findViewById(R.id.swipe_content);
         viewGroup.addView(viewHolder.itemView);
 
@@ -135,6 +140,14 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return viewHolder;
     }
 
+    private Class<?> getSupperClass(Class<?> aClass) {
+        Class<?> supperClass = aClass.getSuperclass();
+        if (supperClass != null && !supperClass.equals(Object.class)) {
+            return getSupperClass(supperClass);
+        }
+        return aClass;
+    }
+
     @Override
     public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
     }
@@ -145,7 +158,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (isHeaderOrFooter(holder)) return;
 
         View itemView = holder.itemView;
-        position -= getHeaderItemCount();
+        position -= getHeaderCount();
 
         if (itemView instanceof SwipeMenuLayout && mSwipeMenuCreator != null) {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
@@ -173,14 +186,6 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         mAdapter.onBindViewHolder(holder, position, payloads);
     }
 
-    private Class<?> getSupperClass(Class<?> aClass) {
-        Class<?> supperClass = aClass.getSuperclass();
-        if (supperClass != null && !supperClass.equals(Object.class)) {
-            return getSupperClass(supperClass);
-        }
-        return aClass;
-    }
-
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mAdapter.onAttachedToRecyclerView(recyclerView);
@@ -206,24 +211,24 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public boolean isHeaderOrFooter(int position) {
-        return isHeaderView(position) || isFooterView(position);
+        return isHeader(position) || isFooter(position);
     }
 
-    public boolean isHeaderView(int position) {
-        return position >= 0 && position < getHeaderItemCount();
+    public boolean isHeader(int position) {
+        return position >= 0 && position < getHeaderCount();
     }
 
-    public boolean isFooterView(int position) {
-        return position >= getHeaderItemCount() + getContentItemCount();
+    public boolean isFooter(int position) {
+        return position >= getHeaderCount() + getContentItemCount();
     }
 
     public void addHeaderView(View view) {
-        mHeaderViews.put(getHeaderItemCount() + BASE_ITEM_TYPE_HEADER, view);
+        mHeaderViews.put(getHeaderCount() + BASE_ITEM_TYPE_HEADER, view);
     }
 
     public void addHeaderViewAndNotify(View view) {
-        mHeaderViews.put(getHeaderItemCount() + BASE_ITEM_TYPE_HEADER, view);
-        notifyItemInserted(getHeaderItemCount() - 1);
+        addHeaderView(view);
+        notifyItemInserted(getHeaderCount() - 1);
     }
 
     public void removeHeaderViewAndNotify(View view) {
@@ -235,12 +240,12 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public void addFooterView(View view) {
-        mFootViews.put(getFooterItemCount() + BASE_ITEM_TYPE_FOOTER, view);
+        mFootViews.put(getFooterCount() + BASE_ITEM_TYPE_FOOTER, view);
     }
 
     public void addFooterViewAndNotify(View view) {
-        mFootViews.put(getFooterItemCount() + BASE_ITEM_TYPE_FOOTER, view);
-        notifyItemInserted(getHeaderItemCount() + getContentItemCount() + getFooterItemCount() - 1);
+        addFooterView(view);
+        notifyItemInserted(getHeaderCount() + getContentItemCount() + getFooterCount() - 1);
     }
 
     public void removeFooterViewAndNotify(View view) {
@@ -248,14 +253,14 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (footerIndex == -1) return;
 
         mFootViews.removeAt(footerIndex);
-        notifyItemRemoved(getHeaderItemCount() + getContentItemCount() + footerIndex);
+        notifyItemRemoved(getHeaderCount() + getContentItemCount() + footerIndex);
     }
 
-    public int getHeaderItemCount() {
+    public int getHeaderCount() {
         return mHeaderViews.size();
     }
 
-    public int getFooterItemCount() {
+    public int getFooterCount() {
         return mFootViews.size();
     }
 
@@ -267,16 +272,18 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        mAdapter.setHasStableIds(hasStableIds);
+    public final void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
     }
 
     @Override
     public long getItemId(int position) {
-        if (!isHeaderOrFooter(position)) {
-            return mAdapter.getItemId(position);
+        if (isHeaderOrFooter(position)) {
+            return -position - 1;
         }
-        return super.getItemId(position);
+
+        position -= getHeaderCount();
+        return mAdapter.getItemId(position);
     }
 
     @Override

@@ -265,7 +265,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
         @Override
         public void onItemClick(View itemView, int position) {
-            position -= mRecyclerView.getHeaderItemCount();
+            position -= mRecyclerView.getHeaderCount();
             if (position >= 0) mListener.onItemClick(itemView, position);
         }
     }
@@ -291,7 +291,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
         @Override
         public void onItemLongClick(View itemView, int position) {
-            position -= mRecyclerView.getHeaderItemCount();
+            position -= mRecyclerView.getHeaderCount();
             if (position >= 0) mListener.onItemLongClick(itemView, position);
         }
     }
@@ -326,7 +326,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
         @Override
         public void onItemClick(SwipeMenuBridge menuBridge, int position) {
-            position -= mRecyclerView.getHeaderItemCount();
+            position -= mRecyclerView.getHeaderCount();
             if (position >= 0) {
                 mListener.onItemClick(menuBridge, position);
             }
@@ -342,11 +342,11 @@ public class SwipeRecyclerView extends RecyclerView {
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (mAdapterWrapper.isHeaderView(position) || mAdapterWrapper.isFooterView(position)) {
+                    if (mAdapterWrapper.isHeader(position) || mAdapterWrapper.isFooter(position)) {
                         return gridLayoutManager.getSpanCount();
                     }
                     if (spanSizeLookupHolder != null) {
-                        return spanSizeLookupHolder.getSpanSize(position - getHeaderItemCount());
+                        return spanSizeLookupHolder.getSpanSize(position - getHeaderCount());
                     }
                     return 1;
                 }
@@ -402,32 +402,32 @@ public class SwipeRecyclerView extends RecyclerView {
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
-            positionStart += getHeaderItemCount();
+            positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount);
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
-            positionStart += getHeaderItemCount();
+            positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount, payload);
         }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
-            positionStart += getHeaderItemCount();
+            positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeInserted(positionStart, itemCount);
         }
 
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
-            positionStart += getHeaderItemCount();
+            positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeRemoved(positionStart, itemCount);
         }
 
         @Override
         public void onItemRangeMoved(int fromPosition, int toPosition, int itemCount) {
-            fromPosition += getHeaderItemCount();
-            toPosition += getHeaderItemCount();
+            fromPosition += getHeaderCount();
+            toPosition += getHeaderCount();
             mAdapterWrapper.notifyItemMoved(fromPosition, toPosition);
         }
     };
@@ -475,17 +475,17 @@ public class SwipeRecyclerView extends RecyclerView {
     /**
      * Get size of headers.
      */
-    public int getHeaderItemCount() {
+    public int getHeaderCount() {
         if (mAdapterWrapper == null) return 0;
-        return mAdapterWrapper.getHeaderItemCount();
+        return mAdapterWrapper.getHeaderCount();
     }
 
     /**
      * Get size of footer.
      */
-    public int getFooterItemCount() {
+    public int getFooterCount() {
         if (mAdapterWrapper == null) return 0;
-        return mAdapterWrapper.getFooterItemCount();
+        return mAdapterWrapper.getFooterCount();
     }
 
     /**
@@ -547,7 +547,7 @@ public class SwipeRecyclerView extends RecyclerView {
                 mOldSwipedLayout.smoothCloseMenu();
             }
         }
-        position += getHeaderItemCount();
+        position += getHeaderCount();
         ViewHolder vh = findViewHolderForAdapterPosition(position);
         if (vh != null) {
             View itemView = getSwipeMenuView(vh.itemView);
