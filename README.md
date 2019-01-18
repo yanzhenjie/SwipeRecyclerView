@@ -40,7 +40,7 @@
 ## 如何使用
 首先在要使用本库的`module`的`build.gradle`中添加依赖：
 ```groovy
-implementation 'com.yanzhenjie:recyclerview-swipe:1.2.1'
+implementation 'com.yanzhenjie:recyclerview-swipe:1.2.2'
 ```
 
 <b><font color="red">特别注意1</font></b>：从1.2.0版本开始，`SwipeMenuCreator`的`onCreateMenu()`方法的第三个参数，**由原来的Item对应的`viewType`变成Item对应的`position`**，即由：
