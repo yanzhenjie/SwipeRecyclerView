@@ -342,7 +342,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if (mAdapterWrapper.isHeaderView(position) || mAdapterWrapper.isFooterView(position)) {
+                    if (mAdapterWrapper.isHeader(position) || mAdapterWrapper.isFooter(position)) {
                         return gridLayoutManager.getSpanCount();
                     }
                     if (spanSizeLookupHolder != null) {
@@ -375,6 +375,7 @@ public class SwipeMenuRecyclerView extends RecyclerView {
             adapter.registerAdapterDataObserver(mAdapterDataObserver);
 
             mAdapterWrapper = new SwipeAdapterWrapper(getContext(), adapter);
+            mAdapterWrapper.setHasStableIds(adapter.hasStableIds());
             mAdapterWrapper.setSwipeItemClickListener(mSwipeItemClickListener);
             mAdapterWrapper.setSwipeItemLongClickListener(mSwipeItemLongClickListener);
             mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);

@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.swipe;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -94,23 +95,28 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (isHeaderView(position)) {
+        if (isHeader(position)) {
             return mHeaderViews.keyAt(position);
-        } else if (isFooterView(position)) {
+        } else if (isFooter(position)) {
             return mFootViews.keyAt(position - getHeaderItemCount() - getContentItemCount());
         }
         return mAdapter.getItemViewType(position - getHeaderItemCount());
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (mHeaderViews.get(viewType) != null) {
-            return new ViewHolder(mHeaderViews.get(viewType));
-        } else if (mFootViews.get(viewType) != null) {
-            return new ViewHolder(mFootViews.get(viewType));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View contentView = mHeaderViews.get(viewType);
+        if (contentView != null) {
+            return new ViewHolder(contentView);
         }
-        final RecyclerView.ViewHolder viewHolder = mAdapter.onCreateViewHolder(parent, viewType);
 
+        contentView = mFootViews.get(viewType);
+        if (contentView != null) {
+            return new ViewHolder(contentView);
+        }
+
+        final RecyclerView.ViewHolder viewHolder = mAdapter.onCreateViewHolder(parent, viewType);
         if (mSwipeItemClickListener != null) {
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,7 +137,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (mSwipeMenuCreator == null) return viewHolder;
 
-        final View contentView = mInflater.inflate(R.layout.recycler_swipe_view_item, parent, false);
+        contentView = mInflater.inflate(R.layout.recycler_swipe_view_item, parent, false);
         ViewGroup viewGroup = contentView.findViewById(R.id.swipe_content);
         viewGroup.addView(viewHolder.itemView);
 
@@ -144,12 +150,21 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         return viewHolder;
     }
 
-    @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    private Class<?> getSupperClass(Class<?> aClass) {
+        Class<?> supperClass = aClass.getSuperclass();
+        if (supperClass != null && !supperClass.equals(Object.class)) {
+            return getSupperClass(supperClass);
+        }
+        return aClass;
     }
 
     @Override
-    public final void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+    public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    }
+
+    @Override
+    public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position,
+        @NonNull List<Object> payloads) {
         if (isHeaderOrFooter(holder)) return;
 
         View itemView = holder.itemView;
@@ -181,21 +196,13 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
         mAdapter.onBindViewHolder(holder, position, payloads);
     }
 
-    private Class<?> getSupperClass(Class<?> aClass) {
-        Class<?> supperClass = aClass.getSuperclass();
-        if (supperClass != null && !supperClass.equals(Object.class)) {
-            return getSupperClass(supperClass);
-        }
-        return aClass;
-    }
-
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mAdapter.onAttachedToRecyclerView(recyclerView);
     }
 
     @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder holder) {
         if (isHeaderOrFooter(holder)) {
             ViewGroup.LayoutParams lp = holder.itemView.getLayoutParams();
             if (lp instanceof StaggeredGridLayoutManager.LayoutParams) {
@@ -214,14 +221,14 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public boolean isHeaderOrFooter(int position) {
-        return isHeaderView(position) || isFooterView(position);
+        return isHeader(position) || isFooter(position);
     }
 
-    public boolean isHeaderView(int position) {
+    public boolean isHeader(int position) {
         return position >= 0 && position < getHeaderItemCount();
     }
 
-    public boolean isFooterView(int position) {
+    public boolean isFooter(int position) {
         return position >= getHeaderItemCount() + getContentItemCount();
     }
 
@@ -230,7 +237,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void addHeaderViewAndNotify(View view) {
-        mHeaderViews.put(getHeaderItemCount() + BASE_ITEM_TYPE_HEADER, view);
+        addHeaderView(view);
         notifyItemInserted(getHeaderItemCount() - 1);
     }
 
@@ -247,7 +254,7 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void addFooterViewAndNotify(View view) {
-        mFootViews.put(getFooterItemCount() + BASE_ITEM_TYPE_FOOTER, view);
+        addFooterView(view);
         notifyItemInserted(getHeaderItemCount() + getContentItemCount() + getFooterItemCount() - 1);
     }
 
@@ -275,46 +282,54 @@ public class SwipeAdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void setHasStableIds(boolean hasStableIds) {
-        mAdapter.setHasStableIds(hasStableIds);
+    public final void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(hasStableIds);
     }
 
     @Override
     public long getItemId(int position) {
-        if (!isHeaderOrFooter(position)) {
-            return mAdapter.getItemId(position);
+        if (isHeaderOrFooter(position)) {
+            return -position - 1;
         }
-        return super.getItemId(position);
+
+        position -= getHeaderItemCount();
+        return mAdapter.getItemId(position);
     }
 
     @Override
-    public void onViewRecycled(RecyclerView.ViewHolder holder) {
-        if (!isHeaderOrFooter(holder)) mAdapter.onViewRecycled(holder);
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderOrFooter(holder)) {
+            mAdapter.onViewRecycled(holder);
+        }
     }
 
     @Override
-    public boolean onFailedToRecycleView(RecyclerView.ViewHolder holder) {
-        if (!isHeaderOrFooter(holder)) return mAdapter.onFailedToRecycleView(holder);
+    public boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderOrFooter(holder)) {
+            return mAdapter.onFailedToRecycleView(holder);
+        }
         return false;
     }
 
     @Override
-    public void onViewDetachedFromWindow(RecyclerView.ViewHolder holder) {
-        if (!isHeaderOrFooter(holder)) mAdapter.onViewDetachedFromWindow(holder);
+    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder holder) {
+        if (!isHeaderOrFooter(holder)) {
+            mAdapter.onViewDetachedFromWindow(holder);
+        }
     }
 
     @Override
-    public void registerAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
+        mAdapter.onDetachedFromRecyclerView(recyclerView);
+    }
+
+    @Override
+    public void registerAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.registerAdapterDataObserver(observer);
     }
 
     @Override
-    public void unregisterAdapterDataObserver(RecyclerView.AdapterDataObserver observer) {
+    public void unregisterAdapterDataObserver(@NonNull RecyclerView.AdapterDataObserver observer) {
         super.unregisterAdapterDataObserver(observer);
-    }
-
-    @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
-        mAdapter.onDetachedFromRecyclerView(recyclerView);
     }
 }
