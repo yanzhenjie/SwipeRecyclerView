@@ -74,7 +74,7 @@ public class DefineActivity extends BaseDragActivity {
             }
 
             // 真实的Position：通过ViewHolder拿到的position都需要减掉HeadView的数量。
-            int position = adapterPosition - mRecyclerView.getHeaderItemCount();
+            int position = adapterPosition - mRecyclerView.getHeaderCount();
 
             // 假如让普通Item的第一个不能拖拽。
             if (position == 0) {
@@ -109,7 +109,7 @@ public class DefineActivity extends BaseDragActivity {
             }
 
             // 真实的Position：通过ViewHolder拿到的position都需要减掉HeadView的数量。
-            int position = adapterPosition - mRecyclerView.getHeaderItemCount();
+            int position = adapterPosition - mRecyclerView.getHeaderCount();
 
             // 假如让普通Item的第一个不能侧滑删除。
             if (position == 0) {
@@ -152,8 +152,8 @@ public class DefineActivity extends BaseDragActivity {
                 if (srcHolder.getItemViewType() != targetHolder.getItemViewType()) return false;
 
                 // 添加了HeadView时，通过ViewHolder拿到的position都需要减掉HeadView的数量。
-                int fromPosition = srcHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
-                int toPosition = targetHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
+                int fromPosition = srcHolder.getAdapterPosition() - mRecyclerView.getHeaderCount();
+                int toPosition = targetHolder.getAdapterPosition() - mRecyclerView.getHeaderCount();
 
                 if (toPosition == 0) {// 保证第一个不被挤走。
                     return false;
@@ -173,7 +173,7 @@ public class DefineActivity extends BaseDragActivity {
 
             @Override
             public void onItemDismiss(RecyclerView.ViewHolder srcHolder) {
-                int position = srcHolder.getAdapterPosition() - mRecyclerView.getHeaderItemCount();
+                int position = srcHolder.getAdapterPosition() - mRecyclerView.getHeaderCount();
                 mDataList.remove(position);
                 mAdapter.notifyItemRemoved(position);
                 Toast.makeText(DefineActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
