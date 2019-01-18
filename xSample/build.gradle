@@ -1,0 +1,23 @@
+apply plugin: rootProject.ext.plugins.application
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+    }
+}
+
+dependencies {
+    implementation project(':x')
+
+    implementation rootProject.ext.dependencies.xDesign
+    implementation rootProject.ext.dependencies.xAppCompat
+    implementation rootProject.ext.dependencies.xRecyclerView
+    implementation rootProject.ext.dependencies.xCardView
+}

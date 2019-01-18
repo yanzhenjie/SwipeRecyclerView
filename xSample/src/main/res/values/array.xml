@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<resources>
+    <string-array name="main_item">
+        <item>Item中的横竖菜单</item>
+        <item>Item的拖拽和侧滑删除</item>
+        <item>添加Header和Footer</item>
+        <item>下拉刷新和加载更多</item>
+        <item>和滑动布局嵌套使用</item>
+        <item>Sticky分组效果</item>
+    </string-array>
+
+    <string-array name="menu_item">
+        <item>List形式菜单</item>
+        <item>Grid形式菜单</item>
+        <item>根据ViewType定制菜单</item>
+        <item>竖向排布的菜单</item>
+        <item>自定义菜单</item>
+    </string-array>
+
+    <string-array name="refresh_item">
+        <item>默认LoadMoreView</item>
+        <item>自定义LoadMoreView</item>
+    </string-array>
+
+    <string-array name="nested_item">
+        <item>当Item是CardView时（特殊）</item>
+        <item>和DrawerLayout嵌套使用</item>
+        <item>和ViewPager嵌套使用</item>
+    </string-array>
+
+    <string-array name="sticky_item">
+        <item>普通布局中Sticky</item>
+        <item>Item菜单Sticky分组</item>
+    </string-array>
+
+    <string-array name="touch_item">
+        <item>ListItem拖拽和侧滑删除</item>
+        <item>GridItem拖拽</item>
+        <item>触摸即开始拖拽</item>
+        <item>自定义拖拽参数(不同ViewType)</item>
+    </string-array>
+</resources>
