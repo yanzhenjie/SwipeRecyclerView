@@ -73,6 +73,8 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
 
     public SwipeMenuLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setClickable(true);
+
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SwipeMenuLayout);
         mLeftViewId = typedArray.getResourceId(R.styleable.SwipeMenuLayout_leftViewId, mLeftViewId);
         mContentViewId = typedArray.getResourceId(R.styleable.SwipeMenuLayout_contentViewId, mContentViewId);
