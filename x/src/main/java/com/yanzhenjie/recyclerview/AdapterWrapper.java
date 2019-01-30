@@ -27,6 +27,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.collection.SparseArrayCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -202,6 +203,21 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         mAdapter.onAttachedToRecyclerView(recyclerView);
+
+        RecyclerView.LayoutManager lm = recyclerView.getLayoutManager();
+        if (lm instanceof GridLayoutManager) {
+            final GridLayoutManager glm = (GridLayoutManager)lm;
+            final GridLayoutManager.SpanSizeLookup originLookup = glm.getSpanSizeLookup();
+
+            glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    if (isHeaderOrFooter(position)) return glm.getSpanCount();
+                    if (originLookup != null) return originLookup.getSpanSize(position);
+                    return 1;
+                }
+            });
+        }
     }
 
     @Override
