@@ -11,31 +11,27 @@ ext {
                minSdkVersion    : 14,
                targetSdkVersion : 28,
 
-               versionCode      : 10,
-               versionName      : "1.2.1",]
+               versionCode      : 11,
+               versionName      : "1.3.0",]
 
-    bintray = [version       : "1.2.1",
+    bintray = [version       : "1.3.0",
 
                siteUrl       : 'https://github.com/yanzhenjie/SwipeRecyclerView',
                gitUrl        : 'git@github.com:yanzhenjie/SwipeRecyclerView.git',
 
-               group         : "com.yanzhenjie",
+               group         : "com.yanzhenjie.recyclerview",
 
-               // project
                packaging     : 'aar',
                name          : 'SwipeRecyclerView',
                description   : 'SwipeRecyclerView For Android',
 
-               // project.license
                licenseName   : 'The Apache Software License, Version 2.0',
                licenseUrl    : 'http://www.apache.org/licenses/LICENSE-2.0.txt',
 
-               // project.developers
                developerId   : 'yanzhenjie',
                developerName : 'yanzhenjie',
                developerEmail: 'im.yanzhenjie@foxmail.com',
 
-               // bintray
                binrayLibrary : "",
                bintrayRepo   : "maven",
                bintrayUser   : 'yolanda',
