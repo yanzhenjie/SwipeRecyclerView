@@ -12,9 +12,11 @@
 2. Item长按拖拽、侧滑删除
 3. 添加/移除HeaderView/FooterView
 4. **自动/点击**加载更多的功能
-5. Sticky普通布局黏贴和ReyclerView分组黏贴
+5. 支持二级列表，List形式、Grid形式、Staggered形式
+6. Sticky普通布局黏贴和ReyclerView分组黏贴
+7. 支持AndroidX
 
-> 使用本库只需要使用SwipeMenuRecyclerView即可，用法和原生RecyclerView一模一样，本库比原生的RecyclerView多了几个扩展方法。
+> 使用本库只需要使用SwipeRecyclerView即可，用法和原生RecyclerView一模一样，本库比原生的RecyclerView多了几个扩展方法。
 
 ## 截图
 对上面提到的效果基本都有演示，但不是全部，更多效果可以下载Demo查看。
@@ -38,27 +40,18 @@
 <img src="./image/11.gif" width="180px"/>
 
 ## 如何使用
-首先在要使用本库的`module`的`build.gradle`中添加依赖：
+如果你使用的是android support库，那么请添加下述依赖：
 ```groovy
-implementation 'com.yanzhenjie:recyclerview-swipe:1.2.1'
+implementation 'com.yanzhenjie.recyclerview:support:1.3.0'
 ```
 
-<b><font color="red">特别注意1</font></b>：从1.2.0版本开始，`SwipeMenuCreator`的`onCreateMenu()`方法的第三个参数，**由原来的Item对应的`viewType`变成Item对应的`position`**，即由：
-```java
-public interface SwipeMenuCreator {
-    void onCreateMenu(..., int viewType);
-}
-```
-变成：
-```java
-public interface SwipeMenuCreator {
-    void onCreateMenu(..., int position);
-}
+如果你使用的是android x库，那么请添加下述依赖：
+```groovy
+implementation 'com.yanzhenjie.recyclerview:x:1.3.0'
 ```
 
-<b><font color="red">特别注意2</font></b>：从1.2.0版本开始，`SwipeMenuRecyclerView`底层创建Item菜单的时机不再是`onCreateViewHolder()`时了，而是在`onBindViewHolder()`时，也就是说**每次刷新Item时菜单将会被重新创建**，也就是说**Item菜单支持刷新啦**。
-
-使用该项目时如果遇到任何问题，请加本文档开头给出的QQ技术群进行讨论或者咨询作者本人。
+> **1. SwipeRecyclerView从1.3.0版本开始支持AndroidX和二级列表，因此相对于低版本的包名和类名有所改动，从低版本升级的开发者需要考量是否要升级。**  
+**2. 为了让开发者方便切换support库和x库，SwipeRecyclerView的support库和x库除了依赖时的名称不一样外，包名、控件名和类名都是一样的，因此两个库不能共存。**  
 
 ### 加入布局
 在布局的xml中加入`SwipeMenuRecyclerView`：
