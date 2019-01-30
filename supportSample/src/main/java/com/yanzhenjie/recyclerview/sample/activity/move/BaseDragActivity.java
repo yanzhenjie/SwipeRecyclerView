@@ -100,11 +100,11 @@ public abstract class BaseDragActivity extends BaseActivity {
             // 添加左侧的，如果不添加，则左侧不会出现菜单。
             {
                 SwipeMenuItem addItem = new SwipeMenuItem(BaseDragActivity.this).setBackground(
-                    R.drawable.selector_green).setImage(R.mipmap.ic_action_add).setWidth(width).setHeight(height);
+                    R.drawable.selector_green).setImage(R.drawable.ic_action_add).setWidth(width).setHeight(height);
                 swipeLeftMenu.addMenuItem(addItem); // 添加一个按钮到左侧菜单。
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(BaseDragActivity.this).setBackground(
-                    R.drawable.selector_red).setImage(R.mipmap.ic_action_close).setWidth(width).setHeight(height);
+                    R.drawable.selector_red).setImage(R.drawable.ic_action_close).setWidth(width).setHeight(height);
 
                 swipeLeftMenu.addMenuItem(closeItem); // 添加一个按钮到左侧菜单。
             }
@@ -113,7 +113,7 @@ public abstract class BaseDragActivity extends BaseActivity {
             {
                 SwipeMenuItem deleteItem = new SwipeMenuItem(BaseDragActivity.this).setBackground(
                     R.drawable.selector_red)
-                    .setImage(R.mipmap.ic_action_delete)
+                    .setImage(R.drawable.ic_action_delete)
                     .setText("删除")
                     .setTextColor(Color.WHITE)
                     .setWidth(width)
@@ -121,7 +121,7 @@ public abstract class BaseDragActivity extends BaseActivity {
                 swipeRightMenu.addMenuItem(deleteItem);// 添加一个按钮到右侧侧菜单。
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(BaseDragActivity.this).setBackground(
-                    R.drawable.selector_purple).setImage(R.mipmap.ic_action_close).setWidth(width).setHeight(height);
+                    R.drawable.selector_purple).setImage(R.drawable.ic_action_close).setWidth(width).setHeight(height);
                 swipeRightMenu.addMenuItem(closeItem); // 添加一个按钮到右侧菜单。
             }
         }

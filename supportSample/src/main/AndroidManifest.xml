@@ -23,6 +23,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
@@ -72,12 +73,12 @@
             android:name=".activity.move.DefineActivity"
             android:label="自定义拖拽/侧滑"/>
 
-        <!-- -->
+        <!-- Header和Footer -->
         <activity
             android:name=".activity.header.HeaderViewActivity"
             android:label="Header和Footer"/>
 
-        <!-- -->
+        <!-- 刷新和加载更多 -->
         <activity
             android:name=".activity.load.RefreshLoadActivity"
             android:label="刷新和加载更多"/>
@@ -88,7 +89,7 @@
             android:name=".activity.load.DefineActivity"
             android:label="自定义LoadMore"/>
 
-        <!-- -->
+        <!-- 嵌套 -->
         <activity
             android:name=".activity.nested.NestedActivity"
             android:label="滑动布局嵌套使用"/>
@@ -102,7 +103,24 @@
             android:name=".activity.nested.ViewPagerActivity"
             android:label="ViewPager"/>
 
-        <!-- -->
+        <!-- 二级列表 -->
+        <activity
+            android:name=".activity.expanded.ExpandableActivity"
+            android:label="二级列表"/>
+
+        <activity
+            android:name=".activity.expanded.ListActivity"
+            android:label="List形式二级列表"/>
+
+        <activity
+            android:name=".activity.expanded.GridActivity"
+            android:label="Grid形式二级列表"/>
+
+        <activity
+            android:name=".activity.expanded.StaggeredActivity"
+            android:label="Staggered形式二级列表"/>
+
+        <!-- 黏贴分组 -->
         <activity
             android:name=".activity.group.GroupActivity"
             android:label="Sticky分组效果"/>

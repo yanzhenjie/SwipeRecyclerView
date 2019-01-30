@@ -73,13 +73,13 @@ public class GridActivity extends BaseActivity {
             // 添加左侧的，如果不添加，则左侧不会出现菜单。
             {
                 SwipeMenuItem addItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_green)
-                    .setImage(R.mipmap.ic_action_add)
+                    .setImage(R.drawable.ic_action_add)
                     .setWidth(width)
                     .setHeight(height);
                 swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_red)
-                    .setImage(R.mipmap.ic_action_close)
+                    .setImage(R.drawable.ic_action_close)
                     .setWidth(width)
                     .setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
@@ -88,7 +88,7 @@ public class GridActivity extends BaseActivity {
             // 添加右侧的，如果不添加，则右侧不会出现菜单。
             {
                 SwipeMenuItem deleteItem = new SwipeMenuItem(GridActivity.this).setBackground(R.drawable.selector_red)
-                    .setImage(R.mipmap.ic_action_delete)
+                    .setImage(R.drawable.ic_action_delete)
                     .setText("删除")
                     .setTextColor(Color.WHITE)
                     .setWidth(width)

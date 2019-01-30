@@ -78,7 +78,7 @@ public class VerticalActivity extends BaseActivity {
             {
                 SwipeMenuItem addItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
                     R.drawable.selector_green)
-                    .setImage(R.mipmap.ic_action_add)
+                    .setImage(R.drawable.ic_action_add)
                     .setWidth(width)
                     .setHeight(0)
                     .setWeight(1);
@@ -86,7 +86,7 @@ public class VerticalActivity extends BaseActivity {
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
                     R.drawable.selector_red)
-                    .setImage(R.mipmap.ic_action_close)
+                    .setImage(R.drawable.ic_action_close)
                     .setWidth(width)
                     .setHeight(0)
                     .setWeight(1);
@@ -97,7 +97,7 @@ public class VerticalActivity extends BaseActivity {
             {
                 SwipeMenuItem deleteItem = new SwipeMenuItem(VerticalActivity.this).setBackground(
                     R.drawable.selector_red)
-                    .setImage(R.mipmap.ic_action_delete)
+                    .setImage(R.drawable.ic_action_delete)
                     .setText("删除")
                     .setTextColor(Color.WHITE)
                     .setWidth(width)

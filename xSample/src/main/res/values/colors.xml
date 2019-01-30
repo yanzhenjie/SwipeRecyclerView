@@ -19,7 +19,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="text_color">#FF333333</color>
+    <color name="text_color">#333333</color>
 
     <color name="red_normal">#FF0000</color>
     <color name="red_pressed">#FF6666</color>
@@ -28,8 +28,9 @@
     <color name="purple_normal">#9932CC</color>
     <color name="purple_pressed">#9F79EE</color>
 
-    <color name="white">#FFFFFFFF</color>
-    <color name="white_pressed">#FFCFCFCF</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_pressed">#CFCFCF</color>
 
-    <color name="divider_color">#FFB7B2B2</color>
+    <color name="divider_color">#B7B2B2</color>
 </resources>

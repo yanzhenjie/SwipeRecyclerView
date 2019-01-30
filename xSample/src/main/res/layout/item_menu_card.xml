@@ -27,7 +27,6 @@
         xmlns:swipe="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
         swipe:contentViewId="@+id/content_view"
         swipe:leftViewId="@+id/left_view"
         swipe:rightViewId="@+id/right_view">

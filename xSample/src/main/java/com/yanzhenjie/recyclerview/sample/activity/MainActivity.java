@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.yanzhenjie.recyclerview.sample.R;
+import com.yanzhenjie.recyclerview.sample.activity.expanded.ExpandableActivity;
 import com.yanzhenjie.recyclerview.sample.activity.group.GroupActivity;
 import com.yanzhenjie.recyclerview.sample.activity.header.HeaderViewActivity;
 import com.yanzhenjie.recyclerview.sample.activity.load.RefreshLoadActivity;
@@ -71,6 +72,10 @@ public class MainActivity extends BaseActivity {
                 break;
             }
             case 5: {
+                startActivity(new Intent(this, ExpandableActivity.class));
+                break;
+            }
+            case 6: {
                 startActivity(new Intent(this, GroupActivity.class));
                 break;
             }

@@ -92,7 +92,7 @@ public class MenuActivity extends AppCompatActivity {
                 int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
                 SwipeMenuItem closeItem = new SwipeMenuItem(MenuActivity.this).setBackground(R.drawable.selector_purple)
-                    .setImage(R.mipmap.ic_action_close)
+                    .setImage(R.drawable.ic_action_close)
                     .setWidth(width)
                     .setHeight(height);
                 swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。

@@ -127,13 +127,13 @@ public class MenuFragment extends Fragment {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
             SwipeMenuItem addItem = new SwipeMenuItem(getContext()).setBackground(R.drawable.selector_green)
-                .setImage(R.mipmap.ic_action_add)
+                .setImage(R.drawable.ic_action_add)
                 .setWidth(width)
                 .setHeight(height);
             swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
 
             SwipeMenuItem closeItem = new SwipeMenuItem(getContext()).setBackground(R.drawable.selector_green)
-                .setImage(R.mipmap.ic_action_close)
+                .setImage(R.drawable.ic_action_close)
                 .setWidth(width)
                 .setHeight(height);
             swipeRightMenu.addMenuItem(closeItem); // 添加菜单到右侧。

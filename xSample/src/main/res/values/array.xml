@@ -21,6 +21,7 @@
         <item>添加Header和Footer</item>
         <item>下拉刷新和加载更多</item>
         <item>和滑动布局嵌套使用</item>
+        <item>二级列表</item>
         <item>Sticky分组效果</item>
     </string-array>
 
@@ -30,6 +31,13 @@
         <item>根据ViewType定制菜单</item>
         <item>竖向排布的菜单</item>
         <item>自定义菜单</item>
+    </string-array>
+
+    <string-array name="touch_item">
+        <item>ListItem拖拽和侧滑删除</item>
+        <item>GridItem拖拽</item>
+        <item>触摸即开始拖拽</item>
+        <item>自定义拖拽参数(不同ViewType)</item>
     </string-array>
 
     <string-array name="refresh_item">
@@ -43,15 +51,14 @@
         <item>和ViewPager嵌套使用</item>
     </string-array>
 
+    <string-array name="expandable_item">
+        <item>List形式</item>
+        <item>Grid形式</item>
+        <item>Staggered形式</item>
+    </string-array>
+
     <string-array name="sticky_item">
         <item>普通布局中Sticky</item>
         <item>Item菜单Sticky分组</item>
-    </string-array>
-
-    <string-array name="touch_item">
-        <item>ListItem拖拽和侧滑删除</item>
-        <item>GridItem拖拽</item>
-        <item>触摸即开始拖拽</item>
-        <item>自定义拖拽参数(不同ViewType)</item>
     </string-array>
 </resources>
