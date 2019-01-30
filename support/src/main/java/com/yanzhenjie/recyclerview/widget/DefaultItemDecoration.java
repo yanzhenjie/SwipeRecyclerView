@@ -18,16 +18,12 @@ package com.yanzhenjie.recyclerview.widget;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-
-import com.yanzhenjie.recyclerview.SwipeRecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by YanZhenjie on 2017/8/14.
@@ -37,41 +33,32 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
     private final int mWidth;
     private final int mHeight;
     private final Drawer mDrawer;
-    private List<Integer> mViewTypeList = new ArrayList<>();
 
     /**
-     * @param color decoration line color.
+     * @param color divider line color.
      */
     public DefaultItemDecoration(@ColorInt int color) {
-        this(color, 2, 2, -1);
+        this(color, 4, 4);
     }
 
     /**
      * @param color line color.
      * @param width line width.
      * @param height line height.
-     * @param excludeViewType don't need to draw the ViewType of the item of the split line.
      */
-    public DefaultItemDecoration(@ColorInt int color, int width, int height, int... excludeViewType) {
+    public DefaultItemDecoration(@ColorInt int color, int width, int height) {
         this.mWidth = Math.round(width / 2F);
         this.mHeight = Math.round(height / 2F);
         this.mDrawer = new ColorDrawer(color, mWidth, mHeight);
-        for (int i : excludeViewType) {
-            mViewTypeList.add(i);
-        }
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+    public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
+        @NonNull RecyclerView.State state) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof LinearLayoutManager) {
-            int position = parent.getChildLayoutPosition(view);
-            int viewType = parent.getAdapter().getItemViewType(position);
-            if (mViewTypeList.contains(viewType)) {
-                outRect.set(0, 0, 0, 0);
-                return;
-            }
             int orientation = getOrientation(layoutManager);
+            int position = parent.getChildLayoutPosition(view);
             int spanCount = getSpanCount(layoutManager);
             int childCount = layoutManager.getItemCount();
 
@@ -246,8 +233,9 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void onDraw(Canvas canvas, RecyclerView parent, RecyclerView.State state) {
+    public void onDraw(@NonNull Canvas canvas, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         RecyclerView.LayoutManager layoutManager = parent.getLayoutManager();
+        assert layoutManager != null;
         int orientation = getOrientation(layoutManager);
         int spanCount = getSpanCount(layoutManager);
         int childCount = layoutManager.getChildCount();
@@ -256,11 +244,8 @@ public class DefaultItemDecoration extends RecyclerView.ItemDecoration {
             canvas.save();
             for (int i = 0; i < childCount; i++) {
                 View view = layoutManager.getChildAt(i);
+                assert view != null;
                 int position = parent.getChildLayoutPosition(view);
-                int viewType = parent.getAdapter().getItemViewType(position);
-
-                if (mViewTypeList.contains(viewType)) continue;
-                if (view instanceof SwipeRecyclerView.LoadMoreView) continue;
 
                 if (orientation == RecyclerView.VERTICAL) {
                     drawVertical(canvas, view, position, spanCount, childCount);
