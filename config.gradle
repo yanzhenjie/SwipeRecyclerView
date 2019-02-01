@@ -17,7 +17,7 @@ ext {
     bintray = [version       : "1.3.0",
 
                siteUrl       : 'https://github.com/yanzhenjie/SwipeRecyclerView',
-               gitUrl        : 'git@github.com:yanzhenjie/SwipeRecyclerView.git',
+               gitUrl        : 'https://github.com/yanzhenjie/SwipeRecyclerView.git',
 
                group         : "com.yanzhenjie.recyclerview",
 
