@@ -145,17 +145,20 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
     }
 
     private int positionFromParentPosition(int parentPosition) {
-        int position = -1;
+        int itemCount = 0;
 
         int parentCount = parentItemCount();
         for (int i = 0; i < parentCount; i++) {
-            if (parentPosition == i) return position + 1;
+            itemCount += 1;
 
-            boolean parentExpand = mExpandItemArray.get(i);
-            if (parentExpand) {
-                position += childItemCount(i);
+            if (parentPosition == i) {
+                return itemCount - 1;
             } else {
-                position += 1;
+                if (isExpanded(i)) {
+                    itemCount += childItemCount(i);
+                } else {
+                    // itemCount += 1;
+                }
             }
         }
 
@@ -163,20 +166,26 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
     }
 
     private int positionFromChildPosition(int parentPosition, int childPosition) {
-        int position = -1;
+        int itemCount = 0;
 
         int parentCount = parentItemCount();
         for (int i = 0; i < parentCount; i++) {
+            itemCount += 1;
+
             if (parentPosition == i) {
                 int childCount = childItemCount(parentPosition);
                 if (childPosition < childCount) {
-                    position += (childPosition + 1);
-                    return position;
+                    itemCount += (childPosition + 1);
+                    return itemCount - 1;
                 }
 
                 throw new IllegalStateException("The child position is invalid: " + childPosition);
             } else {
-                position += 1;
+                if (isExpanded(i)) {
+                    itemCount += childItemCount(i);
+                } else {
+                    // itemCount += 1;
+                }
             }
         }
 
@@ -187,9 +196,11 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
     public final int getItemCount() {
         int parentCount = parentItemCount();
         for (int i = 0; i < parentCount; i++) {
-            if (mExpandItemArray.get(i, false)) {
+            if (isExpanded(i)) {
                 int childCount = childItemCount(i);
                 parentCount += childCount;
+            } else {
+                // parentCount += 0;
             }
         }
         return parentCount;
@@ -209,13 +220,12 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
 
     @Override
     public final int getItemViewType(int position) {
+        int parentPosition = parentItemPosition(position);
         if (isParentItem(position)) {
-            int parentPosition = parentItemPositionFromParentItem(position);
             int viewType = parentItemViewType(parentPosition);
             if (!mParentViewType.contains(viewType)) mParentViewType.add(viewType);
             return viewType;
         } else {
-            int parentPosition = parentItemPositionFromChildItem(position);
             int childPosition = childItemPosition(position);
             return childItemViewType(parentPosition, childPosition);
         }
@@ -233,9 +243,10 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
     /**
      * Get the view type of the child item.
      *
-     * @param parentPosition position of child item.
+     * @param parentPosition position of parent item.
+     * @param childPosition position of child item.
      */
-    public int childItemViewType(int parentPosition, int position) {
+    public int childItemViewType(int parentPosition, int childPosition) {
         return TYPE_CHILD;
     }
 
@@ -247,17 +258,20 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
      * @return true, otherwise is false.
      */
     public final boolean isParentItem(int adapterPosition) {
+        int itemCount = 0;
+
         int parentCount = parentItemCount();
         for (int i = 0; i < parentCount; i++) {
-            if (adapterPosition == i) return true;
+            if (itemCount == adapterPosition) {
+                return true;
+            }
+
+            itemCount += 1;
 
             if (isExpanded(i)) {
-                int childCount = childItemCount(i);
-                if (adapterPosition <= (i + childCount)) {
-                    return false;
-                } else {
-                    adapterPosition -= childCount;
-                }
+                itemCount += childItemCount(i);
+            } else {
+                // itemCount += 1;
             }
         }
 
@@ -267,74 +281,50 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
     /**
      * Get the position of the parent item from the adapter position.
      *
-     * @param adapterPosition adapter position.
+     * @param adapterPosition adapter position of item.
      */
     public final int parentItemPosition(int adapterPosition) {
-        if (isParentItem(adapterPosition)) {
-            return parentItemPositionFromParentItem(adapterPosition);
-        } else {
-            return parentItemPositionFromChildItem(adapterPosition);
-        }
-    }
-
-    private int parentItemPositionFromParentItem(int adapterPosition) {
-        int parentCount = parentItemCount();
-        for (int i = 0; i < parentCount; i++) {
-            if (adapterPosition == i) return i;
+        int itemCount = 0;
+        for (int i = 0; i < parentItemCount(); i++) {
+            itemCount += 1;
 
             if (isExpanded(i)) {
                 int childCount = childItemCount(i);
-                if (adapterPosition > (i + childCount)) adapterPosition -= childCount;
+                itemCount += childCount;
+            }
+            if (adapterPosition < itemCount) {
+                return i;
             }
         }
 
         throw new IllegalStateException("The adapter position is not a parent type: " + adapterPosition);
     }
 
-    private int parentItemPositionFromChildItem(int adapterPosition) {
-        int pointPosition = -1;
-
-        int parentCount = parentItemCount();
-        for (int i = 0; i < parentCount; i++) {
-            if (isExpanded(i)) {
-                int childCount = childItemCount(i);
-                pointPosition += (childCount + 1);
-                if (adapterPosition <= pointPosition) {
-                    return i;
-                }
-            } else {
-                pointPosition += 1;
-                if (adapterPosition <= pointPosition) {
-                    return i;
-                }
-            }
-        }
-
-        throw new IllegalStateException("The adapter position is invalid: " + adapterPosition);
-    }
-
     /**
      * Get the position of the child item from the adapter position.
      *
-     * @param adapterPosition adapter position.
+     * @param childAdapterPosition adapter position of child item.
      */
-    public final int childItemPosition(int adapterPosition) {
-        int pointPosition = -1;
+    public final int childItemPosition(int childAdapterPosition) {
+        int itemCount = 0;
 
         int parentCount = parentItemCount();
         for (int i = 0; i < parentCount; i++) {
+            itemCount += 1;
+
             if (isExpanded(i)) {
                 int childCount = childItemCount(i);
-                pointPosition += (childCount + 1);
-                if (adapterPosition <= pointPosition) {
-                    return childCount - (pointPosition - adapterPosition) - 1;
+                itemCount += childCount;
+
+                if (childAdapterPosition < itemCount) {
+                    return childCount - (itemCount - childAdapterPosition);
                 }
             } else {
-                pointPosition += 1;
+                // itemCount += 1;
             }
         }
 
-        throw new IllegalStateException("The adapter position is invalid: " + adapterPosition);
+        throw new IllegalStateException("The adapter position is invalid: " + childAdapterPosition);
     }
 
     @NonNull
@@ -366,11 +356,10 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
 
     @Override
     public final void onBindViewHolder(@NonNull VH holder, int position, @NonNull List<Object> payloads) {
+        int parentPosition = parentItemPosition(position);
         if (isParentItem(position)) {
-            int parentPosition = parentItemPositionFromParentItem(position);
             bindParentHolder(holder, parentPosition, payloads);
         } else {
-            int parentPosition = parentItemPositionFromChildItem(position);
             int childPosition = childItemPosition(position);
             bindChildHolder(holder, parentPosition, childPosition, payloads);
         }
