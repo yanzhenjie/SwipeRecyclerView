@@ -1,4 +1,4 @@
-﻿# SwipeMenuRecyclerView
+﻿# SwipeRecyclerView
 
 作者的主页：[https://www.yanzhenjie.com](https://www.yanzhenjie.com)  
 技术交流群：[46505645](https://jq.qq.com/?_wv=1027&k=5wY8UWl)  
@@ -54,9 +54,9 @@ implementation 'com.yanzhenjie.recyclerview:x:1.3.1'
 **2. 为了让开发者方便切换support库和x库，SwipeRecyclerView的support库和x库除了依赖时的名称不一样外，包名、控件名和类名都是一样的，因此两个库不能共存。**  
 
 ### 加入布局
-在布局的xml中加入`SwipeMenuRecyclerView`：
+在布局的xml中加入`SwipeRecyclerView`：
 ```xml
-<com.yanzhenjie.recyclerview.swipe.SwipeMenuRecyclerView
+<com.yanzhenjie.recyclerview.SwipeRecyclerView
     .../>
 ```
 
@@ -72,7 +72,7 @@ itemDecoration = new DefaultDecoration(color, width, height, excludeViewType);
 // 或者：例如下面的123都是不画分割线的ViewType：
 itemDecoration = new DefaultDecoration(color, width, height, 1, 2, 3);
 
-SwipeMenuRecyclerView recyclerView = ...;
+SwipeRecyclerView recyclerView = ...;
 recyclerView.setDecoration(itemDecoration);
 ```
 
@@ -271,7 +271,7 @@ LoadMoreListener mLoadMoreListener = new LoadMoreListener() {
 自定义加载更多View也很简单，自定义一个View，并实现一个接口即可：
 ```java
 public class DefineLoadMoreView extends LinearLayout
-        implements SwipeMenuRecyclerView.LoadMoreView,
+        implements SwipeRecyclerView.LoadMoreView,
         View.OnClickListener {
 
     private LoadMoreListener mLoadMoreListener;
@@ -317,7 +317,7 @@ public class DefineLoadMoreView extends LinearLayout
      * 调用了setAutoLoadMore(false)后，在需要加载更多的时候，此方法被调用，并传入listener。
      */
     @Override
-    public void onWaitToLoadMore(SwipeMenuRecyclerView.LoadMoreListener loadMoreListener) {
+    public void onWaitToLoadMore(SwipeRecyclerView.LoadMoreListener loadMoreListener) {
         this.mLoadMoreListener = loadMoreListener;
         }
 
