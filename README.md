@@ -78,7 +78,7 @@ recyclerView.setDecoration(itemDecoration);
 
 ### Item点击监听
 ```java
-recyclerView.setSwipeItemClickListener(new SwipeItemClickListener() {
+recyclerView.setOnItemClickListener(new OnItemClickListener() {
     @Override
     public void onItemClick(View view, int position) {
         // TODO...
@@ -108,9 +108,9 @@ SwipeMenuCreator mSwipeMenuCreator = new SwipeMenuCreator() {
 };
 
 // 菜单点击监听。
-swipeRecyclerView.setSwipeMenuItemClickListener(mMenuItemClickListener);
+swipeRecyclerView.setOnItemMenuClickListener(mItemMenuClickListener);
 
-SwipeMenuItemClickListener mMenuItemClickListener = new SwipeMenuItemClickListener() {
+OnItemMenuClickListener mItemMenuClickListener = new OnItemMenuClickListener() {
     @Override
     public void onItemClick(SwipeMenuBridge menuBridge, int position) {
         // 任何操作必须先关闭菜单，否则可能出现Item菜单打开状态错乱。
