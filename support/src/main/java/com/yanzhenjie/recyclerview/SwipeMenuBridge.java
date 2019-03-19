@@ -35,6 +35,9 @@ public class SwipeMenuBridge {
         return mDirection;
     }
 
+    /**
+     * Get the position of button in the menu.
+     */
     public int getPosition() {
         return mPosition;
     }

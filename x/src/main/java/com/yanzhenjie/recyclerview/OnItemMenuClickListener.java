@@ -21,9 +21,8 @@ package com.yanzhenjie.recyclerview;
 public interface OnItemMenuClickListener {
 
     /**
-     * Invoke when the menu item is clicked.
-     *
-     * @param menuBridge menu.
+     * @param menuBridge menu bridge.
+     * @param adapterPosition position of item.
      */
-    void onItemClick(SwipeMenuBridge menuBridge, int position);
+    void onItemClick(SwipeMenuBridge menuBridge, int adapterPosition);
 }
