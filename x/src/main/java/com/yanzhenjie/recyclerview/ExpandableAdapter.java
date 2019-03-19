@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -33,8 +32,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
  */
 public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder> extends RecyclerView.Adapter<VH> {
 
-    private static final int TYPE_PARENT = 1;
-    private static final int TYPE_CHILD = 2;
+    private static final int TYPE_PARENT = 10000000;
+    private static final int TYPE_CHILD = 20000000;
 
     private final SparseBooleanArray mExpandItemArray = new SparseBooleanArray();
     private final List<Integer> mParentViewType = new ArrayList<>();
@@ -225,22 +224,11 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
         int parentPosition = parentItemPosition(position);
         if (isParentItem(position)) {
             int viewType = parentItemViewType(parentPosition);
-            checkViewType(viewType);
             if (!mParentViewType.contains(viewType)) mParentViewType.add(viewType);
             return viewType;
         } else {
             int childPosition = childItemPosition(position);
-            int viewType = childItemViewType(parentPosition, childPosition);
-            checkViewType(viewType);
-            return viewType;
-        }
-    }
-
-    private void checkViewType(int type) {
-        if (type == TYPE_PARENT || type == TYPE_CHILD) {
-            String message = String.format(Locale.US,
-                "The value [%d] is reserved, please replace it with other values.", type);
-            throw new IllegalArgumentException(message);
+            return childItemViewType(parentPosition, childPosition);
         }
     }
 
