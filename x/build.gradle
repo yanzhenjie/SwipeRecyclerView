@@ -15,5 +15,5 @@ android {
 }
 
 dependencies {
-    compileOnly rootProject.ext.dependencies.xRecyclerView
+    api rootProject.ext.dependencies.xRecyclerView
 }
