@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Zhenjie Yan on 1/28/19.
@@ -223,11 +224,22 @@ public abstract class ExpandableAdapter<VH extends ExpandableAdapter.ViewHolder>
         int parentPosition = parentItemPosition(position);
         if (isParentItem(position)) {
             int viewType = parentItemViewType(parentPosition);
+            checkViewType(viewType);
             if (!mParentViewType.contains(viewType)) mParentViewType.add(viewType);
             return viewType;
         } else {
             int childPosition = childItemPosition(position);
-            return childItemViewType(parentPosition, childPosition);
+            int viewType = childItemViewType(parentPosition, childPosition);
+            checkViewType(viewType);
+            return viewType;
+        }
+    }
+
+    private void checkViewType(int type) {
+        if (type == TYPE_PARENT || type == TYPE_CHILD) {
+            String message = String.format(Locale.US,
+                "The value [%d] is reserved, please replace it with other values.", type);
+            throw new IllegalArgumentException(message);
         }
     }
 
