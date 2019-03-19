@@ -51,6 +51,7 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
 
     public SwipeMenuView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setGravity(Gravity.CENTER_VERTICAL);
     }
 
     public void createMenu(RecyclerView.ViewHolder viewHolder, SwipeMenu swipeMenu, Controller controller,
