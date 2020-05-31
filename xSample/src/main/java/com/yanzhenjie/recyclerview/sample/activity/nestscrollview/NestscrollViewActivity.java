@@ -75,20 +75,6 @@ public class NestscrollViewActivity extends AppCompatActivity {
             }
         });
 
-        //如果dispatchLoadMore是私有的需要特别处理
-        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                View onlyChild = v.getChildAt(0);
-                if (onlyChild.getHeight() <= scrollY + v.getHeight()) {
-                    // 如果满足就是到底部了
-                    mSwipeRecyclerView.onScrollStateChanged(2);
-                    mSwipeRecyclerView.onScrolled(scrollX,scrollY);
-                }
-
-            }
-        });
-
     }
 
     private void setData() {
