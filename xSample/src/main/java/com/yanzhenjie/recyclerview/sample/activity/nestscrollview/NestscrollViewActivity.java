@@ -53,7 +53,7 @@ public class NestscrollViewActivity extends AppCompatActivity {
                         setData();
                         mSwipeRecyclerView.getAdapter().notifyDataSetChanged();
                     }
-                },2000);
+                },1 * 1000);
             }
         });
 
