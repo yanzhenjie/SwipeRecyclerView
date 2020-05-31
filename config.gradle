@@ -44,6 +44,6 @@ ext {
 
                     xDesign      : 'com.google.android.material:material:1.0.0',
                     xAppCompat   : 'androidx.appcompat:appcompat:1.0.2',
-                    xRecyclerView: 'androidx.recyclerview:recyclerview:1.0.0',
+                    xRecyclerView: 'androidx.recyclerview:recyclerview:1.1.0',
                     xCardView    : 'androidx.cardview:cardview:1.0.0']
 }

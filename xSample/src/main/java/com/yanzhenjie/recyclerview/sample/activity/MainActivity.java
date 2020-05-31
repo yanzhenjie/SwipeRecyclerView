@@ -27,6 +27,7 @@ import com.yanzhenjie.recyclerview.sample.activity.load.RefreshLoadActivity;
 import com.yanzhenjie.recyclerview.sample.activity.menu.MenuActivity;
 import com.yanzhenjie.recyclerview.sample.activity.move.MoveActivity;
 import com.yanzhenjie.recyclerview.sample.activity.nested.NestedActivity;
+import com.yanzhenjie.recyclerview.sample.activity.nestscrollview.NestscrollViewActivity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -77,6 +78,10 @@ public class MainActivity extends BaseActivity {
             }
             case 6: {
                 startActivity(new Intent(this, GroupActivity.class));
+                break;
+            }
+            case 7: {
+                startActivity(new Intent(this, NestscrollViewActivity.class));
                 break;
             }
         }

@@ -130,6 +130,9 @@
         <activity
             android:name=".activity.group.MenuActivity"
             android:label="Item菜单Sticky分组"/>
+        <activity
+            android:name=".activity.nestscrollview.NestscrollViewActivity"
+            android:label="NestscrollView嵌套"/>
     </application>
 
 </manifest>
