@@ -743,7 +743,7 @@ public class SwipeRecyclerView extends RecyclerView {
         }
     }
 
-    private void dispatchLoadMore() {
+    public void  dispatchLoadMore() {
         if (isLoadError) return;
 
         if (!isAutoLoadMore) {

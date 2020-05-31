@@ -23,6 +23,7 @@
         <item>和滑动布局嵌套使用</item>
         <item>二级列表</item>
         <item>Sticky分组效果</item>
+        <item>NestedScrollView嵌套</item>
     </string-array>
 
     <string-array name="menu_item">
