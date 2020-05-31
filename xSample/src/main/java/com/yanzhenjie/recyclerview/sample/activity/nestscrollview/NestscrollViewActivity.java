@@ -3,13 +3,16 @@ package com.yanzhenjie.recyclerview.sample.activity.nestscrollview;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +37,13 @@ public class NestscrollViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_nestscorllview);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+
         mNestedScrollView = findViewById(R.id.nestedScrollView);
         mSwipeRecyclerView = findViewById(R.id.swipeRecyclerView);
 
@@ -77,6 +87,9 @@ public class NestscrollViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 制作模拟数据
+     */
     private void setData() {
         int baseNo = mList.size() ;
         for(int i = baseNo ; i < baseNo + 20 ; i++ ){
@@ -120,6 +133,14 @@ public class NestscrollViewActivity extends AppCompatActivity {
             super(itemView);
             this.itemView = itemView;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return true;
     }
 
 }
