@@ -32,6 +32,7 @@ import java.util.Collections;
  * 拖拽Item + 侧滑删除，默认侧滑删除只支持List形式。
  * </p>
  * Created by Yan Zhenjie on 2016/8/3.
+ * Modified by Qiming on 2022/5/6: demo how to enable/disable swipe menu globally
  */
 public class DragSwipeListActivity extends BaseDragActivity {
 
@@ -50,6 +51,15 @@ public class DragSwipeListActivity extends BaseDragActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 控制是否可以侧滑删除。
                 mRecyclerView.setItemViewSwipeEnabled(isChecked);
+            }
+        });
+
+        SwitchCompat switchSwipeMenu = mHeaderView.findViewById(R.id.switch_swipemenu);
+        switchSwipeMenu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 控制是否可以侧滑出菜单——全局控制。
+                mRecyclerView.setSwipeItemMenuEnabled(isChecked);
             }
         });
 
