@@ -13,7 +13,7 @@
 3. 添加/移除HeaderView/FooterView
 4. **自动/点击**加载更多的功能
 5. 支持二级列表，List形式、Grid形式、Staggered形式
-6. Sticky普通布局黏贴和ReyclerView分组黏贴
+6. Sticky普通布局黏贴和RecyclerView分组黏贴
 7. 支持AndroidX
 
 > 使用本库只需要使用SwipeRecyclerView即可，用法和原生RecyclerView一模一样，本库比原生的RecyclerView多了几个扩展方法。

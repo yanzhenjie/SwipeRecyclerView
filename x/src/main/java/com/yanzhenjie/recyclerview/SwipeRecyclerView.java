@@ -313,7 +313,26 @@ public class SwipeRecyclerView extends RecyclerView {
     public void setOnItemMenuStateListener(OnItemMenuStateListener listener) {
         if (listener == null) return;
         checkAdapterExist("Cannot set menu state change listener, setAdapter has already been called.");
-        this.mItemMenuStateListener = listener;
+        this.mItemMenuStateListener = new ItemMenuStateListener(this, listener);
+    }
+
+    private static class ItemMenuStateListener implements OnItemMenuStateListener {
+
+        private SwipeRecyclerView mRecyclerView;
+        private OnItemMenuStateListener mListener;
+
+        public ItemMenuStateListener(SwipeRecyclerView recyclerView, OnItemMenuStateListener listener) {
+            this.mRecyclerView = recyclerView;
+            this.mListener = listener;
+        }
+
+        @Override
+        public void onMenuState(int menuState, int adapterPosition) {
+            adapterPosition -= mRecyclerView.getHeaderCount();
+            if (adapterPosition >= 0) {
+                mListener.onMenuState(menuState, adapterPosition);
+            }
+        }
     }
 
     /**
