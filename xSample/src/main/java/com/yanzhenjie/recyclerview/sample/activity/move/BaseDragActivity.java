@@ -30,6 +30,7 @@ import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.sample.R;
 import com.yanzhenjie.recyclerview.sample.activity.BaseActivity;
+import com.yanzhenjie.recyclerview.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.touch.OnItemStateChangedListener;
 
@@ -156,11 +157,14 @@ public abstract class BaseDragActivity extends BaseActivity {
 
     private OnItemMenuStateListener mItemMenuStateListener = new OnItemMenuStateListener() {
         @Override
-        public void onMenuState(int menuState, int adapterPosition) {
+        public void onMenuState(RecyclerView.ViewHolder viewHolder, int menuState) {
+            MainAdapter.ViewHolder vh = (MainAdapter.ViewHolder) viewHolder;
             if (menuState == OPEN) {
-                Toast.makeText(BaseDragActivity.this, "菜单已展开，位置：" + adapterPosition, Toast.LENGTH_SHORT).show();
+                vh.setHiddenView(true);
+                Toast.makeText(BaseDragActivity.this, "菜单已展开，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(BaseDragActivity.this, "菜单已收起，位置：" + adapterPosition, Toast.LENGTH_SHORT).show();
+                vh.setHiddenView(false);
+                Toast.makeText(BaseDragActivity.this, "菜单已收起，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
         }
     };

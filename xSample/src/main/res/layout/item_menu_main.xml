@@ -26,8 +26,16 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Testing"/>
+
+    <TextView
+        android:id="@+id/tv_hidden"
+        android:layout_marginLeft="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="看到我了么？" />
 
 </LinearLayout>

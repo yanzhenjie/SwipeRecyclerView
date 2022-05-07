@@ -15,6 +15,8 @@
  */
 package com.yanzhenjie.recyclerview;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 /**
  * Created by Qiming on 2022/5/7.
  */
@@ -24,8 +26,8 @@ public interface OnItemMenuStateListener {
     int CLOSED = 2;
 
     /**
+     * @param viewHolder the ViewHolder of the current item.
      * @param menuState the menu status.
-     * @param adapterPosition position of item.
      */
-    void onMenuState(int menuState, int adapterPosition);
+    void onMenuState(RecyclerView.ViewHolder viewHolder, int menuState);
 }

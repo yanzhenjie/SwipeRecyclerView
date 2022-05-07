@@ -59,17 +59,23 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
         holder.setData(mDataList.get(position));
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitle;
+        TextView tvHidden;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
+            tvHidden = itemView.findViewById(R.id.tv_hidden);
         }
 
         public void setData(String title) {
             this.tvTitle.setText(title);
+        }
+
+        public void setHiddenView(boolean visible) {
+            tvHidden.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
