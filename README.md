@@ -146,7 +146,7 @@ OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
     @Override
     public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
         // 此方法在Item拖拽交换位置时被调用。
-        // 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+        // 第一个参数是要交换位置的Item，第二个是目标位置的Item。
 
         // 交换数据，并更新adapter。
         int fromPosition = srcHolder.getAdapterPosition();
