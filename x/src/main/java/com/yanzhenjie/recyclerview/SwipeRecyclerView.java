@@ -75,6 +75,7 @@ public class SwipeRecyclerView extends RecyclerView {
     private DefaultItemTouchHelper mItemTouchHelper;
 
     private SwipeMenuCreator mSwipeMenuCreator;
+    private OnItemMenuStateListener mItemMenuStateListener;
     private OnItemMenuClickListener mOnItemMenuClickListener;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
@@ -307,6 +308,15 @@ public class SwipeRecyclerView extends RecyclerView {
     }
 
     /**
+     * Set to menu state change listener.
+     */
+    public void setOnItemMenuStateListener(OnItemMenuStateListener listener) {
+        if (listener == null) return;
+        checkAdapterExist("Cannot set menu state change listener, setAdapter has already been called.");
+        this.mItemMenuStateListener = listener;
+    }
+
+    /**
      * Set to click menu listener.
      */
     public void setOnItemMenuClickListener(OnItemMenuClickListener listener) {
@@ -380,6 +390,7 @@ public class SwipeRecyclerView extends RecyclerView {
             mAdapterWrapper.setOnItemLongClickListener(mOnItemLongClickListener);
             mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
             mAdapterWrapper.setOnItemMenuClickListener(mOnItemMenuClickListener);
+            mAdapterWrapper.setOnItemMenuStateListener(mItemMenuStateListener);
 
             if (mHeaderViewList.size() > 0) {
                 for (View view : mHeaderViewList) {

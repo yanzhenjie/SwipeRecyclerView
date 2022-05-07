@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
+import com.yanzhenjie.recyclerview.OnItemMenuStateListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
@@ -50,6 +51,10 @@ public abstract class BaseDragActivity extends BaseActivity {
 
         mRecyclerView.setOnItemMenuClickListener(mItemMenuClickListener); // Item的Menu点击。
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator); // 菜单创建器。
+
+        // 监听侧滑菜单展开/收起的状态变化。
+        // 注意：必须在给RecyclerView设置adapter之前设置
+        mRecyclerView.setOnItemMenuStateListener(mItemMenuStateListener);
 
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged(mDataList);
@@ -145,6 +150,17 @@ public abstract class BaseDragActivity extends BaseActivity {
             } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
                 Toast.makeText(BaseDragActivity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
                     .show();
+            }
+        }
+    };
+
+    private OnItemMenuStateListener mItemMenuStateListener = new OnItemMenuStateListener() {
+        @Override
+        public void onMenuState(int menuState, int adapterPosition) {
+            if (menuState == OPEN) {
+                Toast.makeText(BaseDragActivity.this, "菜单已展开，位置：" + adapterPosition, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(BaseDragActivity.this, "菜单已收起，位置：" + adapterPosition, Toast.LENGTH_SHORT).show();
             }
         }
     };

@@ -54,6 +54,7 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
     private LeftHorizontal mSwipeLeftHorizontal;
     private RightHorizontal mSwipeRightHorizontal;
     private Horizontal mSwipeCurrentHorizontal;
+    private OnItemMenuStateListener mItemMenuStateListener;
     private boolean shouldResetSwipe;
     private boolean mDragging;
     private boolean swipeEnable = true;
@@ -111,6 +112,10 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
             mContentView = errorView;
             addView(mContentView);
         }
+    }
+
+    public void setOnItemMenuStateListener(OnItemMenuStateListener listener) {
+         this.mItemMenuStateListener = listener;
     }
 
     /**
@@ -463,6 +468,11 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
         if (mSwipeCurrentHorizontal != null) {
             mSwipeCurrentHorizontal.autoOpenMenu(mScroller, getScrollX(), duration);
             invalidate();
+
+            if (mItemMenuStateListener != null) {
+                SwipeMenuView menuView = (SwipeMenuView) mSwipeCurrentHorizontal.getMenuView();
+                mItemMenuStateListener.onMenuState(OnItemMenuStateListener.OPEN, menuView.getAdapterPosition());
+            }
         }
     }
 
@@ -492,6 +502,11 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
         if (mSwipeCurrentHorizontal != null) {
             mSwipeCurrentHorizontal.autoCloseMenu(mScroller, getScrollX(), duration);
             invalidate();
+
+            if (mItemMenuStateListener != null) {
+                SwipeMenuView menuView = (SwipeMenuView) mSwipeCurrentHorizontal.getMenuView();
+                mItemMenuStateListener.onMenuState(OnItemMenuStateListener.CLOSED, menuView.getAdapterPosition());
+            }
         }
     }
 

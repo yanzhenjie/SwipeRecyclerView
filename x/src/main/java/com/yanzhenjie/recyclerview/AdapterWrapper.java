@@ -49,6 +49,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LayoutInflater mInflater;
 
     private SwipeMenuCreator mSwipeMenuCreator;
+    private OnItemMenuStateListener mItemMenuStateListener;
     private OnItemMenuClickListener mOnItemMenuClickListener;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
@@ -69,6 +70,10 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     void setSwipeMenuCreator(SwipeMenuCreator swipeMenuCreator) {
         this.mSwipeMenuCreator = swipeMenuCreator;
+    }
+
+    void setOnItemMenuStateListener(OnItemMenuStateListener listener) {
+        this.mItemMenuStateListener = listener;
     }
 
     /**
@@ -176,6 +181,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (itemView instanceof SwipeMenuLayout && mSwipeMenuCreator != null) {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
+            menuLayout.setOnItemMenuStateListener(mItemMenuStateListener);
             SwipeMenu leftMenu = new SwipeMenu(menuLayout);
             SwipeMenu rightMenu = new SwipeMenu(menuLayout);
             mSwipeMenuCreator.onCreateMenu(leftMenu, rightMenu, position);
