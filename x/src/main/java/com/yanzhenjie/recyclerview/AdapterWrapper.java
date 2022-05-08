@@ -49,10 +49,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecyclerView.Adapter mAdapter;
     private LayoutInflater mInflater;
-
     private boolean autoMarginEnable = false;
-    private int leftMarginOfItem = -1;
-    private int rightMarginOfItem = -1;
 
     private SwipeMenuCreator mSwipeMenuCreator;
     private OnItemMenuStateListener mItemMenuStateListener;
@@ -194,19 +191,16 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
             menuLayout.setOnItemMenuStateListener(mItemMenuStateListener);
             if (autoMarginEnable) {
-                // 获取原始Item的layout参数，继承其左侧和右侧的margin
                 FrameLayout contentFrame = (FrameLayout) menuLayout.getChildAt(1);
                 ViewGroup nestedContent = (ViewGroup) contentFrame.getChildAt(0);
                 ViewGroup.MarginLayoutParams params1 = (ViewGroup.MarginLayoutParams) nestedContent.getLayoutParams();
-                // 只取一次值，避免列表来回滚动时控件复用带来的干扰
-                if (leftMarginOfItem == -1 || rightMarginOfItem == -1) {
-                    leftMarginOfItem = params1.leftMargin;
-                    rightMarginOfItem = params1.rightMargin;
-                }
                 ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) menuLayout.getLayoutParams();
-                params2.leftMargin = leftMarginOfItem;
-                params2.rightMargin = rightMarginOfItem;
-                params1.leftMargin = params1.rightMargin = 0;
+                // Make sure we only adjust margins once for each item
+                if (params1.leftMargin != 0 || params1.rightMargin != 0) {
+                    params2.leftMargin = params1.leftMargin ;
+                    params2.rightMargin = params1.rightMargin;
+                    params1.leftMargin = params1.rightMargin = 0;
+                }
             }
 
             SwipeMenu leftMenu = new SwipeMenu(menuLayout);
