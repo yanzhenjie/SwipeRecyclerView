@@ -70,7 +70,8 @@ public class SwipeRecyclerView extends RecyclerView {
     private int mDownX;
     private int mDownY;
 
-    private boolean allowSwipeDelete;
+    private boolean allowSwipeDelete = false;
+    private boolean autoMarginEnable = false;
 
     private DefaultItemTouchHelper mItemTouchHelper;
 
@@ -102,6 +103,26 @@ public class SwipeRecyclerView extends RecyclerView {
             mItemTouchHelper = new DefaultItemTouchHelper();
             mItemTouchHelper.attachToRecyclerView(this);
         }
+    }
+
+    /**
+     * Set SwipeMenuLayout's horizontal margins.
+     *
+     * @param enabled true means we'll inherit the original content layout's margins;
+     *                otherwise not; default is false.
+     */
+    public void setAutoMarginEnabled(boolean enabled) {
+        this.autoMarginEnable = enabled;
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.setAutoMarginEnabled(enabled);
+        }
+    }
+
+    /**
+     * True means enabled, otherwise not; default is false.
+     */
+    public boolean isAutoMarginEnabled() {
+        return autoMarginEnable;
     }
 
     /**
@@ -391,6 +412,7 @@ public class SwipeRecyclerView extends RecyclerView {
             mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
             mAdapterWrapper.setOnItemMenuClickListener(mOnItemMenuClickListener);
             mAdapterWrapper.setOnItemMenuStateListener(mItemMenuStateListener);
+            mAdapterWrapper.setAutoMarginEnabled(autoMarginEnable);
 
             if (mHeaderViewList.size() > 0) {
                 for (View view : mHeaderViewList) {

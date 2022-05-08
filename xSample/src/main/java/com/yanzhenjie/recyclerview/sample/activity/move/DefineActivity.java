@@ -21,7 +21,9 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.yanzhenjie.recyclerview.OnItemMenuStateListener;
 import com.yanzhenjie.recyclerview.sample.R;
+import com.yanzhenjie.recyclerview.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.touch.OnItemMovementListener;
 
@@ -65,6 +67,7 @@ public class DefineActivity extends BaseDragActivity {
             }
         });
 
+        mRecyclerView.setAutoMarginEnabled(true);
         mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
         mRecyclerView.setItemViewSwipeEnabled(false); // 滑动删除，默认关闭。
 
@@ -189,5 +192,25 @@ public class DefineActivity extends BaseDragActivity {
                 Toast.makeText(DefineActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    @Override
+    protected void beforeSettingAdapter() {
+        // 监听侧滑菜单展开/收起的状态变化。
+        // 注意：必须在给RecyclerView设置adapter之前设置
+        OnItemMenuStateListener listener = new OnItemMenuStateListener() {
+            @Override
+            public void onMenuState(RecyclerView.ViewHolder viewHolder, int menuState) {
+                MainAdapter.ViewHolder vh = (MainAdapter.ViewHolder) viewHolder;
+                if (menuState == OPEN) {
+                    vh.setHiddenView(true);
+                    Toast.makeText(DefineActivity.this, "菜单已展开，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                } else {
+                    vh.setHiddenView(false);
+                    Toast.makeText(DefineActivity.this, "菜单已收起，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        mRecyclerView.setOnItemMenuStateListener(listener);
     }
 }

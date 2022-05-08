@@ -22,7 +22,9 @@
     android:background="?selectableItemBackground"
     android:gravity="center_vertical"
     android:minHeight="@dimen/dp_70"
-    android:padding="@dimen/dp_10">
+    android:padding="@dimen/dp_10"
+    android:layout_marginLeft="18dp"
+    android:layout_marginRight="18dp">
 
     <TextView
         android:id="@+id/tv_title"

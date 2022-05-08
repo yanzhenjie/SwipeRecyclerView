@@ -19,6 +19,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.yanzhenjie.recyclerview.x.R;
 
@@ -47,6 +48,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecyclerView.Adapter mAdapter;
     private LayoutInflater mInflater;
+    private boolean autoMarginEnable = false;
 
     private SwipeMenuCreator mSwipeMenuCreator;
     private OnItemMenuStateListener mItemMenuStateListener;
@@ -61,6 +63,10 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public RecyclerView.Adapter getOriginAdapter() {
         return mAdapter;
+    }
+
+    public void setAutoMarginEnabled(boolean enabled) {
+        this.autoMarginEnable = enabled;
     }
 
     /**
@@ -182,6 +188,17 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (itemView instanceof SwipeMenuLayout && mSwipeMenuCreator != null) {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
             menuLayout.setOnItemMenuStateListener(mItemMenuStateListener);
+            if (autoMarginEnable) {
+                // 获取原始Item的layout参数，继承其左侧和右侧的margin
+                FrameLayout contentFrame = (FrameLayout) menuLayout.getChildAt(1);
+                ViewGroup nestedContent = (ViewGroup) contentFrame.getChildAt(0);
+                ViewGroup.MarginLayoutParams params1 = (ViewGroup.MarginLayoutParams) nestedContent.getLayoutParams();
+                ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) menuLayout.getLayoutParams();
+                params2.leftMargin = params1.leftMargin;
+                params2.rightMargin = params1.rightMargin;
+                menuLayout.setLayoutParams(params2);
+            }
+
             SwipeMenu leftMenu = new SwipeMenu(menuLayout);
             SwipeMenu rightMenu = new SwipeMenu(menuLayout);
             mSwipeMenuCreator.onCreateMenu(leftMenu, rightMenu, position);

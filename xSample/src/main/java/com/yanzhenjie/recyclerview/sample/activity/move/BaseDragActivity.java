@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
-import com.yanzhenjie.recyclerview.OnItemMenuStateListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
 import com.yanzhenjie.recyclerview.SwipeMenuCreator;
@@ -30,7 +29,6 @@ import com.yanzhenjie.recyclerview.SwipeMenuItem;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.sample.R;
 import com.yanzhenjie.recyclerview.sample.activity.BaseActivity;
-import com.yanzhenjie.recyclerview.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.touch.OnItemStateChangedListener;
 
@@ -53,9 +51,8 @@ public abstract class BaseDragActivity extends BaseActivity {
         mRecyclerView.setOnItemMenuClickListener(mItemMenuClickListener); // Item的Menu点击。
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator); // 菜单创建器。
 
-        // 监听侧滑菜单展开/收起的状态变化。
-        // 注意：必须在给RecyclerView设置adapter之前设置
-        mRecyclerView.setOnItemMenuStateListener(mItemMenuStateListener);
+        // 在设置adapter之前给子类一个机会。
+        beforeSettingAdapter();
 
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged(mDataList);
@@ -66,6 +63,7 @@ public abstract class BaseDragActivity extends BaseActivity {
     }
 
     protected abstract OnItemMoveListener getItemMoveListener();
+    protected void beforeSettingAdapter() { }
 
     /**
      * Item的拖拽/侧滑删除时，手指状态发生变化监听。
@@ -151,20 +149,6 @@ public abstract class BaseDragActivity extends BaseActivity {
             } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
                 Toast.makeText(BaseDragActivity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
                     .show();
-            }
-        }
-    };
-
-    private OnItemMenuStateListener mItemMenuStateListener = new OnItemMenuStateListener() {
-        @Override
-        public void onMenuState(RecyclerView.ViewHolder viewHolder, int menuState) {
-            MainAdapter.ViewHolder vh = (MainAdapter.ViewHolder) viewHolder;
-            if (menuState == OPEN) {
-                vh.setHiddenView(true);
-                Toast.makeText(BaseDragActivity.this, "菜单已展开，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-            } else {
-                vh.setHiddenView(false);
-                Toast.makeText(BaseDragActivity.this, "菜单已收起，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
             }
         }
     };
