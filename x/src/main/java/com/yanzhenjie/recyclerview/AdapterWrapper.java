@@ -15,6 +15,7 @@
  */
 package com.yanzhenjie.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ import static com.yanzhenjie.recyclerview.SwipeRecyclerView.LEFT_DIRECTION;
 import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
 
 /**
- * Created by YanZhenjie on 2017/7/20.
+ * Created by Yan Zhenjie on 2017/7/20.
  */
 class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -48,7 +49,10 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecyclerView.Adapter mAdapter;
     private LayoutInflater mInflater;
+
     private boolean autoMarginEnable = false;
+    private int leftMarginOfItem = -1;
+    private int rightMarginOfItem = -1;
 
     private SwipeMenuCreator mSwipeMenuCreator;
     private OnItemMenuStateListener mItemMenuStateListener;
@@ -177,6 +181,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position,
         @NonNull List<Object> payloads) {
@@ -193,10 +198,15 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 FrameLayout contentFrame = (FrameLayout) menuLayout.getChildAt(1);
                 ViewGroup nestedContent = (ViewGroup) contentFrame.getChildAt(0);
                 ViewGroup.MarginLayoutParams params1 = (ViewGroup.MarginLayoutParams) nestedContent.getLayoutParams();
+                // 只取一次值，避免列表来回滚动时控件复用带来的干扰
+                if (leftMarginOfItem == -1 || rightMarginOfItem == -1) {
+                    leftMarginOfItem = params1.leftMargin;
+                    rightMarginOfItem = params1.rightMargin;
+                }
                 ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) menuLayout.getLayoutParams();
-                params2.leftMargin = params1.leftMargin;
-                params2.rightMargin = params1.rightMargin;
-                menuLayout.setLayoutParams(params2);
+                params2.leftMargin = leftMarginOfItem;
+                params2.rightMargin = rightMarginOfItem;
+                params1.leftMargin = params1.rightMargin = 0;
             }
 
             SwipeMenu leftMenu = new SwipeMenu(menuLayout);
