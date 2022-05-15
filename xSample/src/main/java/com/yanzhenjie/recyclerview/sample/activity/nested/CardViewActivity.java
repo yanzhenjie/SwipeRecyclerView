@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yanzhenjie.recyclerview.SwipeMenuLayout;
 import com.yanzhenjie.recyclerview.sample.R;
 import com.yanzhenjie.recyclerview.sample.activity.BaseActivity;
 import com.yanzhenjie.recyclerview.sample.adapter.BaseAdapter;
@@ -87,6 +88,7 @@ public class CardViewActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(@NonNull DefaultViewHolder holder, int position) {
+            holder.resetMenuStatus();
             holder.setData(mDataList.get(position));
         }
     }
@@ -94,12 +96,15 @@ public class CardViewActivity extends BaseActivity {
     static class DefaultViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitle;
+        SwipeMenuLayout menuLayout;
 
         public DefaultViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
+            menuLayout = itemView.findViewById(R.id.menuLayout);
+            //setIsRecyclable(false);
 
-            ((CardView)itemView).getChildAt(0).setOnClickListener(new View.OnClickListener() {
+            menuLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(v.getContext(), "第" + getAdapterPosition() + "个", Toast.LENGTH_SHORT).show();
@@ -109,6 +114,14 @@ public class CardViewActivity extends BaseActivity {
 
         public void setData(String title) {
             this.tvTitle.setText(title);
+        }
+
+        public void resetMenuStatus() {
+            // ViewHolder may be reused (or say recyclable).
+            // So the menu should be reset in onBindViewHolder()
+            if (menuLayout.isMenuOpen()) {
+                menuLayout.smoothCloseMenu();
+            }
         }
     }
 
