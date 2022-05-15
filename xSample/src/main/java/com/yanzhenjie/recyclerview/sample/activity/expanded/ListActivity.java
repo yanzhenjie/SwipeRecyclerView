@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.sample.R;
+import com.yanzhenjie.recyclerview.sample.activity.BaseActivity;
 import com.yanzhenjie.recyclerview.sample.activity.expanded.entity.Group;
 import com.yanzhenjie.recyclerview.sample.activity.expanded.entity.GroupMember;
 import com.yanzhenjie.recyclerview.sample.adapter.ExpandedAdapter;
@@ -39,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 /**
  * Created by Zhenjie Yan on 1/30/19.
  */
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends BaseActivity {
 
     private SwipeRecyclerView mRecyclerView;
     private ExpandedAdapter mAdapter;
