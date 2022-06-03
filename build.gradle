@@ -2,11 +2,13 @@ apply from: "config.gradle"
 apply plugin: 'maven-publish'
 
 group = 'com.github.luqiming666'
+version = '1.4.2'
 
 buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -20,6 +22,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 }
 
