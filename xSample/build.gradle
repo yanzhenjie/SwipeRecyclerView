@@ -2,7 +2,6 @@ apply plugin: rootProject.ext.plugins.application
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
         applicationId rootProject.ext.android.applicationId
@@ -20,4 +19,6 @@ dependencies {
     implementation rootProject.ext.dependencies.xAppCompat
     implementation rootProject.ext.dependencies.xRecyclerView
     implementation rootProject.ext.dependencies.xCardView
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 }

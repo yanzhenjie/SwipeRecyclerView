@@ -1,12 +1,9 @@
 ext {
     plugins = [library    : 'com.android.library',
-               application: 'com.android.application',
-               maven      : 'com.github.dcendents.android-maven',
-               bintray    : 'com.jfrog.bintray']
+               application: 'com.android.application']
 
     android = [applicationId    : "com.yanzhenjie.recyclerview.sample",
                compileSdkVersion: 30,
-               buildToolsVersion: "28.0.3",
 
                minSdkVersion    : 14,
                targetSdkVersion : 30,
@@ -42,8 +39,8 @@ ext {
                     cardView     : 'com.android.support:cardview-v7:28.0.0',
                     recyclerView : 'com.android.support:recyclerview-v7:28.0.0',
 
-                    xDesign      : 'com.google.android.material:material:1.0.0',
-                    xAppCompat   : 'androidx.appcompat:appcompat:1.0.2',
-                    xRecyclerView: 'androidx.recyclerview:recyclerview:1.0.0',
+                    xDesign      : 'com.google.android.material:material:1.4.0',
+                    xAppCompat   : 'androidx.appcompat:appcompat:1.3.0',
+                    xRecyclerView: 'androidx.recyclerview:recyclerview:1.2.1',
                     xCardView    : 'androidx.cardview:cardview:1.0.0']
 }

@@ -2,9 +2,7 @@ apply plugin: rootProject.ext.plugins.library
 apply plugin: 'maven-publish'
 
 android {
-
     compileSdkVersion rootProject.ext.android.compileSdkVersion
-    buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.android.minSdkVersion
