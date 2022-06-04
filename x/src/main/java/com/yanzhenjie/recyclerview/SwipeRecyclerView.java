@@ -643,7 +643,7 @@ public class SwipeRecyclerView extends RecyclerView {
                     if (touchPosition != mOldTouchedPosition && mOldSwipedLayout != null &&
                         mOldSwipedLayout.isMenuOpen()) {
                         mOldSwipedLayout.smoothCloseMenu();
-                        isIntercepted = true;
+                        //isIntercepted = true;
                     }
 
                     if (isIntercepted) {

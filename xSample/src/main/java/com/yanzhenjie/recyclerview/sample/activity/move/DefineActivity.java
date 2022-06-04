@@ -22,6 +22,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.yanzhenjie.recyclerview.OnItemMenuStateListener;
+import com.yanzhenjie.recyclerview.SwipeMenuLayout;
+import com.yanzhenjie.recyclerview.SwipeMenuView;
 import com.yanzhenjie.recyclerview.sample.R;
 import com.yanzhenjie.recyclerview.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
@@ -29,6 +31,7 @@ import com.yanzhenjie.recyclerview.touch.OnItemMovementListener;
 
 import java.util.Collections;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -203,7 +206,17 @@ public class DefineActivity extends BaseDragActivity {
             public void onMenuState(RecyclerView.ViewHolder viewHolder, int menuState) {
                 MainAdapter.ViewHolder vh = (MainAdapter.ViewHolder) viewHolder;
                 if (menuState == OPEN) {
+                    // 演示：修改Item的状态
                     vh.setHiddenView(true);
+                    // 演示：修改菜单项的状态
+                    SwipeMenuLayout menuLayout = (SwipeMenuLayout) vh.itemView;
+                    if (menuLayout.hasRightMenu()) {
+                        SwipeMenuView rightMenuView = (SwipeMenuView) menuLayout.getChildAt(2);
+                        View view1 = rightMenuView.getChildAt(0);
+                        view1.setBackgroundColor(ContextCompat.getColor(DefineActivity.this, R.color.green_normal));
+                        view1.setEnabled(false);
+                    }
+
                     Toast.makeText(DefineActivity.this, "菜单已展开，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
                 } else {
                     vh.setHiddenView(false);
