@@ -1,4 +1,5 @@
 apply plugin: rootProject.ext.plugins.library
+apply plugin: 'maven-publish'
 
 android {
 
@@ -12,6 +13,25 @@ android {
     }
 
     resourcePrefix 'x_recycler'
+}
+
+task generateSourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier 'sources'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = 'com.github.luqiming666'
+                artifactId = 'SwipeRecyclerView'
+                version = rootProject.ext.android.versionName
+            }
+        }
+    }
 }
 
 dependencies {
