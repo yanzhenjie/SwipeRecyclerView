@@ -191,7 +191,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
             menuLayout.setOnItemMenuStateListener(mItemMenuStateListener);
             if (autoMarginEnable) {
-                FrameLayout contentFrame = (FrameLayout) menuLayout.getChildAt(1);
+                FrameLayout contentFrame = (FrameLayout) menuLayout.findViewById(R.id.swipe_content);
                 ViewGroup nestedContent = (ViewGroup) contentFrame.getChildAt(0);
                 ViewGroup.MarginLayoutParams params1 = (ViewGroup.MarginLayoutParams) nestedContent.getLayoutParams();
                 ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) menuLayout.getLayoutParams();

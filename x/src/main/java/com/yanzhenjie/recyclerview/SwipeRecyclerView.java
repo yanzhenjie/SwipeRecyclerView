@@ -121,7 +121,7 @@ public class SwipeRecyclerView extends RecyclerView {
     /**
      * True means enabled, otherwise not; default is false.
      */
-    public boolean isAutoMarginEnabled() {
+    public boolean getAutoMarginEnabled() {
         return autoMarginEnable;
     }
 
