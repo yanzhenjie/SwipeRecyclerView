@@ -471,7 +471,8 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
 
             if (mItemMenuStateListener != null) {
                 SwipeMenuView menuView = (SwipeMenuView) mSwipeCurrentHorizontal.getMenuView();
-                mItemMenuStateListener.onMenuState(menuView.getViewHolder(), OnItemMenuStateListener.OPEN);
+                if (menuView.getViewHolder() != null)
+                    mItemMenuStateListener.onMenuState(menuView.getViewHolder(), OnItemMenuStateListener.OPEN);
             }
         }
     }
@@ -505,7 +506,8 @@ public class SwipeMenuLayout extends FrameLayout implements Controller {
 
             if (mItemMenuStateListener != null) {
                 SwipeMenuView menuView = (SwipeMenuView) mSwipeCurrentHorizontal.getMenuView();
-                mItemMenuStateListener.onMenuState(menuView.getViewHolder(), OnItemMenuStateListener.CLOSED);
+                if (menuView.getViewHolder() != null)
+                    mItemMenuStateListener.onMenuState(menuView.getViewHolder(), OnItemMenuStateListener.CLOSED);
             }
         }
     }
