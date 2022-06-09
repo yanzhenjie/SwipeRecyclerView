@@ -21,17 +21,12 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.yanzhenjie.recyclerview.OnItemMenuStateListener;
-import com.yanzhenjie.recyclerview.SwipeMenuLayout;
-import com.yanzhenjie.recyclerview.SwipeMenuView;
 import com.yanzhenjie.recyclerview.sample.R;
-import com.yanzhenjie.recyclerview.sample.adapter.MainAdapter;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 import com.yanzhenjie.recyclerview.touch.OnItemMovementListener;
 
 import java.util.Collections;
 
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,7 +65,6 @@ public class DefineActivity extends BaseDragActivity {
             }
         });
 
-        mRecyclerView.setAutoMarginEnabled(true);
         mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
         mRecyclerView.setItemViewSwipeEnabled(false); // 滑动删除，默认关闭。
 
@@ -158,7 +152,6 @@ public class DefineActivity extends BaseDragActivity {
         }
     };
 
-
     @Override
     protected OnItemMoveListener getItemMoveListener() {
         return new OnItemMoveListener() {
@@ -195,35 +188,5 @@ public class DefineActivity extends BaseDragActivity {
                 Toast.makeText(DefineActivity.this, "现在的第" + position + "条被删除。", Toast.LENGTH_SHORT).show();
             }
         };
-    }
-
-    @Override
-    protected void beforeSettingAdapter() {
-        // 监听侧滑菜单展开/收起的状态变化。
-        // 注意：必须在给RecyclerView设置adapter之前设置
-        OnItemMenuStateListener listener = new OnItemMenuStateListener() {
-            @Override
-            public void onMenuState(RecyclerView.ViewHolder viewHolder, int menuState) {
-                MainAdapter.ViewHolder vh = (MainAdapter.ViewHolder) viewHolder;
-                if (menuState == OPEN) {
-                    // 演示：修改Item的状态
-                    vh.setHiddenView(true);
-                    // 演示：修改菜单项的状态
-                    SwipeMenuLayout menuLayout = (SwipeMenuLayout) vh.itemView;
-                    if (menuLayout.hasRightMenu()) {
-                        SwipeMenuView rightMenuView = (SwipeMenuView) menuLayout.getChildAt(2);
-                        View view1 = rightMenuView.getChildAt(0);
-                        view1.setBackgroundColor(ContextCompat.getColor(DefineActivity.this, R.color.green_normal));
-                        view1.setEnabled(false);
-                    }
-
-                    Toast.makeText(DefineActivity.this, "菜单已展开，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                } else {
-                    vh.setHiddenView(false);
-                    Toast.makeText(DefineActivity.this, "菜单已收起，位置：" + viewHolder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
-        mRecyclerView.setOnItemMenuStateListener(listener);
     }
 }

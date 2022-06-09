@@ -31,6 +31,7 @@
         <item>根据ViewType定制菜单</item>
         <item>竖向排布的菜单</item>
         <item>自定义菜单</item>
+        <item>List形式菜单-更多测试</item>
     </string-array>
 
     <string-array name="touch_item">

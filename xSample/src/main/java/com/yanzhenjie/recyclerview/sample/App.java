@@ -16,6 +16,7 @@
 package com.yanzhenjie.recyclerview.sample;
 
 import android.app.Application;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * Created by Yan Zhenjie on 2016/7/27.
@@ -31,6 +32,9 @@ public class App extends Application {
         if (instance == null) {
             instance = this;
         }
+
+        // Bugly configurations
+        CrashReport.initCrashReport(this, "451ccbc490", false);  // bound with QQ
     }
 
     public static App getInstance() {
