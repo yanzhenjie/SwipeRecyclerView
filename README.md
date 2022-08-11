@@ -46,9 +46,11 @@ implementation 'com.yanzhenjie.recyclerview:support:1.3.2'
 ```
 
 如果你使用的是android x库，那么请添加下述依赖：
-<font color="#006600">implementation 'com.github.luqiming666:SwipeRecyclerView:1.4.8'<font>
 ```groovy
-注意：记得在build.gradle中加入
+implementation 'com.github.luqiming666:SwipeRecyclerView:1.4.8'
+```
+**注意** 记得在build.gradle中加入
+```groovy
 maven {
      url 'https://jitpack.io'
 }
