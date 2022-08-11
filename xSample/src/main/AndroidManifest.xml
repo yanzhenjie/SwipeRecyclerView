@@ -62,6 +62,9 @@
         <activity
             android:name=".activity.menu.ListPlusActivity"
             android:label="List形式菜单-更多测试"/>
+        <activity
+            android:name=".activity.menu.ListEmptyViewActivity"
+            android:label="List形式菜单-空态切换"/>
 
         <!-- -->
         <activity

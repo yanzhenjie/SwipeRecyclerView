@@ -69,6 +69,7 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private int mDownX;
     private int mDownY;
+    private View mEmptyView;
 
     private boolean allowSwipeDelete = false;
     private boolean autoMarginEnable = false;
@@ -103,6 +104,15 @@ public class SwipeRecyclerView extends RecyclerView {
             mItemTouchHelper = new DefaultItemTouchHelper();
             mItemTouchHelper.attachToRecyclerView(this);
         }
+    }
+
+    /**
+     * Use the view as a placeholder when this RecyclerView is empty.
+     *
+     * @param emptyView the target view to show.
+     */
+    public void setEmptyView(View emptyView) {
+        mEmptyView = emptyView;
     }
 
     /**
@@ -426,36 +436,42 @@ public class SwipeRecyclerView extends RecyclerView {
             }
         }
         super.setAdapter(mAdapterWrapper);
+        checkIfEmpty();
     }
 
     private AdapterDataObserver mAdapterDataObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
             mAdapterWrapper.notifyDataSetChanged();
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount);
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount, payload);
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeInserted(positionStart, itemCount);
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeRemoved(positionStart, itemCount);
+            checkIfEmpty();
         }
 
         @Override
@@ -463,8 +479,17 @@ public class SwipeRecyclerView extends RecyclerView {
             fromPosition += getHeaderCount();
             toPosition += getHeaderCount();
             mAdapterWrapper.notifyItemMoved(fromPosition, toPosition);
+            checkIfEmpty();
         }
     };
+
+    private void checkIfEmpty() {
+        if (mEmptyView != null && getAdapter() != null) {
+            boolean emptyViewVisible = getAdapter().getItemCount() == 0;
+            mEmptyView.setVisibility(emptyViewVisible ? View.VISIBLE : View.GONE);
+            this.setVisibility(emptyViewVisible ? View.GONE : View.VISIBLE);
+        }
+    }
 
     private List<View> mHeaderViewList = new ArrayList<>();
     private List<View> mFooterViewList = new ArrayList<>();
