@@ -30,10 +30,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * <p>
  * ListView形式的侧滑菜单--更多测试！
- * </p>
- * Created by QM on 2022/6/9.
+ * Created by QM-LU on 2022/6/9.
  */
 public class ListPlusActivity extends BaseActivity {
 

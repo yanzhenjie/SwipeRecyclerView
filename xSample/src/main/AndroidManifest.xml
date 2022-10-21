@@ -96,6 +96,9 @@
             android:name=".activity.load.DefaultActivity"
             android:label="默认LoadMore"/>
         <activity
+            android:name=".activity.load.DefaultActivityDiff"
+            android:label="默认LoadMore-AsyncListDiffer"/>
+        <activity
             android:name=".activity.load.DefineActivity"
             android:label="自定义LoadMore"/>
 

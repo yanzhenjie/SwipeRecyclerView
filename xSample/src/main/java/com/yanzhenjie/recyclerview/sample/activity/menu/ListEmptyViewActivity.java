@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by QM on 2022/8/11.
+ * Created by QM-LU on 2022/8/11.
  */
 public class ListEmptyViewActivity extends BaseActivity {
 

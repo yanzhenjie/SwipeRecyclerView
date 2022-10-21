@@ -44,6 +44,7 @@
 
     <string-array name="refresh_item">
         <item>默认LoadMoreView</item>
+        <item>默认LoadMoreView-AsyncListDiffer</item>
         <item>自定义LoadMoreView</item>
     </string-array>
 
