@@ -50,7 +50,17 @@ public class DragGridActivity extends BaseDragActivity {
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 控制是否可以侧滑删除。
                 mRecyclerView.setItemViewSwipeEnabled(isChecked);
+            }
+        });
+
+        SwitchCompat switchSwipeMenu = mHeaderView.findViewById(R.id.switch_swipemenu);
+        switchSwipeMenu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 控制是否可以侧滑出菜单——全局控制。
+                mRecyclerView.setSwipeItemMenuEnabled(isChecked);
             }
         });
 

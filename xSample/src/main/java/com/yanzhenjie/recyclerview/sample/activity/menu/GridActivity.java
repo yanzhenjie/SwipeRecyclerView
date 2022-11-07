@@ -130,7 +130,7 @@ public class GridActivity extends BaseActivity {
     // ---------- 开发者只需要关注上面的代码 ---------- //
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_all_activity, menu);
         return true;
     }

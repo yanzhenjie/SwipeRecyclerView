@@ -91,6 +91,10 @@ public class SwipeMenuView extends LinearLayout implements View.OnClickListener 
         }
     }
 
+    public RecyclerView.ViewHolder getViewHolder() {
+        return mViewHolder;
+    }
+
     @Override
     public void onClick(View v) {
         if (mItemClickListener != null) {

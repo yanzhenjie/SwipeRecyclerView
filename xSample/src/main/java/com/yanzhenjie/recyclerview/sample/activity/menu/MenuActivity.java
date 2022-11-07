@@ -64,6 +64,14 @@ public class MenuActivity extends BaseActivity {
                 startActivity(new Intent(this, DefineActivity.class));
                 break;
             }
+            case 5: {
+                startActivity(new Intent(this, ListPlusActivity.class));
+                break;
+            }
+            case 6: {
+                startActivity(new Intent(this, ListEmptyViewActivity.class));
+                break;
+            }
         }
     }
 

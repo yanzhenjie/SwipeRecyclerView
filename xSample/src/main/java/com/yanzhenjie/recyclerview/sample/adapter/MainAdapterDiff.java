@@ -25,27 +25,53 @@ import com.yanzhenjie.recyclerview.sample.R;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by YOLANDA on 2016/7/22.
+ * Created by QM-LU on 2022/10/20.
+ * https://blog.csdn.net/suwenlai/article/details/108276501
  */
-public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
+public class MainAdapterDiff extends BaseAdapter<MainAdapterDiff.ViewHolder> {
 
-    private List<String> mDataList;
+    private AsyncListDiffer<String> mDiffer;
+    private DiffUtil.ItemCallback<String> diffCallback = new DiffUtil.ItemCallback<String>() {
+        @Override
+        public boolean areItemsTheSame(String oldItem, String newItem) {
+            return oldItem.equals(newItem);
+        }
 
-    public MainAdapter(Context context) {
+        @Override
+        public boolean areContentsTheSame(String oldItem, String newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
+    public MainAdapterDiff(Context context) {
         super(context);
+        mDiffer = new AsyncListDiffer<>(this, diffCallback);
     }
 
     public void notifyDataSetChanged(List<String> dataList) {
-        this.mDataList = dataList;
-        super.notifyDataSetChanged();
+        // No longer used!!!
     }
 
     @Override
     public int getItemCount() {
-        return mDataList == null ? 0 : mDataList.size();
+        return mDiffer.getCurrentList().size();
+    }
+
+    public void submitList(List<String> data) {
+        mDiffer.submitList(data);
+    }
+
+    public List<String> getList() {
+        return mDiffer.getCurrentList();
+    }
+
+    public String getItem(int position) {
+        return mDiffer.getCurrentList().get(position);
     }
 
     @NonNull
@@ -56,9 +82,10 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setData(mDataList.get(position));
+        holder.setData(getItem(position));
     }
 
+    ////////////////////////////////////////////////////////////////
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitle;

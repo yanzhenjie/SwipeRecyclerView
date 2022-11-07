@@ -69,12 +69,15 @@ public class SwipeRecyclerView extends RecyclerView {
 
     private int mDownX;
     private int mDownY;
+    private View mEmptyView;
 
-    private boolean allowSwipeDelete;
+    private boolean allowSwipeDelete = false;
+    private boolean autoMarginEnable = false;
 
     private DefaultItemTouchHelper mItemTouchHelper;
 
     private SwipeMenuCreator mSwipeMenuCreator;
+    private OnItemMenuStateListener mItemMenuStateListener;
     private OnItemMenuClickListener mOnItemMenuClickListener;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
@@ -101,6 +104,35 @@ public class SwipeRecyclerView extends RecyclerView {
             mItemTouchHelper = new DefaultItemTouchHelper();
             mItemTouchHelper.attachToRecyclerView(this);
         }
+    }
+
+    /**
+     * Use the view as a placeholder when this RecyclerView is empty.
+     *
+     * @param emptyView the target view to show.
+     */
+    public void setEmptyView(View emptyView) {
+        mEmptyView = emptyView;
+    }
+
+    /**
+     * Set SwipeMenuLayout's horizontal margins.
+     *
+     * @param enabled true means we'll inherit the original content layout's margins;
+     *                otherwise not; default is false.
+     */
+    public void setAutoMarginEnabled(boolean enabled) {
+        this.autoMarginEnable = enabled;
+        if (mAdapterWrapper != null) {
+            mAdapterWrapper.setAutoMarginEnabled(enabled);
+        }
+    }
+
+    /**
+     * True means enabled, otherwise not; default is false.
+     */
+    public boolean getAutoMarginEnabled() {
+        return autoMarginEnable;
     }
 
     /**
@@ -307,6 +339,15 @@ public class SwipeRecyclerView extends RecyclerView {
     }
 
     /**
+     * Set to menu state change listener.
+     */
+    public void setOnItemMenuStateListener(OnItemMenuStateListener listener) {
+        if (listener == null) return;
+        checkAdapterExist("Cannot set menu state change listener, setAdapter has already been called.");
+        this.mItemMenuStateListener = listener;
+    }
+
+    /**
      * Set to click menu listener.
      */
     public void setOnItemMenuClickListener(OnItemMenuClickListener listener) {
@@ -380,6 +421,8 @@ public class SwipeRecyclerView extends RecyclerView {
             mAdapterWrapper.setOnItemLongClickListener(mOnItemLongClickListener);
             mAdapterWrapper.setSwipeMenuCreator(mSwipeMenuCreator);
             mAdapterWrapper.setOnItemMenuClickListener(mOnItemMenuClickListener);
+            mAdapterWrapper.setOnItemMenuStateListener(mItemMenuStateListener);
+            mAdapterWrapper.setAutoMarginEnabled(autoMarginEnable);
 
             if (mHeaderViewList.size() > 0) {
                 for (View view : mHeaderViewList) {
@@ -393,36 +436,42 @@ public class SwipeRecyclerView extends RecyclerView {
             }
         }
         super.setAdapter(mAdapterWrapper);
+        checkIfEmpty();
     }
 
     private AdapterDataObserver mAdapterDataObserver = new AdapterDataObserver() {
         @Override
         public void onChanged() {
             mAdapterWrapper.notifyDataSetChanged();
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount);
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeChanged(int positionStart, int itemCount, Object payload) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeChanged(positionStart, itemCount, payload);
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeInserted(int positionStart, int itemCount) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeInserted(positionStart, itemCount);
+            checkIfEmpty();
         }
 
         @Override
         public void onItemRangeRemoved(int positionStart, int itemCount) {
             positionStart += getHeaderCount();
             mAdapterWrapper.notifyItemRangeRemoved(positionStart, itemCount);
+            checkIfEmpty();
         }
 
         @Override
@@ -430,8 +479,17 @@ public class SwipeRecyclerView extends RecyclerView {
             fromPosition += getHeaderCount();
             toPosition += getHeaderCount();
             mAdapterWrapper.notifyItemMoved(fromPosition, toPosition);
+            checkIfEmpty();
         }
     };
+
+    private void checkIfEmpty() {
+        if (mEmptyView != null && getAdapter() != null) {
+            boolean emptyViewVisible = getAdapter().getItemCount() == 0;
+            mEmptyView.setVisibility(emptyViewVisible ? View.VISIBLE : View.GONE);
+            this.setVisibility(emptyViewVisible ? View.GONE : View.VISIBLE);
+        }
+    }
 
     private List<View> mHeaderViewList = new ArrayList<>();
     private List<View> mFooterViewList = new ArrayList<>();
@@ -610,7 +668,7 @@ public class SwipeRecyclerView extends RecyclerView {
                     if (touchPosition != mOldTouchedPosition && mOldSwipedLayout != null &&
                         mOldSwipedLayout.isMenuOpen()) {
                         mOldSwipedLayout.smoothCloseMenu();
-                        isIntercepted = true;
+                        //isIntercepted = true;
                     }
 
                     if (isIntercepted) {

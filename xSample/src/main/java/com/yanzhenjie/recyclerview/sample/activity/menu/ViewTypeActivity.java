@@ -157,17 +157,27 @@ public class ViewTypeActivity extends BaseActivity {
     // ---------- 开发者只需要关注上面的代码 ---------- //
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_all_activity, menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // https://blog.csdn.net/weixin_42451611/article/details/117592218
+        getMenuInflater().inflate(R.menu.menu_more_tests, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        } else if (item.getItemId() == R.id.menu_open_rv_menu) {
-            mRecyclerView.smoothOpenRightMenu(0);
+        switch (item.getItemId()) {
+            case R.id.menu_open_rv_menu:
+                mRecyclerView.smoothOpenRightMenu(0);
+                break;
+            case R.id.menu_open_rv_menu2:
+                mRecyclerView.smoothOpenLeftMenu(1);
+                break;
+            case R.id.menu_close_rv_menu:
+                mRecyclerView.smoothCloseMenu();
+                break;
+            case android.R.id.home:
+                finish();
+                break;
         }
         return true;
     }

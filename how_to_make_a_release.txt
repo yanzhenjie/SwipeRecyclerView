@@ -1,0 +1,6 @@
+﻿
+1. commit & push source code changes to github.com
+2. on github.com, click "Draft a new release" with a new tag, then "Publish"
+3. open https://jitpack.io/
+4. enter luqiming666/SwipeRecyclerView, then click the button "Look up"
+5. click "Get it" beside the tag you want to build & release

@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.yanzhenjie.recyclerview.OnItemClickListener;
 import com.yanzhenjie.recyclerview.SwipeRecyclerView;
 import com.yanzhenjie.recyclerview.sample.R;
-import com.yanzhenjie.recyclerview.sample.adapter.MainAdapter;
+import com.yanzhenjie.recyclerview.sample.adapter.MainAdapterDiff;
 import com.yanzhenjie.recyclerview.widget.DefaultItemDecoration;
 
 import java.util.ArrayList;
@@ -38,16 +38,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
- * <p>
- * 默认的加载更多的View。
- * </p>
- * Created by YanZhenjie on 2017/7/21.
+ * 默认的加载更多的View - 使用AsyncListDiffer提升刷新效率！
+ * Created by QM-LU on 2022/10/22.
  */
-public class DefaultActivity extends AppCompatActivity {
+public class DefaultActivityDiff extends AppCompatActivity {
 
     private SwipeRefreshLayout mRefreshLayout;
     private SwipeRecyclerView mRecyclerView;
-    private MainAdapter mAdapter;
+    private MainAdapterDiff mAdapter;
     private List<String> mDataList;
 
     @Override
@@ -65,14 +63,14 @@ public class DefaultActivity extends AppCompatActivity {
         mRefreshLayout.setOnRefreshListener(mRefreshListener); // 刷新监听。
 
         mRecyclerView = findViewById(R.id.recycler_view);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         mRecyclerView.addItemDecoration(new DefaultItemDecoration(ContextCompat.getColor(this, R.color.divider_color)));
         mRecyclerView.setOnItemClickListener(mItemClickListener); // RecyclerView Item点击监听。
 
         mRecyclerView.useDefaultLoadMore(); // 使用默认的加载更多的View。
         mRecyclerView.setLoadMoreListener(mLoadMoreListener); // 加载更多的监听。
 
-        mAdapter = new MainAdapter(this);
+        mAdapter = new MainAdapterDiff(this);
         mRecyclerView.setAdapter(mAdapter);
 
         // 请求服务器加载数据。
@@ -88,9 +86,16 @@ public class DefaultActivity extends AppCompatActivity {
             mRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    loadData();
+                    List<String> newList = new ArrayList<>();
+                    List<String> strings = createDataList(mAdapter.getItemCount());
+                    newList.addAll(mAdapter.getList());
+                    newList.addAll(strings);
+                    mAdapter.submitList(newList);
+
+                    mRecyclerView.loadMoreFinish(false, true);
+                    mRefreshLayout.setRefreshing(false);
                 }
-            }, 1000); // 延时模拟请求服务器。
+            }, 500); // 延时模拟请求服务器。
         }
     };
 
@@ -103,10 +108,11 @@ public class DefaultActivity extends AppCompatActivity {
             mRecyclerView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    List<String> newList = new ArrayList<>();
                     List<String> strings = createDataList(mAdapter.getItemCount());
-                    mDataList.addAll(strings);
-                    // notifyItemRangeInserted()或者notifyDataSetChanged().
-                    mAdapter.notifyItemRangeInserted(mDataList.size() - strings.size(), strings.size());
+                    newList.addAll(mAdapter.getList());
+                    newList.addAll(strings);
+                    mAdapter.submitList(newList);
 
                     // 数据完更多数据，一定要调用这个方法。
                     // 第一个参数：表示此次数据是否为空。
@@ -128,7 +134,7 @@ public class DefaultActivity extends AppCompatActivity {
     private OnItemClickListener mItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View itemView, int position) {
-            Toast.makeText(DefaultActivity.this, "第" + position + "个", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DefaultActivityDiff.this, "第" + position + "个", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -136,8 +142,8 @@ public class DefaultActivity extends AppCompatActivity {
      * 第一次加载数据。
      */
     private void loadData() {
-        mDataList = createDataList(0);
-        mAdapter.notifyDataSetChanged(mDataList);
+        List<String> strings = createDataList(0);
+        mAdapter.submitList(strings);
 
         mRefreshLayout.setRefreshing(false);
 
@@ -149,7 +155,7 @@ public class DefaultActivity extends AppCompatActivity {
 
     protected List<String> createDataList(int start) {
         List<String> strings = new ArrayList<>();
-        for (int i = start; i < start + 100; i++) {
+        for (int i = start; i < start + 20; i++) {
             strings.add("第" + i + "个Item");
         }
         return strings;
