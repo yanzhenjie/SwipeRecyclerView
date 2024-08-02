@@ -55,6 +55,15 @@ public class DefineActivity extends BaseDragActivity {
             }
         });
 
+        SwitchCompat switchSwipeMenu = header.findViewById(R.id.switch_swipemenu);
+        switchSwipeMenu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 控制是否可以侧滑出菜单——全局控制。
+                mRecyclerView.setSwipeItemMenuEnabled(isChecked);
+            }
+        });
+
         mRecyclerView.setLongPressDragEnabled(true); // 长按拖拽，默认关闭。
         mRecyclerView.setItemViewSwipeEnabled(false); // 滑动删除，默认关闭。
 

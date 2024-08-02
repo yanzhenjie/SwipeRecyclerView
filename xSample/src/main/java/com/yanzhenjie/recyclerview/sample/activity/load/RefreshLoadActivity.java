@@ -49,6 +49,10 @@ public class RefreshLoadActivity extends BaseActivity {
                 break;
             }
             case 1: {
+                startActivity(new Intent(this, DefaultActivityDiff.class));
+                break;
+            }
+            case 2: {
                 startActivity(new Intent(this, DefineActivity.class));
                 break;
             }

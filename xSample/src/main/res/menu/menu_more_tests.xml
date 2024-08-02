@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_open_rv_menu"
+        android:title="打开第一个"/>
+    <item
+        android:id="@+id/menu_open_rv_menu2"
+        android:title="打开第二个"/>
+    <item
+        android:id="@+id/menu_close_rv_menu"
+        android:title="收起侧滑菜单"/>
+</menu>

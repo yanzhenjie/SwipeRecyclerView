@@ -59,7 +59,7 @@ public class MainAdapter extends BaseAdapter<MainAdapter.ViewHolder> {
         holder.setData(mDataList.get(position));
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitle;
 

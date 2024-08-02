@@ -20,6 +20,6 @@
     <string name="x_recycler_more_not">No more data</string>
     <string name="x_recycler_click_load_more">Click to load more</string>
     <string name="x_recycler_load_error">Error, please try again</string>
-    <string name="x_recycler_load_more_message">Loading, please wait later</string>
+    <string name="x_recycler_load_more_message">Loading, please wait a moment</string>
 
 </resources>

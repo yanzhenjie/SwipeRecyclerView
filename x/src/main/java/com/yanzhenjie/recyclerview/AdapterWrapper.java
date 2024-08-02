@@ -15,10 +15,12 @@
  */
 package com.yanzhenjie.recyclerview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.yanzhenjie.recyclerview.x.R;
 
@@ -35,7 +37,7 @@ import static com.yanzhenjie.recyclerview.SwipeRecyclerView.LEFT_DIRECTION;
 import static com.yanzhenjie.recyclerview.SwipeRecyclerView.RIGHT_DIRECTION;
 
 /**
- * Created by YanZhenjie on 2017/7/20.
+ * Created by Yan Zhenjie on 2017/7/20.
  */
 class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -47,8 +49,10 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private RecyclerView.Adapter mAdapter;
     private LayoutInflater mInflater;
+    private boolean autoMarginEnable = false;
 
     private SwipeMenuCreator mSwipeMenuCreator;
+    private OnItemMenuStateListener mItemMenuStateListener;
     private OnItemMenuClickListener mOnItemMenuClickListener;
     private OnItemClickListener mOnItemClickListener;
     private OnItemLongClickListener mOnItemLongClickListener;
@@ -62,6 +66,10 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return mAdapter;
     }
 
+    public void setAutoMarginEnabled(boolean enabled) {
+        this.autoMarginEnable = enabled;
+    }
+
     /**
      * Set to create menu listener.
      *
@@ -69,6 +77,10 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
      */
     void setSwipeMenuCreator(SwipeMenuCreator swipeMenuCreator) {
         this.mSwipeMenuCreator = swipeMenuCreator;
+    }
+
+    void setOnItemMenuStateListener(OnItemMenuStateListener listener) {
+        this.mItemMenuStateListener = listener;
     }
 
     /**
@@ -166,6 +178,7 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public final void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position,
         @NonNull List<Object> payloads) {
@@ -176,6 +189,20 @@ class AdapterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         if (itemView instanceof SwipeMenuLayout && mSwipeMenuCreator != null) {
             SwipeMenuLayout menuLayout = (SwipeMenuLayout)itemView;
+            menuLayout.setOnItemMenuStateListener(mItemMenuStateListener);
+            if (autoMarginEnable) {
+                FrameLayout contentFrame = (FrameLayout) menuLayout.findViewById(R.id.swipe_content);
+                ViewGroup nestedContent = (ViewGroup) contentFrame.getChildAt(0);
+                ViewGroup.MarginLayoutParams params1 = (ViewGroup.MarginLayoutParams) nestedContent.getLayoutParams();
+                ViewGroup.MarginLayoutParams params2 = (ViewGroup.MarginLayoutParams) menuLayout.getLayoutParams();
+                // Make sure we only adjust margins once for each item
+                if (params1.leftMargin != 0 || params1.rightMargin != 0) {
+                    params2.leftMargin = params1.leftMargin ;
+                    params2.rightMargin = params1.rightMargin;
+                    params1.leftMargin = params1.rightMargin = 0;
+                }
+            }
+
             SwipeMenu leftMenu = new SwipeMenu(menuLayout);
             SwipeMenu rightMenu = new SwipeMenu(menuLayout);
             mSwipeMenuCreator.onCreateMenu(leftMenu, rightMenu, position);

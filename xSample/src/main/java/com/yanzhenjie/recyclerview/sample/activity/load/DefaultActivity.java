@@ -108,7 +108,7 @@ public class DefaultActivity extends AppCompatActivity {
                     // notifyItemRangeInserted()或者notifyDataSetChanged().
                     mAdapter.notifyItemRangeInserted(mDataList.size() - strings.size(), strings.size());
 
-                    // 数据完更多数据，一定要掉用这个方法。
+                    // 数据完更多数据，一定要调用这个方法。
                     // 第一个参数：表示此次数据是否为空。
                     // 第二个参数：表示是否还有更多数据。
                     mRecyclerView.loadMoreFinish(false, true);
@@ -143,7 +143,7 @@ public class DefaultActivity extends AppCompatActivity {
 
         // 第一次加载数据：一定要调用这个方法，否则不会触发加载更多。
         // 第一个参数：表示此次数据是否为空，假如你请求到的list为空(== null || list.size == 0)，那么这里就要true。
-        // 第二个参数：表示是否还有更多数据，根据服务器返回给你的page等信息判断是否还有更多，这样可以提供性能，如果不能判断则传true。
+        // 第二个参数：表示是否还有更多数据，根据服务器返回给你的page等信息判断是否还有更多，这样可以提高性能，如果不能判断则传true。
         mRecyclerView.loadMoreFinish(false, true);
     }
 

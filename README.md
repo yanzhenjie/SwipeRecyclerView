@@ -13,7 +13,7 @@
 3. 添加/移除HeaderView/FooterView
 4. **自动/点击**加载更多的功能
 5. 支持二级列表，List形式、Grid形式、Staggered形式
-6. Sticky普通布局黏贴和ReyclerView分组黏贴
+6. Sticky普通布局黏贴和RecyclerView分组黏贴
 7. 支持AndroidX
 
 > 使用本库只需要使用SwipeRecyclerView即可，用法和原生RecyclerView一模一样，本库比原生的RecyclerView多了几个扩展方法。
@@ -47,7 +47,13 @@ implementation 'com.yanzhenjie.recyclerview:support:1.3.2'
 
 如果你使用的是android x库，那么请添加下述依赖：
 ```groovy
-implementation 'com.yanzhenjie.recyclerview:x:1.3.2'
+implementation 'com.github.luqiming666:SwipeRecyclerView:1.4.8'
+```
+**注意** 记得在build.gradle中加入
+```groovy
+maven {
+     url 'https://jitpack.io'
+}
 ```
 
 > **1. SwipeRecyclerView从1.3.0版本开始支持AndroidX和二级列表，因此相对于低版本的包名和类名有所改动，从低版本升级的开发者需要考量是否要升级。**  
@@ -146,7 +152,7 @@ OnItemMoveListener mItemMoveListener = new OnItemMoveListener() {
     @Override
     public boolean onItemMove(ViewHolder srcHolder, ViewHolder targetHolder) {
         // 此方法在Item拖拽交换位置时被调用。
-        // 第一个参数是要交换为之的Item，第二个是目标位置的Item。
+        // 第一个参数是要交换位置的Item，第二个是目标位置的Item。
 
         // 交换数据，并更新adapter。
         int fromPosition = srcHolder.getAdapterPosition();

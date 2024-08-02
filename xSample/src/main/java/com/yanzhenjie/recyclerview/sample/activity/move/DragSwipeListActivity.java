@@ -19,13 +19,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.yanzhenjie.recyclerview.sample.R;
 import com.yanzhenjie.recyclerview.touch.OnItemMoveListener;
 
 import java.util.Collections;
 
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * 拖拽Item + 侧滑删除，默认侧滑删除只支持List形式。
  * </p>
  * Created by Yan Zhenjie on 2016/8/3.
+ * Modified by Qiming on 2022/5/6: demo how to enable/disable swipe menu globally
  */
 public class DragSwipeListActivity extends BaseDragActivity {
 
@@ -45,12 +46,21 @@ public class DragSwipeListActivity extends BaseDragActivity {
         mHeaderView = getLayoutInflater().inflate(R.layout.layout_header_switch, mRecyclerView, false);
         mRecyclerView.addHeaderView(mHeaderView);
 
-        SwitchCompat switchCompat = mHeaderView.findViewById(R.id.switch_compat);
+        ToggleButton switchCompat = mHeaderView.findViewById(R.id.switch_compat);
         switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 控制是否可以侧滑删除。
                 mRecyclerView.setItemViewSwipeEnabled(isChecked);
+            }
+        });
+
+        ToggleButton switchSwipeMenu = mHeaderView.findViewById(R.id.switch_swipemenu);
+        switchSwipeMenu.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // 控制是否可以侧滑出菜单——全局控制。
+                mRecyclerView.setSwipeItemMenuEnabled(isChecked);
             }
         });
 

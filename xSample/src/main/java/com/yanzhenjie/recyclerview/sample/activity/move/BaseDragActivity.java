@@ -51,6 +51,9 @@ public abstract class BaseDragActivity extends BaseActivity {
         mRecyclerView.setOnItemMenuClickListener(mItemMenuClickListener); // Item的Menu点击。
         mRecyclerView.setSwipeMenuCreator(mSwipeMenuCreator); // 菜单创建器。
 
+        // 在设置adapter之前给子类一个机会。
+        beforeSettingAdapter();
+
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged(mDataList);
 
@@ -60,6 +63,7 @@ public abstract class BaseDragActivity extends BaseActivity {
     }
 
     protected abstract OnItemMoveListener getItemMoveListener();
+    protected void beforeSettingAdapter() { }
 
     /**
      * Item的拖拽/侧滑删除时，手指状态发生变化监听。
